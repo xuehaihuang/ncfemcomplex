@@ -42,6 +42,7 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{placeins}
+\usepackage{needspace}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage[hyperpageref]{backref}
@@ -120,6 +121,9 @@
 % %65N15;   %%  Error bounds
 % }
 
+\keywords{Nonconforming finite element complex, Morley--Wang--Xu element, BGG complex, cohomology}
+\subjclass[2020]{Primary 65N30; Secondary 58J10}
+
 \begin{abstract}
 We compute the cohomology of Morley--Wang--Xu (MWX) complexes on simplicial meshes in arbitrary dimension $n\geq2$ and characterize the starting degrees that admit a nonconforming Bernstein--Gelfand--Gelfand (BGG) reduction.
 For the prescribed adjacent input rows and linking maps, with upper starting polynomial degree $m$, the reduction with switch $J=j-1$ applies on every conforming simplicial mesh precisely when $1\leq j\leq m\leq n$.
@@ -135,6 +139,7 @@ A three-dimensional weak-trace Hessian complex illustrates why the assembled con
  
 \maketitle
 
+\vspace*{-2\baselineskip}
 \tableofcontents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -2187,6 +2192,7 @@ A_i:Z_h^{i+1}\longrightarrow\widetilde Z_h^i,
 Here contraction acts on the first alternating factor, and wedge multiplication
 on the second. Set $S^{-1}=S^n=0$.
 
+\Needspace{17\baselineskip}
 \begin{theorem}[Sharp range for the prescribed switch]\label{thm:lowerBGG}
 Fix $n\geq2$, $1\leq m<n$, $1\leq j\leq n$ and $J=j-1$.
 If $j\leq m$, the spaces and differentials in Theorem~\ref{thm:fullBGG},
@@ -2261,6 +2267,8 @@ For $m-1\leq i<n$, take $z\in Z_h^{i+1}$ orthogonal to $D_h^iZ_h^i$.
 At $i=m-1$, the orthogonal-complement characterization in the proof of
 Lemma~1.1 shows that $z$ is co-conforming, piecewise constant, has zero
 boundary co-trace and satisfies $\dd^*z=0$.
+
+\Needspace{4\baselineskip}
 For $i\geq m$, $z$ already has the required conformity and zero boundary
 co-trace, and orthogonality implies $\dd^*z=0$ because $\dd^*z\in Z_h^i$.
 Put $r=i+1-m\geq0$ and $C_a=1\otimes(e^a\wedge\cdot)$.

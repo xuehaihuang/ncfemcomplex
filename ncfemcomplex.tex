@@ -30,6 +30,7 @@
 \usepackage[leqno]{amsmath}
 \usepackage{mathrsfs}
 \usepackage{stmaryrd}
+\SetSymbolFont{stmry}{bold}{U}{stmry}{m}{n}
 \usepackage{chemarrow}
 \usepackage[norelsize]{algorithm2e}
 \usepackage{enumerate}
@@ -40,6 +41,7 @@
 \usepackage{multirow}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{placeins}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage[hyperpageref]{backref}
@@ -93,7 +95,7 @@
 
 
 \begin{document}
-\title[Nonconforming BGG]{Nonconforming BGG}
+\title[MWX and nonconforming BGG cohomology]{Morley--Wang--Xu complexes and the cohomology of nonconforming BGG complexes}
 % \author{Xuewei Cui}%
 % \address{School of Mathematics, Shanghai University of Finance and Economics, Shanghai 200433, China}%
 % \email{xueweicui@stu.sufe.edu.cn }%
@@ -119,6 +121,14 @@
 % }
 
 \begin{abstract}
+We compute the cohomology of Morley--Wang--Xu (MWX) complexes on simplicial meshes in arbitrary dimension $n\geq2$ and characterize the starting degrees that admit a nonconforming Bernstein--Gelfand--Gelfand (BGG) reduction.
+For the prescribed adjacent input rows and linking maps, with upper starting polynomial degree $m$, the reduction with switch $J=j-1$ applies on every conforming simplicial mesh precisely when $1\leq j\leq m\leq n$.
+Throughout this range, the discrete links induce zero on cohomology, and the unaugmented output has $i$th cohomology dimension $\binom{n+1}{j}b_i$ for $0\leq i\leq n$, where $b_i$ is the $i$th Betti number of the domain.
+For each fixed $n$ and $1\leq m<n$, a single mesh of a convex polytope violates the required rank condition for all $m<j\leq n$.
+The proof begins with an explicit quasi-isomorphism from the full MWX complex to simplicial cochains, given by integration over oriented faces.
+A filtration of the assembled degrees of freedom and a Koszul homotopy in the normal variables establish this comparison.
+For truncated rows, we determine the mesh-dependent excess dimension at the piecewise constant endpoint and show how adjoining weak exterior derivatives removes it.
+A three-dimensional weak-trace Hessian complex illustrates why the assembled constraints matter: a convex counterexample rules out replacing its weak trace kernel by pointwise trace-freeness.
 \end{abstract} 
 
 
@@ -130,15 +140,122 @@
 
 
 
+\section*{Introduction}
+Finite element differential complexes organize compatibility conditions, discrete potentials, and Helmholtz decompositions within a common framework.
+Conforming finite element exterior calculus provides this structure for the de Rham complex \cite{ArnoldFalkWinther2006,ArnoldFalkWinther2010,Arnold2018}.
+The construction of complexes from complexes developed by Arnold and Hu \cite{ArnoldHu2021} transfers such structure to tensor-valued differential operators.
+Bonizzoni, Hu, Kanschat and Sap \cite{BonizzoniHuKanschatSap2025}
+construct tensor-product BGG diagrams and complexes on cubical meshes in
+arbitrary dimension using splines and finite elements.
+Chen and Huang \cite{ChenHuangBGG2026} develop corresponding three-dimensional finite element Hessian, elasticity, and div-div complexes using smooth finite element sequences and trace decompositions.
+
+Distributional constructions also provide cohomological descriptions of
+discrete tensor complexes.
+Hu, Lin and Zhang \cite{HuLinZhang2025} construct distributional Hessian
+and div-div complexes on triangulations in two and three dimensions
+and identify their cohomology with de Rham cohomology with coefficients.
+Christiansen, Hu and Lin \cite{ChristiansenHuLin2026} establish the
+corresponding identification for the three-dimensional Regge complex,
+with coefficients in the space of infinitesimal rigid motions.
+
+Nonconforming spaces offer a different starting point.
+The Morley--Wang--Xu elements \cite{WangXu2006,WangXu2013} use degree-$m$ polynomials with moments of derivatives on subsimplices to approximate $H^m$ functions for $1\leq m\leq n$.
+The sequence structure has direct precedents.
+On convex polygons, Falk and Morley \cite[Theorem 4.1]{FalkMorley1990}
+identify discretely divergence-free Crouzeix--Raviart vector fields
+with broken curls of Morley functions, under the homogeneous boundary
+conditions imposed there.
+Christiansen, J.~Hu and K.~Hu \cite[Section 7]{ChristiansenHuHu2018}
+point out that the two-dimensional Morley--Crouzeix--Raviart--DG
+sequence has counterparts in the higher-dimensional MWX family.
+Zhang \cite{ZhangNCFEEC2026} constructs an arbitrary-dimensional nonconforming FEEC framework from piecewise Whitney forms, including discrete de Rham complexes and Helmholtz--Hodge decompositions of piecewise constants.
+
+Two questions arise for the assembled MWX spaces. Does integration over
+mesh faces recover simplicial cohomology? For which starting degrees do
+the discrete linking maps admit the prescribed BGG reduction on every
+mesh, and what is the cohomology of the resulting complex?
+
+For the full componentwise MWX complex, with polynomial degrees decreasing
+from $n$ to zero, oriented face integration defines an explicit
+quasi-isomorphism to simplicial cochains
+(Theorem~\ref{thm:MWXcohomology}). The proof filters the assembled degrees
+of freedom by face dimension. On each face, a Koszul homotopy in the
+normal variables eliminates the additional derivative moments from
+cohomology, leaving one cochain value on each oriented face of the
+matching dimension. The resulting comparison holds in every degree.
+
+For a truncated row $U_q^\bullet$, Theorem~\ref{thm:MWXtruncated}
+identifies the cohomology before the piecewise constant endpoint, using
+lifted face coefficients and height contraction. At the endpoint,
+Remark~\ref{rem:MWXterminalCohomology} gives
+\[
+\dim H^q(U_q^\bullet)
+=b_q+\operatorname{rank}\delta_{K,\partial K}^{n-q-1},
+\qquad 1\leq q<n,
+\]
+where $K$ is the mesh with boundary subcomplex $\partial K$,
+$b_q=\dim H^q(\Omega;\mathbb R)$, and $\delta_{K,\partial K}$ is
+the relative simplicial coboundary. Relative FEEC identifies the splice
+and weak tail of the mixed row (Theorem~\ref{thm:MWXsplice}). At the same
+piecewise constant node, the mixed cohomology has dimension $b_q$:
+the weak continuation removes exactly the mesh-dependent excess.
+
+For the prescribed adjacent MWX rows, linking maps and switch $J=j-1$,
+Theorems~\ref{thm:fullBGG} and~\ref{thm:lowerBGG} together give a sharp
+classification. With $m$ the upper starting polynomial degree, the BGG
+reduction applies on every conforming simplicial mesh precisely for
+$1\leq j\leq m\leq n$. Throughout this range its unaugmented output satisfies
+\[
+\dim H^i(\Upsilon_{h,m,j}^\bullet)
+=\binom{n+1}{j}b_i,\qquad 0\leq i\leq n.
+\]
+On each connected component, the degree-zero kernel consists of the
+affine fields in \eqref{eq:fullBGGkernel}. Adjoining this kernel makes
+the complex exact on a contractible domain.
+For $1\leq j<m\leq n$, Corollary~\ref{cor:MWXBGGHelmholtz} gives an
+orthogonal decomposition at the piecewise constant node in degree $m-1$,
+identifies the coexact summand through the adjoint of the restricted
+weak differential, and determines the harmonic dimension as
+$\binom{n+1}{j}b_{m-1}$.
+
+To obtain equality in the abstract BGG cohomology bound
+\cite[Theorem 6]{ArnoldHu2021}, we prove that every discrete link induces
+zero on cohomology. A continuous homotopy need not preserve the spaces
+in a discrete BGG diagram, an issue also arising in tensor-product
+constructions \cite{BonizzoniHuKanschatSap2025}.
+For the assembled MWX spaces, contractions on the face-coefficient
+complexes handle the early links, while coordinate multipliers and
+finite-dimensional adjoints handle the splice and weak tail.
+Together these arguments prove
+$S^i(\ker\widetilde D_h^i)\subseteq\operatorname{im}D_h^i$
+in every degree for arbitrary topology.
+
+The range is sharp for this specified reduction. For each fixed $n$ and
+$1\leq m<n$, one convex join mesh simultaneously excludes all
+$m<j\leq n$: its first weak link has source dimension
+$(n-m+1)\binom nj>0$ and zero target, so the required injectivity fails.
+This obstruction concerns the prescribed rows, links and switch;
+constructions using different spaces or retaining additional kernels
+are not excluded.
+
+Tables~\ref{tab:BGG2dSummary} and~\ref{tab:BGG3dSummary} collect the planar
+and spatial realizations. A convex triangular bipyramid makes the role
+of the assembled constraints concrete: its weak trace kernel $K_h$ has
+dimension six, while $E_h\cap L^2(\Omega;\mathbb T)$ has dimension zero
+(Remark~\ref{rem:weakTraceBipyramid}). This is also the $n=3,m=2$ join
+mesh in the general obstruction. For $j=1$ it supports the weak-trace
+Hessian complex, whereas for $j=3$ the first weak link maps a
+two-dimensional space to zero.
+
 \section{Nonconforming Finite Element Complex}
 
 
 
 \subsection{Notation}
-Let $\Omega\subset \mathbb{R}^n$ be a bounded polytope,  where integer $n\geq2$.
+Let $\Omega\subset \mathbb{R}^n$ be a bounded Lipschitz polyhedral domain, where $n\geq2$.
 Given an integer $m \geq 0$ and a bounded domain $D \subset \mathbb{R}^{n}$,
-we define $H^{m}(D)$  as the standard Sobolev space of functions on $D$. The corresponding norm and
-semi-norm are denoted by $\| \cdot \|_{ m,D}$ and $|\cdot |_{m,D}$, respectively. Set $L^{2}(D) = H^{0}(D)$.
+we define $H^{m}(D)$ as the standard Sobolev space of functions on $D$,
+with norm $\|\cdot\|_{m,D}$. Set $L^{2}(D)=H^{0}(D)$.
 For integer $r\geq0$,
 let $\mathbb{P}_{r}(D)$ represent the space of all polynomials in $D$ with the total degree no more than $r$.
 Set $\mathbb{P}_{r}(D)=\{0\}$ for $r<0$.
@@ -149,9 +266,9 @@ let $B(D; \mathbb{R}^n):=B(D) \otimes \mathbb{R}^n$ be its vector version.
 We denote $(\cdot, \cdot)_{D}$
 as the usual inner product on $L^{2}(D)$ or $L^{2}(D; \mathbb{R}^n)$. We denote $H_{0}^{m}(D)\,(H_{0}^{m}(D; \mathbb{R}^n))$ as the closure of $C_{0}^{\infty}(D)\,(C_{0}^{\infty}(D; \mathbb{R}^n))$
 with respect to the norm $\| \cdot \|_{m,D}$.  
-In case $D$ is $\Omega$, we abbreviate $\| \cdot \|_{ m,D}$, $|\cdot|_{m,D}$
-and $(\cdot, \cdot)_{D}$  as $\| \cdot \|_{m}$, $|\cdot|_{m}$ and $(\cdot, \cdot)$, respectively. Let $Q_D^k: L^{2}(D) \to \mathbb{P}_{k}(D)$ denote the $L^2$-orthogonal projection operator.
-Its vector-valued analogue is still denoted by $Q_D^k$. For brevity, we write $Q_D := Q_D^0$ for the projection onto piecewise constants.   
+In case $D$ is $\Omega$, we abbreviate $\|\cdot\|_{m,D}$ and
+$(\cdot,\cdot)_D$ as $\|\cdot\|_m$ and $(\cdot,\cdot)$, respectively. Let $Q_D^k: L^{2}(D) \to \mathbb{P}_{k}(D)$ denote the $L^2$-orthogonal projection operator.
+Its vector-valued analogue is still denoted by $Q_D^k$. For brevity, we write $Q_D := Q_D^0$ for the projection onto constants on $D$.
 We use $\boldsymbol{n}_{\partial D}$ to denote the unit outward normal vector of $\partial D$, which will be abbreviated as $\boldsymbol{n}$ if it does not cause any confusion.
 
 For an $n$-dimensional multi-index $\alpha = (\alpha_1, \cdots , \alpha_n)$ with $\alpha_i\in\mathbb Z^+\cup\{0\}$, define $|\alpha|:=\sum_{i=1}^n\alpha_i$.
@@ -166,7 +283,6 @@ mutually perpendicular unit normal vectors, and define the surface gradient on $
 \end{equation}
 namely the projection of $\nabla v$ to the face $F$, which is independent of the choice of the normal vectors.
 When $v$ is a tensor, the surface gradient $\nabla_{F}v$ is defined element-wisely in convention, which is a one-order higher tensor.
-And denote by $\div_{F}$ the corresponding surface divergence.
 For any $\alpha\in A_{n-\ell}$ for $\ell=n-1,\ldots, n-m$, set
 \[
 \frac{\partial^{|\alpha|}v}{\partial\nu_{F}^{\alpha}}:=\frac{\partial^{|\alpha|}v}{\partial\nu_{F, 1}^{\alpha_1}\cdots\partial\nu_{F, n-\ell}^{\alpha_{n-\ell}}}.
@@ -174,7 +290,7 @@ For any $\alpha\in A_{n-\ell}$ for $\ell=n-1,\ldots, n-m$, set
 
 A differential $k$-form $\omega$ is a section of the $k$-alternating bundle, i.e., a map which assigns to each $x \in D$ an element $\omega_x\in{\rm Alt}^kT_x D$, where $T_x D$ denotes the tangent space to $D$ at $x$.
 For a space $B(D)$ defined on $D$, let $B\Lambda^k(D)$ be the space of all $k$-forms whose coefficient function belongs to $B(D)$. Notice that $B\Lambda^0(D)=B(D)$.
-The norm $\| \cdot \|_{ m,D}$ and semi-norm $|\cdot|_{m,D}$ are extended to space $H^m\Lambda^k(D)$, and inner product $(\cdot, \cdot)_{D}$ to space $L^2\Lambda^k(D)$. 
+The norm $\|\cdot\|_{m,D}$ extends to $H^m\Lambda^k(D)$, and the inner product $(\cdot,\cdot)_D$ to $L^2\Lambda^k(D)$.
 Define 
 \begin{align*}
 	H\Lambda^k(D)&:=\{\omega\in L^2\Lambda^k(D): \dd\omega\in L^2\Lambda^{k+1}(D)\},\\
@@ -185,22 +301,19 @@ the codifferential operator $\dd^*$ is defined as
 \begin{equation}\label{eq:stardelta}
 	\star\dd^*\omega=(-1)^k\dd\star\omega.
 \end{equation}
-We equip the following squared norms for the spaces $H\Lambda^k(D)$ and $H^{*}\Lambda^k(D)$:
-\begin{equation*}
-	\|\omega\|_{H\Lambda^k(D)}^2:=\|\omega\|_{0,D}^2+\|\dd\omega\|_{0,D}^2,\quad
-	\|\omega\|_{H^{*}\Lambda^k(D)}^2:=\|\omega\|_{0,D}^2+\|\dd^*\omega\|_{0,D}^2.
-\end{equation*}
-When $D=\Omega$, we use the abbreviations $\|\cdot\|_{H\Lambda^k}$ and $\|\cdot\|_{H^{*}\Lambda^k}$ for $\|\cdot\|_{H\Lambda^k(D)}$ and $\|\cdot\|_{H^{*}\Lambda^k(D)}$, respectively.
 Denote by $H_0\Lambda^k(D)$ the subspace of $H\Lambda^k(D)$ with vanishing trace.
-We can identify $H_0^m\Lambda^{d}(D)$ and $H_0\Lambda^{d-1}(D)$ as $H_0^m(D)\cap L_0^2(D)$ and $H_0(\div, D)$, respectively.
-The spaces $L^2\Lambda^k(D)$ and $H^*\Lambda^k(D)$ are to be interpreted as the trivial space $\{0\}$ for $k\geq d+1$, whereas $\mathbb{P}_{k}\Lambda^{d+1}(D)$ is to be interpreted as $\mathbb R$.
+Set $\mathring H^*\Lambda^k(D):=\star H_0\Lambda^{n-k}(D)$.
+The notation $H_0^m\Lambda^k(D)$ means that every coefficient belongs to $H_0^m(D)$.
+This coefficient condition is distinct from vanishing differential-form trace.
+In particular, $H_0\Lambda^n(D)=L^2\Lambda^n(D)$; a zero-mean constraint on top-degree forms will always be imposed explicitly.
+All form spaces outside degrees $0,\ldots,n$ are understood to be $\{0\}$.
+Any augmentation by constants or by an integral functional is written explicitly.
 We will abbreviate the Sobolev space $B(D)$ as $B$ when $D=\Omega$ if not causing any confusion.
 
-Let $\{\mathcal{T}_{h}\}_{h>0}$ be a regular family of simpilical meshes of $\Omega\subset \mathbb{R}^{n}$, where $h=\max_{T\in\mathcal{T}_{h}}h_T$ with $h_T$ being the diameter of tetrahedron $T$. For $\ell=0,1,\ldots,n-1$,
-denote by $\Delta_{\ell}(\mathcal T_h)$ and $\Delta_{\ell}(\mathring{\mathcal T}_h)$ the set of all subsimplices and all interior subsimplices of dimension $\ell$ in the partition $\mathcal{T}_{h}$, respectively. For a tetrahedron $T$, we let $\Delta_{\ell}(T)$ denote the set of subsimplices of dimension $\ell$. %, for $\ell=0,1,2$. 
-For a subsimplex $f$ of $\mathcal{T}_{h}$, let $\mathcal T_f$ be the set of all tetrahedrons in $\mathcal{T}_h$ sharing $f$.
-Denote by $\omega_{T}$ the union of all the simplices in the set $\{\mathcal T_{\texttt{v}}\}_{\texttt{v}\in\Delta_0(T)}$.
-For a face $F\in \Delta_{2}(\mathcal T_h)$, let $\Delta_{1}(F)$ be the set of all edges of $F$, and $\boldsymbol{n}_F$ be its unit normal vector, which will be abbreviated as $\boldsymbol{n}$. 
+Let $\{\mathcal{T}_{h}\}_{h>0}$ be a shape-regular family of conforming simplicial meshes of $\Omega\subset \mathbb{R}^{n}$, where $h=\max_{T\in\mathcal{T}_{h}}h_T$ with $h_T$ being the diameter of the simplex $T$. For $\ell=0,1,\ldots,n$,
+denote by $\Delta_{\ell}(\mathcal T_h)$ and $\Delta_{\ell}(\mathring{\mathcal T}_h)$ the set of all subsimplices and all interior subsimplices of dimension $\ell$ in the partition $\mathcal{T}_{h}$, respectively. For a simplex $T$, we let $\Delta_{\ell}(T)$ denote the set of subsimplices of dimension $\ell$. %, for $\ell=0,1,2$.
+For a subsimplex $f$ of $\mathcal{T}_{h}$, let $\mathcal T_f$ be the set of all simplices in $\mathcal{T}_h$ sharing $f$.
+For a facet $F\in \Delta_{n-1}(\mathcal T_h)$, let $\Delta_{1}(F)$ be the set of all edges of $F$, and $\boldsymbol{n}_F$ be its unit normal vector, which will be abbreviated as $\boldsymbol{n}$.
 For an edge $e\in \Delta_{1}(\mathcal T_h)$, let $\boldsymbol{t}_e$ be its unit tangent vector, which will be abbreviated as $\boldsymbol{t}$. 
 %For each $e\in\Delta_{1}(F)$, denote by $\boldsymbol{n}_{F,e}$ the
 %unit vector being parallel to $F$ and outward normal to $\partial F$. Set $\boldsymbol{t}_{F,e} :=\boldsymbol{n}_F \times\boldsymbol{n}_{F,e} $, where $\times$ is the exterior product.
@@ -210,6 +323,9 @@ Define the jump of a function $w$ on $F$ as
 [w]:=(w|_{T_1})|_F\boldsymbol{n}_F\cdot\boldsymbol{n}_{\partial T_1}+(w|_{T_2})|_F\boldsymbol{n}_F\cdot\boldsymbol{n}_{\partial T_2}.
 \end{equation*}
 On a face $F$ lying on the boundary $\partial\Omega$, the jump becomes $[w]:=w|_F$.
+We use $\mathbb M=\mathbb R^{n\times n}$, $\mathbb S=\{A\in\mathbb M:A^T=A\}$ and $\mathbb T=\{A\in\mathbb M:\tr A=0\}$.
+Set $\sym A=(A+A^T)/2$, $\skw A=(A-A^T)/2$, and $\dev A=A-(\tr A)I/n$.
+Here $I$ is the identity matrix; tensor differential operators and their vector proxies are specified in the corresponding dimension.
 % For a vector-valued function $\boldsymbol{v}$, define
 % \begin{equation*}
 % \div\boldsymbol{v}=\nabla\cdot\boldsymbol{v},\quad \curl\boldsymbol{v}=\nabla\times\boldsymbol{v},
@@ -228,18 +344,9 @@ Define %$\mathbb P_k(\mathcal T_h;\mathbb R^d):=\mathbb P_k(\mathcal T_h)\otimes
 	\mathbb P_{r}^-\Lambda^k(\mathcal T_h)&:=\{v\in L^2\Lambda^k(\Omega): v|_T\in\mathbb P_{r}^-\Lambda^k(T) \;\textrm{ for all } T\in \mathcal{T}_{h}\}.
 \end{align*}
 % \textcolor{red}{Set $V_{r,h}^{\grad}:=\mathbb P_k(\mathcal T_h)\cap H^1(\Omega)$ and $\mathring{V}_{r,h}^{\grad}:=\mathbb P_k(\mathcal T_h)\cap H_{0}^{1}(\Omega)$.}
-Let $Q_{r,T} : L^{2}\Lambda^k(T)\rightarrow \mathbb P_r\Lambda^k(T)$ for $T\in\mathcal T_h$ and $Q_{r,h} : L^{2}\Lambda^k(\Omega)\rightarrow \mathbb P_r\Lambda^k(\mathcal T_h)$ be the $ L^2$-orthogonal projection operators.
 
-Let $\dd_{h}$ be the element-wise counterpart of the differential operator $\dd$ with respect to $\mathcal{T}_{h}$, respectively. For piecewise smooth function $v$, introduce broken norms:
-\begin{equation*}
-\|v\|_{1,h}:=(\|v\|_{0}^2+|v|_{1,h}^2)^{1/2},\quad\;\; |v|_{j,h}:=\|\nabla_{h}^jv\|_0\;\;\;  \textrm{ for integer } j.
-\end{equation*}
-
-%\begin{equation*}
-%\textcolor{red}{ |v|_{2,h}:=(\sum_{T\in\mathcal{T}_{h}}|v|_{2,T}^2)^{1/2}.}
-%\end{equation*}
-In this paper, we use ``$\lesssim \cdots$'' to mean that ``$\leq C \cdots$'',
-where $C$ is a generic positive constant independent of the mesh size $h$ and the singular perturbation parameter $\varepsilon$, which may take different values in different contexts. Moreover, $A \eqsim B$ means that $A \lesssim B$ and $B \lesssim A$.
+Let $\dd_h$ be the element-wise counterpart of the differential operator
+$\dd$ with respect to $\mathcal T_h$.
 
 \subsection{Morley-Wang-Xu element space}
 Recall the Morley--Wang--Xu element \cite{WangXu2013,WangXu2006}. Let \(1\le m\le n\).
@@ -255,34 +362,40 @@ where \(\ell=n-1,\ldots,n-m\), \(\alpha\in A_{n-\ell}\), and
 The global $H^m$-nonconforming Morley-Wang-Xu element space is defined by
 \begin{align*}
 V_{m,h}^{\rm MWX}:=\{v\in \mathbb P_m(\mathcal T_h):& \textrm{ all the DoFs in \eqref{MWXdof} are single-valued } \\
-& \textrm{ across } \Delta_{\ell}(\mathring{\mathcal T}_h) \textrm{ for } \ell=n-1,\ldots, n-m\}.
+& \textrm{ on each } F\in\Delta_{\ell}(\mathcal T_h) \textrm{ for } \ell=n-1,\ldots, n-m\}.
 \end{align*}
+For each geometric face $F$, fix one normal frame and identify each DoF over all $T\in\mathcal T_F$, including when $F\subset\partial\Omega$.
+Boundary DoFs are unrestricted, but are shared by every incident element.
+We set $V_{0,h}^{\rm MWX}:=\mathbb P_0(\mathcal T_h)$ and define its interpolant by element means.
 When $m=1$, $V_{1,h}^{\rm MWX}$ is the $H^1$-nonconforming linear element space \cite{CrouzeixRaviart1973}, denoted by $V_{h}^{\rm CR}$.
 Let $I_{h}^{\rm MWX}: H^m(\Omega) \to V_{m,h}^{\rm MWX}$ be the nodal interpolation operator determined by the DoFs in \eqref{MWXdof}. It holds that
 \begin{equation}\label{eq:nablajIhMWX}
 \int_F\nabla^{\ell-(n-m)}(v-I_{h}^{\rm MWX}v)\dd s=0,\quad\forall\,F\in \Delta_\ell(T),\; \ell=n-1,\ldots,n-m.
 \end{equation}
 
-For \(k=0,1,\ldots,n-1\), set
+For \(k=0,1,\ldots,n\), set
 \[
 V_{m,h}^{\rm MWX}\Lambda^k
-:= V_{m,h}^{\rm MWX}\otimes \Lambda^k(\Omega),
+:= V_{m,h}^{\rm MWX}\otimes {\rm Alt}^k(\mathbb R^n),
 \qquad
 V_h^{\rm CR}\Lambda^k
-:= V_h^{\rm CR}\otimes \Lambda^k(\Omega).
+:= V_h^{\rm CR}\otimes {\rm Alt}^k(\mathbb R^n).
 \]
 The corresponding interpolation operator for \(k\)-forms is still denoted by
 \(I_h^{\rm MWX}\).
 
 \subsection{Finite element differential forms}
 
+For the conforming complexes below, $r\geq1$.
+The untrimmed space definitions also apply for $r=0$, which is used later in the algebraic Hodge decompositions.
 Let 
 \begin{align*}
 	V_{r,h}^{\dd}\Lambda^k&:=\mathbb P_{r}\Lambda^{k}(\mathcal T_h)\cap H\Lambda^k(\Omega),\quad\;\, V_{r,h}^{*}\Lambda^k:=\star V_{r,h}^{\dd}\Lambda^{n-k},\\
 	V_{r,h}^{\dd,-}\Lambda^k&:=\mathbb P_{r}^-\Lambda^{k}(\mathcal T_h)\cap H\Lambda^k(\Omega),\quad V_{r,h}^{*,-}\Lambda^k:=\star V_{r,h}^{\dd,-}\Lambda^{n-k}.
 \end{align*}
 Set $\mathring{V}_{r,h}^{\dd}\Lambda^k:=V_{r,h}^{\dd}\Lambda^k\cap H_{0}\Lambda^k(\Omega)$ and $\mathring{V}_{r,h}^{\dd,-}\Lambda^k:=V_{r,h}^{\dd,-}\Lambda^k\cap H_{0}\Lambda^k(\Omega)$.
-We have the short exact sequences \cite{Hiptmair2001,Hiptmair2002,Arnold2018,ArnoldFalkWinther2006}
+Define also $\mathring V_{r,h}^{*}\Lambda^k:=\star\mathring V_{r,h}^{\dd}\Lambda^{n-k}$ and $\mathring V_{r,h}^{*,-}\Lambda^k:=\star\mathring V_{r,h}^{\dd,-}\Lambda^{n-k}$.
+We use the following portions of the finite element de Rham complexes \cite{Hiptmair2001,Hiptmair2002,Arnold2018,ArnoldFalkWinther2006}
 \begin{equation}\label{femderhamcomplex1form1}
 	\mathring{V}_{r+1,h}^{\dd,-}\Lambda^{k-1}\xrightarrow{\dd} 
 	\mathring{V}_{r,h}^{\dd}\Lambda^k\xrightarrow{\dd} \dd \mathring{V}_{r,h}^{\dd}\Lambda^k \to0,
@@ -296,36 +409,22 @@ We have the short exact sequences \cite{Hiptmair2001,Hiptmair2002,Arnold2018,Arn
 	V_{r,h}^{*,-}\Lambda^k\xrightarrow{\dd^*} \dd^* V_{r,h}^{*,-}\Lambda^k \to0.
 \end{equation}
 
-Let $I_{r,h}^{\dd}: L^2\Lambda^k(\Omega)\to V_{r,h}^{\dd}\Lambda^k$ and $I_{r,h}^{\dd,-}: L^2\Lambda^k(\Omega)\to V_{r,h}^{\dd,-}\Lambda^k$ be the $L^2$ bounded projection operators devised in~\cite{ArnoldGuzman2021,ChristiansenWinther2008}, then $I_{r,h}^{\dd}\omega,\, I_{r,h}^{\dd,-}\omega\in H_0\Lambda^k(\Omega)$ for $\omega\in H_0\Lambda^k(\Omega)$.
-Define $I_{r,h}^{*}: L^2\Lambda^k(\Omega)\to V_{r,h}^{*}\Lambda^k$ and $I_{r,h}^{*,-}: L^2\Lambda^k(\Omega)\to V_{r,h}^{*,-}\Lambda^k$ as 
-\begin{equation*}
-	\star I_{r,h}^{*}\omega=I_{r,h}^{\dd}(\star\omega),\;\; \star I_{r,h}^{*,-}\omega=I_{r,h}^{\dd,-}(\star\omega), \quad\omega\in L^2\Lambda^k(\Omega).
-\end{equation*}
-Then $I_{r,h}^{*}$ and $I_{r,h}^{*,-}$ are also $L^2$ bounded. 
-We will abbreviate $I_{r,h}^{\dd}$ and $I_{r,h}^{\dd,-}$ as $I_{h}^{\dd}$, and $I_{r,h}^{*}$ and $I_{r,h}^{*,-}$ as $I_{h}^{*}$, if not causing any confusions.
-We have (cf. \cite{ArnoldGuzman2021,ChristiansenWinther2008})
-\begin{equation}\label{eq:IhdCDprop}
-	\dd(I_h^{\dd}\omega)=I_h^{\dd}(\dd \omega),\quad \omega\in H\Lambda^k(\Omega),\, 0\leq k\leq d,
-\end{equation}
-%\begin{equation}\label{eq:IhdeltaCDprop}
-%	\dd^*(I_h^{*}\omega)=I_h^{*}(\dd^* \omega),\quad \omega\in H^*\Lambda^k(\Omega),\, 0\leq j\leq d,
-%\end{equation}
-\begin{equation}\label{eq:Ihddelta-estimate}
-	\|\omega-I_{r,h}^{\dd,-}\omega\| + \|\omega-I_{r,h}^{*,-}\omega\| \lesssim h^r|\omega|_r,\quad \omega\in H^r\Lambda^k(\Omega),
-\end{equation}
-%\eqref{eq:stardelta} and \eqref{eq:IhdCDprop}-\eqref{eq:Ihdestimate} we have
-\begin{equation}\label{eq:Ihddeltaestimate}
-	\|\omega-I_{r,h}^{\dd}\omega\| + h\|\dd(\omega-I_{r,h}^{\dd}\omega)\| \lesssim h^{r+1}|\omega|_{r+1},\quad \omega\in H^{r+1}\Lambda^k(\Omega).
-\end{equation}
+The middle cohomology in the first two displays is relative cohomology, whereas that of the third is absolute cohomology after applying $\star$.
+Thus these sequences are exact at the middle space only when the corresponding cohomology vanishes.
+Even on a contractible domain, the relative top-degree space requires a zero-mean restriction or an integral augmentation for exactness.
+
+For $L^2$-bounded commuting projections on compatible conforming FEEC
+sequences, their homogeneous-boundary counterparts, and the associated
+approximation estimates, see \cite{ArnoldGuzman2021,ChristiansenWinther2008}.
 
 \subsection{Discrete Helmholtz decomposition}
-Now we establish the discrete Helmholtz decomposition of piecewise constant differential forms.
+We decompose piecewise constant differential forms.
 
 \begin{lemma}
-Let $1\leq k\leq d$.
+Let $1\leq k\leq n$.
 It holds the discrete Helmholtz decomposition
 \begin{equation}\label{eq:discreteL2HelmholtzDecompCRL} 
-\mathbb P_0\Lambda^k(\mathcal T_h)=\dd_h V_h^{\rm CR}\Lambda^{k-1} \oplus^{\perp} \dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1} \oplus^{\perp} \mathring{\mathfrak{H}}_h^k, \quad k=1,\ldots, d,
+\mathbb P_0\Lambda^k(\mathcal T_h)=\dd_h V_h^{\rm CR}\Lambda^{k-1} \oplus^{\perp} \dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1} \oplus^{\perp} \mathring{\mathfrak{H}}_h^k, \quad k=1,\ldots, n,
 \end{equation}
 where notation $\oplus^{\perp}$ means the direct sum is $L^2$ orthogonal, and
 the space of discrete harmonic forms
@@ -348,26 +447,41 @@ the space of discrete harmonic forms
 	\end{equation*}
 	Apply the integration by parts to acquire
 	\begin{equation*}
-\sum_{F\in \Delta_{d-1}(\mathcal T_h)}\int_F\tr\psi\wedge[\tr(\star(q_h-\dd_h\phi_h))]=0.
+\sum_{F\in \Delta_{n-1}(\mathcal T_h)}\int_F\overline{\tr_F\psi}\wedge[\tr(\star(q_h-\dd_h\phi_h))]=0.
 	\end{equation*}
-	Thanks to DoFs \eqref{MWXdof}, $q_h-\dd_h\phi_h\in \mathbb P_0\Lambda^k(\mathcal T_h)\cap \mathring{H}^{*}\Lambda^k(\Omega)$.
+Here $\overline{\tr_F\psi}=|F|^{-1}\int_F\tr_F\psi$ is the coefficientwise
+face average in a fixed tangent frame. It is single-valued by the CR DoFs;
+on boundary facets it is taken from the incident element. The replacement
+by this average is valid because the other factor is constant on each facet.
+The CR DoFs in \eqref{MWXdof} allow
+$\overline{\tr_F\psi}$ to be any constant tangential $(k-1)$-form
+on a prescribed facet, with zero means on all other facets.
+The nondegenerate wedge pairing therefore forces
+$[\tr(\star(q_h-\dd_h\phi_h))]=0$ on every facet, including boundary facets.
+Hence $q_h-\dd_h\phi_h\in
+\mathbb P_0\Lambda^k(\mathcal T_h)\cap\mathring H^*\Lambda^k(\Omega)$.
 As $\mathbb P_0\Lambda^k(\mathcal T_h)\cap \mathring{H}^{*}\Lambda^k(\Omega)=\mathring{V}_{1,h}^{*,-}\Lambda^{k}\cap\ker(\dd^*)$, the Helmholtz decomposition \eqref{eq:discreteL2HelmholtzDecompCRL} follows from the discrete Hodge decomposition \cite{Arnold2018,ArnoldFalkWinther2006,ArnoldFalkWinther2010}.
 \end{proof}
 
 
 %\begin{remark}\rm
-%	When $j=d-1$, the Helmholtz decomposition \eqref{eq:discreteL2HelmholtzDecompCR}  become
+%	When $j=n-1$, the Helmholtz decomposition \eqref{eq:discreteL2HelmholtzDecompCR}  become
 %	\begin{equation*}
-	%\mathbb P_0\Lambda^{d+1}(\mathcal T_h)=	\{0\}.
+	%\mathbb P_0\Lambda^{n+1}(\mathcal T_h)=	\{0\}.
 %	\end{equation*}
 %\end{remark}
 \begin{remark}\rm
-	In three dimensions, Helmholtz decomposition \eqref{eq:discreteL2HelmholtzDecompCRL} is 
-	\begin{equation*}
-		\mathbb P_0(\mathcal T_h;\mathbb R^3)=\curl_h(V_h^{\rm CR}\otimes\mathbb R^3) \oplus^{\perp}\nabla \mathring{V}_{1,h}^{\grad} \oplus^{\perp} \mathring{\mathfrak{H}}_h^1 = \nabla_hV_h^{\rm CR} \oplus^{\perp}\curl \mathring{V}_{1,h}^{\rm ND} \oplus^{\perp} \mathring{\mathfrak{H}}_h^0,
-	\end{equation*}
-	which is presented in \cite{BringmannKettelerSchedensack2025}. 
-	%Here $V_{1,h}^{\rm ND}$ is the lowest N\'{e}d\'{e}lec element space of the first kind \cite{Nedelec1980}.
+In three dimensions, \eqref{eq:discreteL2HelmholtzDecompCRL} gives, under the usual vector proxies,
+\begin{align*}
+\mathbb P_0(\mathcal T_h;\mathbb R^3)
+&=\curl_h(V_h^{\rm CR}\otimes\mathbb R^3)
+\oplus^\perp\nabla(\mathbb P_1(\mathcal T_h)\cap H_0^1(\Omega))
+\oplus^\perp\mathring{\mathfrak H}_h^2,\\
+&=\nabla_hV_h^{\rm CR}
+\oplus^\perp\curl(\mathbb P_1(\mathcal T_h;\mathbb R^3)\cap H_0(\curl,\Omega))
+\oplus^\perp\mathring{\mathfrak H}_h^1.
+\end{align*}
+Related vector decompositions are presented in \cite{BringmannKettelerSchedensack2025}.
 \end{remark}
 
 \subsection{Weak exterior differential operator}
@@ -393,7 +507,13 @@ since $\mathring{V}_{r,h}^{*}\Lambda^k$ is not necessarily a subspace of
 $H\Lambda^k(\Omega)$. Related weak differential operators were introduced in
 \cite[Section 2.1]{ChenWuZhongZhou2018}.
 
-The following discrete Hodge decomposition holds:
+For $r\geq0$, define the degree-dependent harmonic space
+\[
+\mathring{\mathfrak H}_{r,h}^k
+:=\{\omega\in\mathring V_{r,h}^{*}\Lambda^k:
+       \dd^*\omega=0,\ \dd_w\omega=0\}.
+\]
+Spaces of negative polynomial degree are zero. The finite-dimensional adjoint relation gives the orthogonal decomposition
 \begin{equation}\label{eq:discreteL2hodgeDecomp}
 \mathring{V}_{r,h}^{*}\Lambda^k
 =
@@ -401,9 +521,12 @@ The following discrete Hodge decomposition holds:
 \oplus^{\perp}
 \dd^*\mathring{V}_{r+1,h}^{*}\Lambda^{k+1}
 \oplus^{\perp}
-\mathring{\mathfrak H}_h^k,
-\qquad k=1,\ldots,d .
+\mathring{\mathfrak H}_{r,h}^k,
+\qquad k=1,\ldots,n .
 \end{equation}
+Indeed, the orthogonal complement of the first image is $\ker\dd^*$ and that of the second is $\ker\dd_w$; the images are orthogonal because $(\dd^*)^2=0$.
+In general $\mathring{\mathfrak H}_{r,h}^k$ is not the fixed lowest-order space $\mathring{\mathfrak H}_h^k$ in \eqref{eq:discreteL2HelmholtzDecompCRL}.
+
 
 \begin{lemma}
 The restriction of $\dd_w$ to
@@ -421,7 +544,7 @@ Hence $\omega=0$, and the asserted injectivity follows.
 \end{proof}
 
 \begin{lemma}
-For $k=1,\ldots,d$, there hold
+For $k=1,\ldots,n$, there hold
 \begin{align}
 \mathbb P_0\Lambda^k(\mathcal T_h)\cap\ker(\dd_w)
 &=
@@ -434,67 +557,19 @@ For $k=1,\ldots,d$, there hold
 &=
 \dd_w \mathring{V}_{r-1,h}^{*}\Lambda^{k-1}
 \oplus^{\perp}
-\mathring{\mathfrak H}_h^k .
+\mathring{\mathfrak H}_{r,h}^k .
 \label{eq:Vrstarkerweakd}
 \end{align}
 \end{lemma}
 
 \begin{proof}
-We first prove \eqref{eq:P0kerweakd}. By the definition of $\dd_w$, one readily
-verifies that
-\[
-\dd_h V_h^{\rm CR}\Lambda^{k-1}
-\oplus^{\perp}
-\mathring{\mathfrak H}_h^k
-\subseteq
-\mathbb P_0\Lambda^k(\mathcal T_h)\cap\ker(\dd_w).
-\]
-It remains to compare dimensions.
-
-Using the discrete Helmholtz decomposition
-\eqref{eq:discreteL2HelmholtzDecompCRL}, we obtain
-\begin{equation*}
-\dd_w\mathbb P_0\Lambda^k(\mathcal T_h)
-=
-\dd_w\bigl(\dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1}\bigr).
-\end{equation*}
-By the preceding lemma, $\dd_w$ is injective on
-$\dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1}$. Hence
-\begin{equation*}
-\dim\bigl(\dd_w\mathbb P_0\Lambda^k(\mathcal T_h)\bigr)
-=
-\dim\bigl(\dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1}\bigr).
-\end{equation*}
-Consequently,
-\begin{equation*}
-\dim\bigl(\mathbb P_0\Lambda^k(\mathcal T_h)\cap\ker(\dd_w)\bigr)
-=
-\dim \mathbb P_0\Lambda^k(\mathcal T_h)
--
-\dim\bigl(\dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1}\bigr).
-\end{equation*}
-The desired identity \eqref{eq:P0kerweakd} follows from
-\eqref{eq:discreteL2HelmholtzDecompCRL}.
-
-The proof of \eqref{eq:Vrstarkerweakd} is analogous. Indeed, using
-\eqref{eq:discreteL2hodgeDecomp} and the injectivity of $\dd_w$ on
-$\dd^*\mathring{V}_{r+1,h}^{*}\Lambda^{k+1}$, one obtains
-\[
-\dim\bigl(\mathring{V}_{r,h}^{*}\Lambda^k\cap\ker(\dd_w)\bigr)
-=
-\dim\bigl(\dd_w \mathring{V}_{r-1,h}^{*}\Lambda^{k-1}\bigr)
-+
-\dim \mathring{\mathfrak H}_h^k .
-\]
-Together with the inclusion
-\[
-\dd_w \mathring{V}_{r-1,h}^{*}\Lambda^{k-1}
-\oplus^{\perp}
-\mathring{\mathfrak H}_h^k
-\subseteq
-\mathring{V}_{r,h}^{*}\Lambda^k\cap\ker(\dd_w),
-\]
-this proves \eqref{eq:Vrstarkerweakd}.
+The adjoint definition gives
+$\ker\dd_w=(\dd^*\mathring V_{r+1,h}^{*}\Lambda^{k+1})^\perp$
+in the relevant domain. Taking $r=0$, intersecting this orthogonal complement
+with $\mathbb P_0\Lambda^k(\mathcal T_h)$, and applying
+\eqref{eq:discreteL2HelmholtzDecompCRL} proves \eqref{eq:P0kerweakd}.
+Applying the same argument to \eqref{eq:discreteL2hodgeDecomp} proves
+\eqref{eq:Vrstarkerweakd}.
 \end{proof}
 
 Thus, the discrete Helmholtz decomposition
@@ -507,150 +582,517 @@ Thus, the discrete Helmholtz decomposition
 
 \subsection{Finite element complex}
 
-We always assume $1\leq m\leq n$.
+We always assume $1\leq m\leq n$ and use the convention
+$V_{0,h}^{\rm MWX}=\mathbb P_0(\mathcal T_h)$.
 \begin{lemma}
-Let $0\leq k\leq n-1$.
-It holds the following commuting property:
+Let $0\leq k\leq n-1$. The elementwise exterior derivative maps
+$V_{m,h}^{\rm MWX}\Lambda^k$ into
+$V_{m-1,h}^{\rm MWX}\Lambda^{k+1}$, and
 \begin{equation}\label{eq:dIhMWXcommute}
-\dd_h(I_{h}^{\rm MWX}\omega)=I_{h}^{\rm MWX}(\dd\omega),\quad\forall\,\omega\in H^m\Lambda^k(\Omega).
+\dd_h(I_{h}^{\rm MWX}\omega)=I_{h}^{\rm MWX}(\dd\omega),
+\qquad\omega\in H^m\Lambda^k(\Omega).
 \end{equation}
-That is we have the commutative diagram
-\begin{equation*}
-\begin{array}{c}
-\xymatrix{
-H^m\Lambda^k(\Omega)\ar[r]^-{\dd} \ar[d]^{I_{h}^{\rm MWX}}&  H^{m-1}\Lambda^{k+1}(\Omega) \ar[d]^{I_{h}^{\rm MWX}} \\
-V_{m,h}^{\rm MWX}\Lambda^k\ar[r]^-{\dd_h} & V_{m-1,h}^{\rm MWX}\Lambda^{k+1}
-}
-\end{array}
-.
-\end{equation*}
+Here the interpolation on the right has order $m-1$, and at order zero
+it is the elementwise mean.
 \end{lemma}
 \begin{proof}
-The property \eqref{eq:nablajIhMWX} implies
-\begin{equation*}
-\int_F\nabla^{\ell-(n-m)-1}\dd_h(\omega-I_{h}^{\rm MWX}\omega)\dd s=0,\;\;\forall\,F\in \Delta_\ell(T)
-\end{equation*}
-for $\ell=n-1,\ldots,n-(m-1)$.
-Thus, the commuting property \eqref{eq:dIhMWXcommute} is true.
+For $m\geq2$, property \eqref{eq:nablajIhMWX} gives
+\[
+\int_F\nabla^{\ell-(n-m)-1}\dd_h(\omega-I_h^{\rm MWX}\omega)\dd s=0,
+\qquad \ell=n-m+1,\ldots,n-1.
+\]
+These include all the target degrees of freedom. To check the mapping
+property, split each derivative into tangential and normal components on
+$F$. Integrating a tangential derivative over $F$ expresses it in terms
+of moments on $\partial F$; repeat this reduction on lower-dimensional
+faces whenever a derivative has a tangential component. The remaining normal
+derivative moments are source degrees of freedom. The all-face assembly therefore makes each target
+moment single-valued, including on shared boundary subsimplices.
+For $m=1$, componentwise integration by parts and the facet means give
+$\int_T\dd(\omega-I_h^{\rm MWX}\omega)=0$.
+Unisolvence proves \eqref{eq:dIhMWXcommute} in both cases.
 \end{proof}
 
-
-\begin{theorem}
-Assume $k+m<n$. The following nonconforming finite element de Rham complex
+\begin{theorem}\label{thm:MWXsplice}
+Let $k\geq0$ and $q=k+m<n$. The sequence
 \begin{equation}\label{complex:ncfem1}
-V_{m,h}^{\rm MWX}\Lambda^{k}\xrightarrow{\dd} 
-	V_{m-1,h}^{\rm MWX}\Lambda^{k+1}\xrightarrow{\dd}\cdots\xrightarrow{\dd}\mathbb P_0\Lambda^{k+m}(\mathcal T_h)\xrightarrow{\dd_w} \mathring{V}_{1,h}^{*}\Lambda^{k+m+1} \xrightarrow{\dd_w}\cdots
+\begin{aligned}
+V_{m,h}^{\rm MWX}\Lambda^{k}
+&\xrightarrow{\dd_h}V_{m-1,h}^{\rm MWX}\Lambda^{k+1}
+\xrightarrow{\dd_h}\cdots\xrightarrow{\dd_h}
+\mathbb P_0\Lambda^{q}(\mathcal T_h)\\
+&\xrightarrow{\dd_w}\mathring V_{1,h}^{*}\Lambda^{q+1}
+\xrightarrow{\dd_w}\cdots\xrightarrow{\dd_w}
+\mathring V_{n-q,h}^{*}\Lambda^n\to0
+\end{aligned}
 \end{equation}
-is exact, when the domain $\Omega$ is contractible.
+is a complex. If $\Omega$ is contractible, the sequence is exact at every
+space following its first displayed term. If, in addition, $k=0$, adjoining
+the constants $\mathbb R\hookrightarrow V_{m,h}^{\rm MWX}$ at the left
+makes the entire sequence exact.
 \end{theorem}
 \begin{proof}
-The exactness of the complex \eqref{complex:ncfem1} follows from the commuting property \eqref{eq:dIhMWXcommute} and \eqref{eq:P0kerweakd}-\eqref{eq:Vrstarkerweakd}.
+The preceding lemma and $\dd_h^2=0$ give the complex property along
+the MWX segment. Elementwise integration by parts, the facet means
+of the CR space, and the homogeneous trace of the test forms give
+$\dd_w\dd_h=0$ at the splice. On the weak segment, the adjoint identity
+and $(\dd^*)^2=0$ give $\dd_w^2=0$.
+
+We first identify the harmonic spaces on an arbitrary domain. Put $p=n-q$
+and set
+\[
+U_h^j=\mathring V_{1,h}^{\dd}\Lambda^j,
+\qquad W_h^j=\mathring V_{1,h}^{\dd,-}\Lambda^j.
+\]
+The full and Whitney spaces have the same incoming derivative image:
+\begin{equation}\label{eq:fullWhitneyDerivativeImage}
+\dd U_h^{p-1}=\dd W_h^{p-1}.
+\end{equation}
+Indeed, let $I_W$ be the canonical Whitney interpolant defined by oriented
+face integrals. For $\tau\in U_h^{p-1}$, these integrals are single-valued
+and vanish on boundary faces, so $I_W\tau\in W_h^{p-1}$.
+The form $\dd\tau$ is conforming and piecewise constant, and hence belongs
+to $W_h^p$. Stokes' formula therefore gives
+$\dd I_W\tau=I_W\dd\tau=\dd\tau$.
+The reverse inclusion follows from $W_h^{p-1}\subset U_h^{p-1}$.
+Consequently
+\[
+\star\mathring{\mathfrak H}_h^q
+=\ker(\dd|_{W_h^p})\cap(\dd W_h^{p-1})^\perp,
+\]
+which is the space of orthogonal representatives of relative Whitney
+cohomology in degree $p$.
+
+For the weak tail, use the compatible relative FEEC complex
+\[
+X_h^j=
+\begin{cases}
+\mathring V_{p-j,h}^{\dd}\Lambda^j,&0\leq j<p,\\
+W_h^j,&p\leq j\leq n,
+\end{cases}
+\qquad X_h^j\xrightarrow{\dd}X_h^{j+1}.
+\]
+The degree pattern is compatible with $\dd$: for $j<p-1$ the derivative
+lowers the full polynomial degree by one, while at the transition
+\[
+\dd\mathbb P_1\Lambda^{p-1}\subset\mathbb P_0\Lambda^p
+\subset\mathbb P_1^-\Lambda^p.
+\]
+For $p\leq j<n$,
+$\dd\mathbb P_1^-\Lambda^j\subset\mathbb P_0\Lambda^{j+1}
+\subset\mathbb P_1^-\Lambda^{j+1}$.
+The homogeneous trace conditions are preserved by $\dd$.
+Before imposing the homogeneous trace conditions, this is one of the
+standard polynomial de Rham subcomplexes described by
+\cite[Section 5.2, (73)]{ArnoldFalkWinther2010}, with the transition
+from full to trimmed polynomial forms at degree $p$.
+Let $K$ denote the mesh and $\partial K$ its boundary subcomplex.
+The canonical Whitney projections induce cohomology isomorphisms on both
+$K$ and $\partial K$ and commute with restriction; see
+\cite[Section 5.6]{ArnoldFalkWinther2010} and
+\cite[Theorem 2]{ChristiansenHu2023}.
+Since the trace degrees of freedom make both restriction maps surjective,
+comparison of the associated long exact sequences gives
+$H^j(X_h^\bullet)\simeq H^j(K,\partial K;\mathbb R)
+\simeq H^j(\overline\Omega,\partial\Omega;\mathbb R)$; see also
+\cite[Section 6.2]{ArnoldFalkWinther2010}.
+At weak-tail node $r$, $1\leq r\leq p$, the Hodge star identifies
+$\mathring V_{r,h}^{*}\Lambda^{q+r}$ with $X_h^{p-r}$.
+The incoming image in this relative complex is the star of
+$\dd^*\mathring V_{r+1,h}^{*}\Lambda^{q+r+1}$.
+Its outgoing kernel is the star of $\ker\dd^*$ at the weak-tail node.
+For $r=1$, this remains true because the derivative of a full affine form
+is piecewise constant and belongs to the Whitney target $W_h^p$;
+for $r>1$ the target has degree $r-1$ as in the original adjoint sequence.
+At $r=p$, the incoming space is zero in both descriptions.
+The harmonic identifications are thus
+\begin{equation}\label{eq:relativeHarmonicIdentification}
+\mathring{\mathfrak H}_h^q\simeq H^p(\overline\Omega,\partial\Omega;\mathbb R),
+\qquad
+\mathring{\mathfrak H}_{r,h}^{q+r}
+\simeq H^{p-r}(\overline\Omega,\partial\Omega;\mathbb R).
+\end{equation}
+
+If $\Omega$ is contractible, Poincar\'e--Lefschetz duality makes these
+relative groups vanish, since $0\leq p-r\leq p<n$. Equations~\eqref{eq:P0kerweakd} and
+\eqref{eq:Vrstarkerweakd} then give exactness at the splice and weak tail.
+At the first weak node, the incoming ranges agree:
+\[
+\dd_w\mathbb P_0\Lambda^q(\mathcal T_h)
+=\dd_w\mathring V_{0,h}^{*}\Lambda^q,
+\]
+since $\dd^*\mathring V_{1,h}^{*}\Lambda^{q+1}$ is contained in
+$\mathring V_{0,h}^{*}\Lambda^q$, and the defining pairings depend
+only on the orthogonal projection onto this subspace.
+
+For the earlier MWX nodes, Theorem~\ref{thm:MWXtruncated}, proved below,
+applies to the zero-degree starting row $U_q^a=V_{q-a,h}^{\rm MWX}\Lambda^a$.
+The displayed MWX segment is its tail beginning at degree $k$.
+Hence each node of degree $k<a<q$ has cohomology $H^a(\Omega;\mathbb R)$,
+which vanishes on a contractible domain. If $k=0$, the same theorem
+identifies the initial kernel with constants. This proves the assertions.
 \end{proof}
 
+\begin{remark}\label{rem:MWXterminalCohomology}
+For $k>0$, no exactness is asserted at the first displayed space of
+\eqref{complex:ncfem1}, since no incoming arrow is specified there.
+The stopped MWX row and the mixed complex can have different cohomology at
+their common piecewise constant space. Put
+$P=\mathbb P_0\Lambda^q(\mathcal T_h)$ and
+$A=\dd_hV_h^{\rm CR}\Lambda^{q-1}$. With $U_q^\bullet$ denoting the
+stopped row of Theorem~\ref{thm:MWXtruncated}, these groups are
+\[
+H^q(U_q^\bullet)=P/A,\qquad
+H_{\rm mix}^q=(\ker(\dd_w|_P))/A,
+\]
+and fit into the short exact sequence
+\[
+0\longrightarrow H_{\rm mix}^q\longrightarrow H^q(U_q^\bullet)
+\xrightarrow{[u]\mapsto\dd_wu}\operatorname{im}(\dd_w|_P)
+\longrightarrow0.
+\]
+For $1\leq q<n$, put $p=n-q$ and
+$b_q=\dim H^q(\Omega;\mathbb R)$, and let
+$\delta_{K,\partial K}^{p-1}$ be the relative simplicial coboundary.
+Then
+\[
+\dim H^q(U_q^\bullet)
+=b_q+\operatorname{rank}\delta_{K,\partial K}^{n-q-1}.
+\]
+Indeed, \eqref{eq:relativeHarmonicIdentification} and
+Poincar\'e--Lefschetz duality give $\dim H_{\rm mix}^q=b_q$.
+The finite-dimensional adjoint relation, Hodge star and
+\eqref{eq:fullWhitneyDerivativeImage} give
+\[
+\operatorname{rank}(\dd_w|_P)
+=\dim\dd U_h^{p-1}
+=\dim\dd W_h^{p-1}
+=\operatorname{rank}\delta_{K,\partial K}^{p-1},
+\]
+where the last equality uses oriented face integration.
+The short exact sequence proves the formula.
+In particular,
+\[
+\dim H^{n-1}(U_{n-1}^\bullet)=b_{n-1}+N_0^\circ,
+\]
+where $N_0^\circ$ is the number of interior vertices:
+$\delta_{K,\partial K}^0$ is injective because every connected
+component meets the boundary.
+For example, when $n=2$ and $q=1$, splitting a triangle into three triangles
+about an interior vertex gives terminal stopped cohomology of dimension one,
+whereas the mixed complex is exact at $P$.
+The face-coefficient description \eqref{eq:MWXtruncatedFaceCohomology}
+also includes this terminal degree.
+\end{remark}
 
+Set $C_h^k=V_{n-k,h}^{\rm MWX}\Lambda^k$ for $0\leq k<n$ and
+$C_h^n=\mathbb P_0\Lambda^n(\mathcal T_h)$. Let
+$\mathcal C^k(\mathcal T_h;\mathbb R)$ denote simplicial cochains, with
+coboundary $\delta$. Fix an orientation for every subsimplex and define
+\begin{equation}\label{eq:MWXcochainmap}
+(J^k\omega)(f)=\int_f\tr_f\omega,
+\qquad f\in\Delta_k(\mathcal T_h).
+\end{equation}
+For $k=0$ this is the vertex value, and for $k=n$ it is the element
+integral. The lowest-dimensional MWX moments make this definition
+independent of the incident element. This map is distinct from the
+$L^2$-bounded projections used for conforming finite element forms.
 
 \begin{lemma}
-Let $0\leq k\leq n-1$.
-It holds the following commuting property:
+The maps $J^k$ are surjective and satisfy
 \begin{equation}\label{eq:IhdMWXcommute}
-\dd(I_{1,h}^{\dd,-}\omega)=I_{1,h}^{\dd,-}(\dd_h\omega),\quad\forall\,\omega\in V_{n-k,h}^{\rm MWX}\Lambda^k.
+J^{k+1}\dd_h=\delta J^k,\qquad 0\leq k<n.
 \end{equation}
-That is we have the commutative diagram
-\begin{equation*}
-\begin{array}{c}
-\xymatrix{
-V_{n-k,h}^{\rm MWX}\Lambda^k\ar[r]^-{\dd_h} \ar[d]^{I_{1,h}^{\dd,-}}&  V_{n-k-1,h}^{\rm MWX}\Lambda^{k+1} \ar[d]^{I_{1,h}^{\dd,-}} \\
-V_{1,h}^{\dd,-}\Lambda^k\ar[r]^-{\dd} & V_{1,h}^{\dd,-}\Lambda^{k+1}
-}
-\end{array}
-.
-\end{equation*}
 \end{lemma}
 \begin{proof}
-It follows from the fact that all the DoFs of space $V_{1,h}^{\dd,-}\Lambda^k$ are a subset of those of space $V_{n-k,h}^{\rm MWX}\Lambda^k$. 
+Surjectivity follows from MWX unisolvence: the tangential integral on
+each $k$-face can be prescribed independently. For an oriented
+$(k+1)$-face $f$, Stokes' formula on any incident element gives
+\[
+\int_f\tr_f\dd_h\omega=\int_{\partial f}\tr\omega.
+\]
+All the boundary integrals are single-valued, so this is precisely
+\eqref{eq:IhdMWXcommute}.
 \end{proof}
 
-\begin{theorem}
-The nonconforming finite element de Rham complex
+\begin{theorem}\label{thm:MWXcohomology}
+The unaugmented nonconforming finite element complex
 \begin{equation}\label{complex:ncfem2}
-\mathbb R
-\to V_{n,h}^{\rm MWX}\Lambda^{0}
-\xrightarrow{\dd}
-V_{n-1,h}^{\rm MWX}\Lambda^{1}
-\xrightarrow{\dd}\cdots
-\xrightarrow{\dd}
-\mathbb P_0\Lambda^{n}(\mathcal T_h)
-\to 0
+0\to V_{n,h}^{\rm MWX}\Lambda^0
+\xrightarrow{\dd_h}V_{n-1,h}^{\rm MWX}\Lambda^1
+\xrightarrow{\dd_h}\cdots
+\xrightarrow{\dd_h}\mathbb P_0\Lambda^n(\mathcal T_h)\to0
 \end{equation}
-has the same cohomology as the continuous de Rham complex.
+has the same cohomology as the unaugmented continuous de Rham complex.
+More precisely, $J$ induces isomorphisms
+\[
+H^k(C_h^\bullet,\dd_h)\simeq
+H^k(\mathcal T_h;\mathbb R)\simeq H_{\rm dR}^k(\Omega),
+\qquad 0\leq k\leq n.
+\]
+\end{theorem}
+\begin{proof}
+For $0\leq\ell\leq n+1$, let $F^\ell C_h^k$ consist of forms whose
+degrees of freedom on faces of dimension less than $\ell$ vanish.
+Include the element integral as the $n$-dimensional degree of freedom
+of $C_h^n$. Thus $F^0C_h^\bullet=C_h^\bullet$ and
+$F^{n+1}C_h^\bullet=0$.
+A target moment on a face $f$ splits into normal derivatives on $f$
+and tangential derivatives integrated over $f$. The latter reduce to
+moments on its facets by integration by parts. Consequently
+$\dd_hF^\ell C_h^k\subset F^\ell C_h^{k+1}$.
+
+Consider the associated quotient $F^\ell C_h^\bullet/F^{\ell+1}C_h^\bullet$.
+By unisolvence, it is the direct sum of independent blocks indexed by
+the $\ell$-faces. For $\ell<n$, the block on a face $f$ has degree-$k$
+space
+\[
+\operatorname{Sym}^{\ell-k}(N_f^*)\otimes
+\Lambda^k(\mathbb R^n)^*,\qquad 0\leq k\leq\ell,
+\]
+where $N_f$ is the normal space of $f$ and the symmetric factor is
+identified with homogeneous polynomials of degree $\ell-k$ in normal
+variables. More explicitly, for a fixed orthonormal normal frame set
+\[
+\mu_{f,\alpha}(u):=\frac{1}{\alpha!}\int_f\partial_\nu^\alpha u,
+\qquad |\alpha|=\ell-k,
+\]
+where the integral is coefficientwise. Modulo moments on lower-dimensional
+faces, for $|\beta|=\ell-k-1$ one has
+\[
+\mu_{f,\beta}(\dd_hu)
+=\sum_{i=1}^{n-\ell}(\beta_i+1)\nu_i^\flat\wedge
+  \mu_{f,\beta+e_i}(u).
+\]
+The factorial normalization thus produces exactly the coefficient
+$\beta_i+1$ from differentiating $z^{\beta+e_i}$.
+Hence the identification with $\sum_\alpha\mu_{f,\alpha}(u)z^\alpha$
+turns the induced differential into
+$\dd_N=\sum_i\nu_i^\flat\wedge\partial_{z_i}$.
+The omitted tangential terms vanish in the quotient by repeated
+integration by parts on lower-dimensional faces.
+
+Split the exterior factor into components with $a$ tangential and
+$k-a$ normal factors. Contraction $\kappa_N$ with the normal Euler
+vector field satisfies
+\[
+\dd_N\kappa_N+\kappa_N\dd_N
+=\bigl((\ell-k)+(k-a)\bigr)I=(\ell-a)I.
+\]
+For $a<\ell$, division by $\ell-a$ gives a contracting homotopy
+within this block. The only remaining component is $k=a=\ell$:
+the one-dimensional space of constant tangential top forms on $f$.
+For $\ell=n$, the quotient consists only of the element constants in
+degree $n$, one per element, giving the same conclusion.
+
+Filter simplicial cochains by
+$F^\ell\mathcal C^k=0$ for $k<\ell$ and
+$F^\ell\mathcal C^k=\mathcal C^k$ for $k\geq\ell$.
+The map $J$ respects these filtrations. On each associated quotient,
+$J$ maps the sole surviving tangential top-form component to its
+oriented face integral, and hence induces a cohomology isomorphism.
+Induction over this finite filtration, using the long exact
+cohomology sequences of successive quotients, shows that $J$ is a
+quasi-isomorphism. The final identification is the simplicial de Rham
+theorem; equivalently one may use the Whitney complex
+\cite{Arnold2018,ArnoldFalkWinther2006}.
+\end{proof}
+
+\begin{remark}
+On a connected contractible domain, augmenting
+\eqref{complex:ncfem2} by the inclusion of $\mathbb R$ at the left
+gives an exact sequence. Without augmentation its degree-zero
+cohomology consists of constants. On a disconnected domain there is
+one constant per connected component.
+\end{remark}
+
+To analyze truncated rows, let $\mathcal K$ be the simplicial complex of the
+mesh, including all boundary faces. For a face $f$, let $T_f$ denote its
+tangent vector space. Given a vertex $v$ with position $x_v$, set
+$\widetilde x_v=(x_v,1)\in\mathbb R^{n+1}$ and
+$\widetilde T_f=\operatorname{span}\{\widetilde x_v:v\in\Delta_0(f)\}$.
+For $0\leq s<n$, define
+\[
+\mathcal C_s^\ell=\bigoplus_{f\in\Delta_\ell(\mathcal K)}\Lambda^sT_f,
+\qquad
+\mathcal B_s^\ell=\bigoplus_{f\in\Delta_\ell(\mathcal K)}
+\Lambda^s\widetilde T_f.
+\]
+Both use the oriented incidence differential induced by face inclusions;
+for instance,
+\[
+(\delta_s c)_g=\sum_{f\in\Delta_\ell(g)}[g:f]\jmath_{fg}c_f,
+\qquad \dim g=\ell+1,
+\]
+where $\jmath_{fg}$ is induced by $T_f\subset T_g$.
+Exterior powers exceeding the dimension of their space are zero.
+The incidence identities give $\delta_s^2=0$, and the same holds for
+$\mathcal B_s^\bullet$.
+
+\begin{theorem}\label{thm:MWXtruncated}
+Let $1\leq q<n$, and consider the truncated MWX complex
+\[
+U_q^a=V_{q-a,h}^{\rm MWX}\Lambda^a,\qquad 0\leq a\leq q,
+\]
+with differential $\dd_h$ and $U_q^q=\mathbb P_0\Lambda^q(\mathcal T_h)$.
+Then
+\[
+H^a(U_q^\bullet,\dd_h)\simeq H^a(\mathcal T_h;\mathbb R),
+\qquad 0\leq a<q.
+\]
+In particular, if $\Omega$ is contractible, the truncated row is exact
+at every positive degree strictly before its piecewise constant endpoint.
 \end{theorem}
 
+We isolate the local cohomology calculation used in the proof and again in
+Section~4.
+\begin{lemma}[Vanishing for lifted face coefficients]\label{lem:liftedFaceVanishing}
+For $1\leq s<n$, the lifted face-coefficient complex satisfies
+\[
+H^\ell(\mathcal B_s^\bullet)=0,\qquad 0\leq\ell<n.
+\]
+\end{lemma}
 \begin{proof}
-This follows from the commuting properties \eqref{eq:dIhMWXcommute} and
-\eqref{eq:IhdMWXcommute}, together with the fact that the Whitney complex has
-the same cohomology as the continuous de Rham complex.
+The lifted vertices of each face are linearly independent. Their exterior
+products split $\mathcal B_s^\bullet$ into summands indexed by
+$(s-1)$-faces $\sigma$. The summand for $\sigma$ has one generator on
+each coface of $\sigma$, and is the relative cochain complex
+$\mathcal C^\bullet(\mathcal K,\mathcal K_\sigma;\mathbb R)$, where
+$\mathcal K_\sigma=\{f\in\mathcal K:\sigma\not\subset f\}$.
+Its degree-$\ell$ cohomology is
+\[
+\widetilde H^{\ell-s}(\operatorname{lk}_{\mathcal K}\sigma;\mathbb R).
+\]
+The shift follows from $\dim(\sigma*g)=s+\dim g$, with the empty link
+simplex giving reduced degree $-1$. Since the mesh triangulates an
+$n$-manifold with boundary, an interior $(s-1)$-face has a link with the
+reduced cohomology of an $(n-s)$-sphere, while a boundary face has an
+acyclic link. Thus each summand has zero cohomology for $\ell<n$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:MWXtruncated}]
+Put $s=n-q$ and use the face-coefficient complexes defined above.
+For $u\in U_q^a$, define $J_s^a u\in\mathcal C_s^{a+s}$ by
+\[
+\langle(J_s^a u)_f,\eta\rangle
+=\int_f\tr_f u\wedge\eta,
+\qquad \eta\in\Lambda^sT_f^*,\quad \dim f=a+s,
+\]
+where $\eta$ is regarded as a constant differential form on $f$.
+The MWX face means make this well-defined, and Stokes' formula gives
+$J_s^{a+1}\dd_h=\delta_sJ_s^a$.
+
+Filter $U_q^\bullet$ by the dimensions of its degrees of freedom, as in
+Theorem~\ref{thm:MWXcohomology}. On an $\ell$-face with $\ell<n$, the
+associated block in degree $a$ is
+\[
+\operatorname{Sym}^{\ell-s-a}(N_f^*)\otimes\Lambda^a(\mathbb R^n)^*,
+\qquad 0\leq a\leq\ell-s.
+\]
+After factorial normalization of derivative moments, the induced
+differential is the normal-polynomial derivative $\dd_N$.
+On a component with $b$ tangential exterior factors, the normal Koszul
+identity has coefficient
+$(\ell-s-a)+(a-b)=\ell-s-b$.
+Thus every component contracts except
+$a=b=\ell-s$, which leaves $\Lambda^{\ell-s}T_f^*$.
+At $\ell=n$, only the element constants in degree $q$ occur, giving the
+same surviving component $\Lambda^qT_f^*$.
+The wedge pairing and oriented integration identify each surviving block
+with $\Lambda^sT_f$.
+Filter the shifted complex $\mathcal C_s^{a+s}$ by the same face dimensions.
+Its associated differential is zero, and $J_s$ identifies its blocks with
+the cohomology just computed. The finite-filtration comparison therefore gives
+\begin{equation}\label{eq:MWXtruncatedFaceCohomology}
+H^a(U_q^\bullet,\dd_h)\simeq H^{a+s}(\mathcal C_s^\bullet,\delta_s),
+\qquad 0\leq a\leq q.
+\end{equation}
+
+It remains to identify the right-hand side below degree $n$.
+The height covector $\varepsilon(x,t)=t$ satisfies
+$\ker(\varepsilon|_{\widetilde T_f})=T_f\times\{0\}$.
+Contraction with $\varepsilon$ consequently yields the short exact sequence
+of cochain complexes
+\begin{equation}\label{eq:MWXfaceCoefficientSES}
+0\longrightarrow\mathcal C_s^\bullet
+\longrightarrow\mathcal B_s^\bullet
+\xrightarrow{\iota_\varepsilon}\mathcal C_{s-1}^\bullet
+\longrightarrow0.
+\end{equation}
+Indeed, this is the exterior-power exact sequence associated with a
+nonzero covector on each $\widetilde T_f$; contraction commutes with all
+face inclusions.
+
+By Lemma~\ref{lem:liftedFaceVanishing}, the long exact sequence of \eqref{eq:MWXfaceCoefficientSES} now gives
+\[
+H^\ell(\mathcal C_s^\bullet)
+\simeq H^{\ell-1}(\mathcal C_{s-1}^\bullet),\qquad \ell<n.
+\]
+Iterating $s$ times, and using that $\mathcal C_0^\bullet$ is the ordinary
+simplicial cochain complex, proves
+$H^{a+s}(\mathcal C_s^\bullet)\simeq H^a(\mathcal K;\mathbb R)$ whenever
+$a+s<n$, equivalently $a<q$. Together with
+\eqref{eq:MWXtruncatedFaceCohomology}, this proves the theorem.
 \end{proof}
 
 
-For $1\leq m\leq n$ and $0\leq k\leq m$, the DoFs for space $V_{n-m+1,h}^{\dd,-}\Lambda^k$ are
-\begin{align}\label{feecnm1stdof}
-\int_f \tr_f\omega\wedge\eta,
-\quad \forall\, \eta\in \mathbb P_{n-m+k-\ell}\Lambda^{\ell-k}(f), f\in \Delta_\ell(\mathcal{T}_h), \ell=k,\ldots,n-m+k.
-\end{align}
-Introduce a subspace of $V_{n-m+1,h}^{\dd,-}\Lambda^k$ by
-\begin{align*}
-\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^k := \{ \omega \in V_{n-m+1,h}^{\dd,-}\Lambda^k&: \textrm{ all the DoFs in \eqref{feecnm1stdof} vanish on } \\
-&\quad f\in \Delta_\ell(\mathcal{T}_h) \textrm{ for } \ell=k,\ldots,n-m+k-1\}.
-\end{align*}
-Then the DoFs for space $\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^k$ are
-\begin{align}\label{feecnm1st0dof}
-\int_f \tr_f\omega\wedge\eta,
-\quad \forall\, \eta\in \mathbb P_{0}\Lambda^{n-m}(f), f\in \Delta_{n-m+k}(\mathcal{T}_h).
-\end{align}
-Clearly, we have $\widehat{V}_{1,h}^{\dd,-}\Lambda^k=V_{1,h}^{\dd,-}\Lambda^k$ when $m=n$.
-The space $\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^k$ has homogeneous boundary conditions on subsimplices with dimension less than $n-m+k$.
-
-By $\tr_f\dd=\dd_f\tr_f$, it holds that $\dd \widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^k\subseteq \widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^{k+1}$. Thus, we have the subcomplex
-\begin{equation}\label{complex:derham0}
-\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^{0}
-\xrightarrow{\dd}
-\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^{1}
-\xrightarrow{\dd}\cdots
-\xrightarrow{\dd}
-\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^{m}
-\to 0.
-\end{equation}
-
-\textcolor{red}{
-Does the complex \eqref{complex:derham0} have the same cohomology as the continuous de Rham complex?}
-
-
-\begin{lemma}
-Let $1\leq m\leq n$ and $0\leq k\leq m-1$.
-It holds the following commuting property:
-\begin{equation}\label{eq:IhdMWXcommute0}
-\dd(\widehat{I}_{n-m+1,h}^{\dd,-}\omega)=\widehat{I}_{n-m+1,h}^{\dd,-}(\dd_h\omega),\quad\forall\,\omega\in V_{n-k,h}^{\rm MWX}\Lambda^k,
-\end{equation}
-where $\widehat{I}_{n-m+1,h}^{\dd,-}: V_{m-k,h}^{\rm MWX}\Lambda^k\to\widehat{V}_{n-m+1,h}^{\dd,-}$ is the interpolation operator based on DoF \eqref{feecnm1st0dof}.
-That is we have the commutative diagram
-\begin{equation*}
-\begin{array}{c}
-\xymatrix{
-V_{m-k,h}^{\rm MWX}\Lambda^k\ar[r]^-{\dd_h} \ar[d]^{\widehat{I}_{n-m+1,h}^{\dd,-}}&  V_{m-k-1,h}^{\rm MWX}\Lambda^{k+1} \ar[d]^{\widehat{I}_{n-m+1,h}^{\dd,-}} \\
-\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^k\ar[r]^-{\dd} &\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^{k+1}
-}
-\end{array}
-.
-\end{equation*}
+\begin{lemma}[Contraction of face coefficients]\label{lem:faceContractionZero}
+For $1\leq r<n$ and a constant covector $\lambda\in(\mathbb R^n)^*$,
+the facewise contraction
+\[
+T_r=\iota_\lambda:\mathcal C_r^\bullet\longrightarrow
+\mathcal C_{r-1}^\bullet
+\]
+induces zero on $H^\ell$ for $0\leq\ell<n$.
 \end{lemma}
 \begin{proof}
-It follows from $\tr_f\dd=\dd_f\tr_f$ and the integration by parts. 
+Extend $\lambda$ to $\widetilde\lambda(v,t)=\lambda(v)$.
+Both contractions commute with face inclusions.
+For $r=1$, the map factors through
+\[
+\mathcal C_1^\bullet\hookrightarrow\mathcal B_1^\bullet
+\xrightarrow{\widetilde\lambda}\mathcal C_0^\bullet,
+\]
+so Lemma~\ref{lem:liftedFaceVanishing} gives the assertion.
+For $r\geq2$, compare the height short exact sequences
+\eqref{eq:MWXfaceCoefficientSES} at indices $r$ and $r-1$.
+The three vertical maps are $T_r$, $\iota_{\widetilde\lambda}$ and
+$-T_{r-1}$, respectively. The last sign makes the right square commute,
+since $\iota_\varepsilon\iota_{\widetilde\lambda}
+=-\iota_{\widetilde\lambda}\iota_\varepsilon$.
+Naturality of the connecting maps gives
+\[
+(T_r)_*\partial_r=-\partial_{r-1}(T_{r-1})_* ,\qquad
+\partial_r:H^{\ell-1}(\mathcal C_{r-1}^\bullet)
+\longrightarrow H^\ell(\mathcal C_r^\bullet).
+\]
+For $\ell<n$, Lemma~\ref{lem:liftedFaceVanishing} makes $\partial_r$
+surjective. Induction on $r$ proves the result, with negative
+cohomological degrees understood as zero.
 \end{proof}
 
 
 \section{Discrete BGG in two dimensions}
 
 \subsection{Discrete Hessian complex in two dimensions}
+In this section, set
+\[
+Q_h:=\mathbb P_1(\mathcal T_h)\cap H_0^1(\Omega)
+=\mathring V_{1,h}^*\Lambda^2.
+\]
+We use $\curl v=(\partial_2v,-\partial_1v)^{\mathsf T}$ and
+$\rot\boldsymbol v=\partial_1v_2-\partial_2v_1$.
+Gradients of vector fields and curls of vector fields are taken row-wise,
+and the divergence of a matrix is taken row-wise. Moreover,
+\[
+\mskw v=\begin{pmatrix}0&-v\\v&0\end{pmatrix},\qquad
+\sskw A=(A_{21}-A_{12})/2.
+\]
+For a piecewise constant matrix $\tau$, the weak rotation is characterized by
+\[
+(\rot_w\tau,\boldsymbol z)=(\tau,\curl\boldsymbol z),
+\qquad \boldsymbol z\in Q_h\otimes\mathbb R^2.
+\]
 The finite element BGG diagram
 \begin{equation*}
 \begin{tikzcd}
@@ -679,58 +1121,80 @@ V_{h}^{\rm CR}\otimes\mathbb R^2
 % &0 
 \end{tikzcd}
 \end{equation*}
-gives rise to the finite element Hessian complex
+leads to the following result.
+\begin{theorem}\label{thm:hessian2d}
+The sequence
 \begin{equation}\label{eq:hesscomplex2dfem}
-\mathbb P_1\xrightarrow{\subset} V_{2,h}^{\rm MWX}\xrightarrow{\nabla_h^2}\mathbb P_0(\mathcal T_h;\mathbb S)\xrightarrow{\rot_w} \mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^2\xrightarrow{}0,
+\mathbb P_1\xrightarrow{\subset} V_{2,h}^{\rm MWX}\xrightarrow{\nabla_h^2}\mathbb P_0(\mathcal T_h;\mathbb S)\xrightarrow{\rot_w} Q_h\otimes\mathbb R^2\xrightarrow{}0
 \end{equation}
-where $\mathring{V}_{1,h}^{*}\Lambda^2$ denotes the linear Lagrange element space with homogeneous boundary conditions. When $\Omega$ is simply connected, this complex is equivalent to the discrete Helmholtz decomposition in \cite[Theorem 3.1]{CarstensenGallistlHu2014} and \cite[Theorem 4.5]{Gallistl2015}:
+is a complex. If $\Omega$ is simply connected, it is exact and
 \begin{equation*}
 \mathbb P_0(\mathcal T_h;\mathbb S)
 =
 \nabla_h^2 V_{2,h}^{\rm MWX}
-\oplus
-\sym\curl(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^2).
+\oplus^{\perp}
+\sym\curl(Q_h\otimes\mathbb R^2).
 \end{equation*}
+\end{theorem}
+\begin{proof}
+The MWX assembly gives $\nabla_hu_h\in V_h^{\rm CR}\otimes\mathbb R^2$.
+If $\nabla_h^2u_h=0$, this gradient is piecewise constant, and its edge means
+make it a global constant. The shared vertex values then imply
+$u_h\in\mathbb P_1$.
+For $\boldsymbol z_h\in Q_h\otimes\mathbb R^2$, element-wise integration
+by parts gives
+\[
+(\nabla_h^2u_h,\sym\curl\boldsymbol z_h)=0.
+\]
+Indeed, the interior edge terms vanish by the continuity of the edge means
+of $\nabla_hu_h$ and the constant tangential derivatives of
+$\boldsymbol z_h$ on each edge. The boundary terms vanish because
+$\boldsymbol z_h$ is zero on the boundary. This also proves the complex property.
 
+The kernel of $\sym\curl$ on each triangle consists of the fields
+$\boldsymbol a+b\boldsymbol x$. Continuity across edges makes
+$\boldsymbol a$ and $b$ global, and the zero boundary condition makes them
+zero. Thus $\sym\curl$ is injective on $Q_h\otimes\mathbb R^2$.
+Let $V,E,T,V_i$ denote the numbers of vertices, edges, triangles, and
+interior vertices. The two orthogonal images have dimensions $V+E-3$
+and $2V_i$, respectively. For a simply connected polygon, Euler's formula
+and the edge-triangle incidence count give
+\[
+(V+E-3)+2V_i=3T=\dim\mathbb P_0(\mathcal T_h;\mathbb S).
+\]
+This proves the decomposition and exactness at the matrix space.
+Finally, $\rot_w$ restricted to symmetric matrices is the adjoint of
+$\sym\curl$, so its surjectivity follows from the injectivity just proved.
+\end{proof}
+Related Morley--$\sym\curl$ decompositions appear in
+\cite[Theorem 3.1]{CarstensenGallistlHu2014} and
+\cite[Theorem 4.5]{Gallistl2015}. The latter uses its prescribed spaces
+$V_\ell$ and $X(\mathcal T_\ell)$; the proof above uses the full Morley
+space and the homogeneous vector potential space $Q_h\otimes\mathbb R^2$.
 
-\textcolor{red}{The continuity mismatch case.}
-The finite element BGG diagram
-\begin{equation*}
-\begin{tikzcd}
-%\mathbb R \arrow{r}{\subset}
-%&
-V_{h}^{\rm CR}
-\arrow{r}{\grad_h}
- &
-\mathbb P_0(\mathcal T_h;\mathbb R^2)
-   \arrow{r}{\rot_w}
- &
-\mathring{V}_{1,h}^{*}\Lambda^2
-% \arrow{r}{}
-% & 0 \\
-\\
- %
-% \mathbb R \arrow{r}{\subset}
-%&
-\mathbb P_0(\mathcal T_h;\mathbb R^2)
- \arrow[ur,swap,"{\rm id}"] \arrow{r}{\grad_w}
- & \mathring{V}_{1,h}^{*}\Lambda^1 \otimes\mathbb R^2
- \arrow[ur,swap,"{\rm -2\sskw}"] \arrow{r}{\rot_w}
- & \mathring{V}_{2,h}^{*}\Lambda^2 \otimes\mathbb R^2
-%\arrow[r] 
-% &0 
-\end{tikzcd}
-\end{equation*}
-\textcolor{red}{
-gives rise to the finite element Hessian complex
-\begin{equation*}
-\mathbb P_1\xrightarrow{\subset} V_{h}^{\rm CR}\xrightarrow{\grad_w\grad_h} (\mathring{V}_{1,h}^{*}\Lambda^1 \otimes\mathbb R^2)/\mskw\mathring{V}_{1,h}^{*}\Lambda^2 \xrightarrow{\rot_w} \mathring{V}_{2,h}^{*}\Lambda^2\otimes\mathbb R^2\xrightarrow{}0,
-\end{equation*}
-where
-$\mathring{V}_{1,h}^{*}\Lambda^1$ is the linear BDM element space, and $\mathring{V}_{2,h}^{*}\Lambda^2$ is the quadratic Lagrange element space.
-}
+\begin{remark}\label{rem:weakRotationQuotient}\rm
+The weak rotation does not, in general, descend to the quotient
+\[
+(\mathring V_{1,h}^*\Lambda^1\otimes\mathbb R^2)/\mskw Q_h.
+\]
+Here $\mathring V_{1,h}^*\Lambda^1$ is the linear BDM space with zero
+normal trace, and the weak rotation is tested against
+$(\mathbb P_2(\mathcal T_h)\cap H_0^1(\Omega))\otimes\mathbb R^2$.
+On a mesh with an interior vertex, choose $0\ne v_h\in Q_h$.
+The matrix $\tau_h=\mskw v_h$ represents the zero class, but the admissible
+test function $\boldsymbol z_h=\boldsymbol x v_h$ gives
+\[
+(\rot_w\tau_h,\boldsymbol z_h)
+=(v_h,\div(\boldsymbol x v_h))
+=\|v_h\|_0^2>0.
+\]
+A quotient construction must therefore specify its representative.
+The orthogonal-kernel realization in \eqref{eq:linearHessian2d} uses
+$[A]\mapsto\rot_w(P_{K_h^{\rm 2D}}A)$ and yields a complex by
+Theorem~\ref{thm:lowerBGG}.
+\end{remark}
 
-\subsection{Discrete grad\,curl complex in two dimensions}
+\subsection{Discrete grad-curl complex in two dimensions}
 The finite element BGG diagram
 \begin{equation*}
 \begin{tikzcd}
@@ -759,24 +1223,34 @@ V_{h}^{\rm CR}\otimes\mathbb R^2
 % &0 
 \end{tikzcd}
 \end{equation*}
-gives rise to the finite element Hessian complex
+gives the rotated version of Theorem~\ref{thm:hessian2d}.
+\begin{corollary}
+The sequence
 \begin{equation}\label{eq:gradcurlcomplex2dfem}
-\mathbb P_1\xrightarrow{\subset} V_{2,h}^{\rm MWX}\xrightarrow{\grad_h\curl_h}\mathbb P_0(\mathcal T_h;\mathbb T)\xrightarrow{\rot_w} \mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^2\xrightarrow{}0.
+\mathbb P_1\xrightarrow{\subset} V_{2,h}^{\rm MWX}\xrightarrow{\grad_h\curl_h}\mathbb P_0(\mathcal T_h;\mathbb T)\xrightarrow{\rot_w} Q_h\otimes\mathbb R^2\xrightarrow{}0
 \end{equation}
-When $\Omega$ is simply connected, this complex is equivalent to the discrete Helmholtz decomposition:
+is a complex. If $\Omega$ is simply connected, it is exact and
 \begin{equation*}
 \mathbb P_0(\mathcal T_h;\mathbb T)
 =
 \grad_h\curl_h V_{2,h}^{\rm MWX}
-\oplus
-\dev\curl(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^2).
+\oplus^{\perp}
+\dev\curl(Q_h\otimes\mathbb R^2).
 \end{equation*}
-A related decomposition can be found in
-\cite[Corollary 6.4]{BringmannKettelerSchedensack2025}.
+\end{corollary}
+\begin{proof}
+Set $R=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
+Left multiplication by $R$ maps $\mathbb S$ isometrically onto $\mathbb T$,
+and
+\[
+R\nabla_h^2u_h=\grad_h\curl_hu_h,\qquad
+R\sym\curl\boldsymbol z_h=\dev\curl(R\boldsymbol z_h).
+\]
+Since $RQ_h^2=Q_h^2$ and $\rot_w(R\tau)=R\rot_w\tau$, the result follows
+from Theorem~\ref{thm:hessian2d}.
+\end{proof}
 
-
-
-\subsection{Discrete div\,div complex in two dimensions}
+\subsection{Discrete div-div complex in two dimensions}
 
 The finite element BGG diagram
  \begin{equation}\label{eq:femdivdivbgg}
@@ -805,18 +1279,134 @@ V_{h}^{\rm CR}
  &0 
 \end{tikzcd}
 \end{equation}
-gives rise to the finite element div\,div complex
+leads to a second-order complex. Define
+\[
+{\rm RT}:=\{\boldsymbol a+b\boldsymbol x:
+\boldsymbol a\in\mathbb R^2,\ b\in\mathbb R\}.
+\]
+\begin{proposition}\label{prop:divdiv2d}
+The sequence
 \begin{equation}\label{eq:continuousdivdivcomplex}
-{\rm RT}\xrightarrow{\subset} 
+{\rm RT}\xrightarrow{\subset}
 V_{2,h}^{\rm MWX}\otimes\mathbb R^2
 \xrightarrow{{\sym\curl_h}}
-V_{h}^{\rm CR}\otimes\mathbb S\xrightarrow{\div_w\div_h}  
-\mathring{V}_{1,h}^{*}\Lambda^2 
-\xrightarrow{}0.
+V_h^{\rm CR}\otimes\mathbb S\xrightarrow{\div_w\div_h}
+Q_h\xrightarrow{}0
 \end{equation}
+is a complex, where
+\[
+(\div_w\div_h\tau_h,q_h)
+=-(\div_h\tau_h,\nabla q_h),\qquad q_h\in Q_h.
+\]
+If $\Omega$ is a connected polygon with $g$ holes, then
+$\ker(\sym\curl_h)={\rm RT}$, the last arrow is surjective, and
+\[
+\dim\frac{\ker(\div_w\div_h|_{V_h^{\rm CR}\otimes\mathbb S})}
+              {\sym\curl_h(V_{2,h}^{\rm MWX}\otimes\mathbb R^2)}=3g.
+\]
+In particular, the sequence is exact when $\Omega$ is simply connected.
+\end{proposition}
+\begin{proof}
+The first composition vanishes on ${\rm RT}$. The MWX derivative property
+shows that $\sym\curl_h\boldsymbol u_h\in V_h^{\rm CR}\otimes\mathbb S$
+and $\div_h\boldsymbol u_h\in V_h^{\rm CR}$.
+The element-wise identity
+\[
+\div_h\sym\curl_h\boldsymbol u_h
+=\tfrac12\curl_h\div_h\boldsymbol u_h
+\]
+reduces the remaining composition to
+$(\curl_h v_h,\nabla q_h)=0$ for $v_h\in V_h^{\rm CR}$ and $q_h\in Q_h$.
+This follows by element-wise integration by parts: on each interior edge,
+the tangential derivative of $q_h$ is constant and the mean jump of $v_h$
+is zero; on a boundary edge, the tangential derivative of $q_h$ is zero.
 
+The local kernel of $\sym\curl$ consists of the fields
+$\boldsymbol a+b\boldsymbol x$. If two such fields agree at both endpoints
+of a common edge, their coefficients $\boldsymbol a$ and $b$ agree.
+The assembled Morley vertex values therefore give
+$\ker(\sym\curl_h)={\rm RT}$ on a connected mesh.
+To prove surjectivity of $B_h:=\div_w\div_h$, let $q_h\in Q_h$ be
+orthogonal to its range. The admissible choice $\tau_h=q_hI$ gives
+\[
+0=(B_h(q_hI),q_h)=-\|\nabla q_h\|_0^2,
+\]
+so $q_h=0$ by its homogeneous boundary condition.
+
+Let $V,E,T$ be the numbers of vertices, edges and triangles, and write
+$V=V_i+V_b$ and $E_b$ for the number of boundary edges. Then
+\[
+\dim\operatorname{range}(\sym\curl_h)=2(V+E)-3,
+\qquad \operatorname{rank}B_h=V_i.
+\]
+Euler's formula and the incidence identities are
+\[
+V-E+T=1-g,\qquad 3T=2E-E_b,\qquad E_b=V_b.
+\]
+Consequently, the cohomology at the symmetric-matrix space has dimension
+\[
+3E-V_i-\bigl(2(V+E)-3\bigr)
+=E-2V-V_i+3=3g.
+\]
+All the other nodes are exact by the kernel and surjectivity arguments above.
+\end{proof}
+
+
+Table~\ref{tab:BGG2dSummary} lists the four planar complexes under the
+vector proxies used above. The first two are related by a constant
+rotation and share $(m,j)=(2,1)$. Thus these sequences realize all three
+admissible parameter pairs for the prescribed MWX rows, links and switch
+$J=j-1$ in Theorems~\ref{thm:fullBGG} and~\ref{thm:lowerBGG}.
+
+\begin{table}[!htbp]
+\centering
+\caption{Two-dimensional BGG complexes and unaugmented cohomology.}
+\label{tab:BGG2dSummary}
+\small
+\begin{tabularx}{\textwidth}{@{}cXcc@{}}
+\toprule
+$(m,j)$ & Complex & Reference & $\dim H^i$ \\
+\midrule
+$(2,1)$ & Morley Hessian
+& \eqref{eq:hesscomplex2dfem} & $3b_i$ \\
+$(2,1)$ & Morley grad-curl (rotated Hessian)
+& \eqref{eq:gradcurlcomplex2dfem} & $3b_i$ \\
+$(2,2)$ & Morley div-div
+& \eqref{eq:continuousdivdivcomplex} & $3b_i$ \\
+$(1,1)$ & CR weak Hessian
+& \eqref{eq:linearHessian2d} & $3b_i$ \\
+\bottomrule
+\end{tabularx}
+\smallskip
+
+\begin{minipage}{\textwidth}
+\footnotesize
+Here $b_i=\dim H^i(\Omega;\mathbb R)$ and $0\leq i\leq2$.
+For a connected polygon with $g$ holes, all four unaugmented cohomology
+dimension triples are $(\dim H^0,\dim H^1,\dim H^2)=(3,3g,0)$.
+\end{minipage}
+\end{table}
 
 \section{Discrete BGG in three dimensions}
+
+In this section, gradients of vector fields, curls, and divergences of matrices
+are taken row-wise. We set $\mskw(a)b=a\times b$ and define
+$\vskw A=\mskw^{-1}(\skw A)$ for $A\in\mathbb M$. Moreover,
+\begin{align*}
+\iota(q)&=qI, & S\tau&=\tau^\top-(\tr\tau)I,\\
+\defm u&=\sym\grad u, & \inc\tau&=\curl((\curl\tau)^\top).
+\end{align*}
+Write $L_{r,h}=\mathbb P_r(\mathcal T_h)\cap H_0^1(\Omega)
+=\mathring V_{r,h}^{*}\Lambda^3$.
+For linear maps $A:X\to Y$ and $B:Y\to Z$ between finite-dimensional inner
+product spaces with $BA=0$, we use
+\[
+\mathfrak H(A,B):=\ker B\cap (AX)^{\perp_Y},\qquad
+Y=AX\oplus^\perp B^*Z\oplus^\perp\mathfrak H(A,B).
+\]
+Indeed, $Y=\ker B\oplus^\perp\operatorname{range}B^*$ and
+$\ker B=AX\oplus^\perp\mathfrak H(A,B)$. All adjoints and orthogonal
+complements below use the $L^2$ inner product unless stated otherwise.
 
 \subsection{Discrete Hessian complex in three dimensions}
 The finite element BGG diagram
@@ -852,14 +1442,32 @@ gives rise to the finite element Hessian complex
 \begin{equation}\label{eq:hesscomplex3dfem}
 \mathbb P_1\xrightarrow{\subset} V_{3,h}^{\rm MWX}\xrightarrow{\nabla_h^2}V_{h}^{\rm CR}\otimes\mathbb S\xrightarrow{\curl_h}\mathbb P_0(\mathcal T_h;\mathbb T)\xrightarrow{\div_w} \mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3\xrightarrow{}0.
 \end{equation}
-When $\Omega$ is simply connected, this complex implies the discrete Helmholtz decomposition
-\begin{equation*}
+If $\Omega$ is contractible, this augmented sequence is exact.
+Positive-degree exactness follows from Theorem~\ref{thm:fullBGG}.
+At the scalar node, a vanishing Hessian makes the function affine on each
+cell; the shared vertex values and edge-normal derivative means identify
+these affine functions, so the kernel is $\mathbb P_1$.
+
+At the piecewise constant node, finite-dimensional Hodge decomposition gives
+\begin{align*}
 \mathbb P_0(\mathcal T_h;\mathbb T)
-=
-\curl_h(V_{h}^{\rm CR}\otimes\mathbb S)
-\oplus
-\dev\grad(\mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3).
-\end{equation*}
+={}&\curl_h(V_{h}^{\rm CR}\otimes\mathbb S)
+\oplus^\perp\dev\grad(L_{1,h}\otimes\mathbb R^3)
+\oplus^\perp\mathfrak H_h^{\rm H},
+\end{align*}
+where $\mathfrak H_h^{\rm H}=\mathfrak H(A_{\rm H},B_{\rm H})$,
+$A_{\rm H}=\curl_h:V_h^{\rm CR}\otimes\mathbb S\to
+\mathbb P_0(\mathcal T_h;\mathbb T)$ and $B_{\rm H}=\div_w$.
+The relation $B_{\rm H}A_{\rm H}=0$ follows from the weak de Rham complex,
+and $B_{\rm H}^*=-\dev\grad$ on $L_{1,h}\otimes\mathbb R^3$.
+If $\Omega$ is contractible, $\mathfrak H_h^{\rm H}=0$ by
+Theorem~\ref{thm:fullBGG}, and the decomposition has two terms.
+For contractible domains, Gu and Huang \cite{GuHuang2026} obtain a related
+decomposition using symmetric CR tensors with zero boundary face means
+and unrestricted CR vector potentials; their sum need not be direct.
+The orthogonal decomposition above uses different spaces and boundary
+conditions, and Theorem~\ref{thm:fullBGG} gives
+$\dim\mathfrak H_h^{\rm H}=4b_2$ on general domains.
 
 We can start from $V_{2,h}^{\rm MWX}$ to have the following finite element BGG diagram
 \begin{equation}\label{discBGG3dHess:MXW2}
@@ -906,33 +1514,174 @@ It suffices to prove
 Then \eqref{anticommu:weakdivvskw} follows from $\curl(\iota(v))=-\mskw(\grad v)$ and $\vskw = \mskw^{-1}\circ \skw$.
 \end{proof}
 
-Thanks to the commuting property \eqref{anticommu:weakdivvskw},
-the finite element BGG diagram \eqref{discBGG3dHess:MXW2} yields the finite element Hessian complex
-\begin{equation*}%\label{eq:hesscomplex3dfem}
-% \mathbb P_1\xrightarrow{\subset} 
-V_{2,h}^{\rm MWX}\xrightarrow{\nabla_h^2}\mathbb P_0(\mathcal T_h;\mathbb S)\xrightarrow{\curl_w}(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap\ker(\tr_w)\xrightarrow{\div_w} \mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3\xrightarrow{}0.
-\end{equation*}
-The explicit charactization of space $(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap\ker(\tr_w)$ is unknown. However, since
-\begin{equation*}
-(\curl_w\boldsymbol{\sigma}, \iota(v))=(\boldsymbol{\sigma}, \sym\curl\iota(v))=0,\quad\forall\,\boldsymbol{\sigma}\in\mathbb P_0(\mathcal T_h;\mathbb S), v\in L^2(\Omega),
-\end{equation*}
-we can revise the last complex as the following
+Set
+\[
+E_h=\mathring V_{1,h}^{*}\Lambda^2\otimes\mathbb R^3,
+\qquad K_h=\ker(\tr_w:E_h\to L_{1,h}).
+\]
+Thus $E_h$ consists of piecewise affine matrices whose rows belong to
+$H_0(\curl;\Omega)$, and
+\[
+K_h=\{\tau\in E_h:(\tr\tau,q)=0\ \forall q\in L_{1,h}\}
+=(L_{1,h}I)^{\perp_{E_h}}.
+\]
+Thanks to \eqref{anticommu:weakdivvskw}, the diagram
+\eqref{discBGG3dHess:MXW2} yields the complex
 \begin{equation}\label{eq:hesscomplex3dfem2}
-% \mathbb P_1\xrightarrow{\subset} 
-V_{2,h}^{\rm MWX}\xrightarrow{\nabla_h^2}\mathbb P_0(\mathcal T_h;\mathbb S)\xrightarrow{\curl_w}(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)\xrightarrow{\div_w} \mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3\xrightarrow{}0,
+V_{2,h}^{\rm MWX}\xrightarrow{\nabla_h^2}
+\mathbb P_0(\mathcal T_h;\mathbb S)\xrightarrow{\curl_w}
+K_h\xrightarrow{\div_w}L_{2,h}\otimes\mathbb R^3\xrightarrow{}0.
 \end{equation}
-where $\curl_w:\mathbb P_0(\mathcal T_h;\mathbb S)\to (\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)$ is understood as the adjoint of $\sym\curl: (\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)\to \mathbb P_0(\mathcal T_h;\mathbb S)$, and $\div_w: (\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)\to \mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3$ is understood as the adjoint of $\dev\grad: \mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3\to(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)$.
-
-Indeed, the finite element Hessian complex \eqref{eq:hesscomplex3dfem2} is the adjoint of the finite element div\,div complex in \cite[Proposition 5.7 and Remark 5.10]{ChenHuang2025}. When $\Omega$ is simply connected, this complex implies the discrete Helmholtz decomposition
-\begin{equation*}
+Here $\curl_w$ is the restriction of the original weak curl and $\div_w$
+is restricted to $K_h$. In particular, for $\sigma\in\mathbb P_0(\mathcal T_h;\mathbb S)$,
+\[
+(\curl_w\sigma,qI)=(\sigma,\curl(qI))=0,\qquad q\in L_{1,h},
+\]
+since $\curl(qI)$ is skew-symmetric. This tests the trace only against
+$L_{1,h}$. The identities $\curl_w\nabla_h^2=0$ and
+$\div_w\curl_w=0$ follow from the two weak de Rham rows.
+Consequently,
+\[
 \mathbb P_0(\mathcal T_h;\mathbb S)
-=\nabla_h^2V_{2,h}^{\rm MWX}
-\oplus\sym\curl((\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)).
-\end{equation*}
-A similar decomposition can be found in \cite[Theorem 7.4]{BringmannKettelerSchedensack2025}.
+=\nabla_h^2V_{2,h}^{\rm MWX}\oplus^\perp\sym\curl K_h
+\oplus^\perp\mathfrak H_h^{\rm H,2},
+\]
+where $\mathfrak H_h^{\rm H,2}=\mathfrak H(\nabla_h^2,\curl_w)$
+for the first two arrows of \eqref{eq:hesscomplex3dfem2}.
+
+On a contractible domain, \eqref{eq:hesscomplex3dfem2}, augmented by
+$\mathbb P_1$ at the left, is exact; in particular,
+$\mathfrak H_h^{\rm H,2}=0$.
+Indeed, if $\sigma\in\mathbb P_0(\mathcal T_h;\mathbb S)$ and
+$\curl_w\sigma=0$, the CR--$\mathbb P_0$ splice applied row-wise gives
+$\sigma=\grad_h v$ for $v\in V_h^{\rm CR}\otimes\mathbb R^3$.
+Symmetry implies $\curl_hv=0$, so Theorem~\ref{thm:MWXsplice}, with
+$m=2,k=0$, gives $v=\grad_hu$ for $u\in V_{2,h}^{\rm MWX}$.
+Next, if $\tau\in K_h$ and $\div_w\tau=0$, weak-tail exactness gives
+$\tau=\curl_w A$ for $A\in\mathbb P_0(\mathcal T_h;\mathbb M)$.
+By \eqref{anticommu:weakdivvskw},
+$\div_w(2\vskw A)=0$. Exactness at the degree-two splice supplies
+$v\in V_h^{\rm CR}\otimes\mathbb R^3$ with
+$\curl_hv=2\vskw A$. Since $2\vskw\grad_hv=\curl_hv$,
+$A-\grad_hv$ is symmetric and has weak curl $\tau$.
+Finally, the adjoint of $\div_w:K_h\to L_{2,h}\otimes\mathbb R^3$
+is $-P_{K_h}\grad$. Its kernel consists of fields $z$ with
+$\grad z\in L_{1,h}I$, hence of global fields $z=a+bx$;
+the homogeneous boundary condition forces $z=0$. Thus the last arrow is
+surjective. The Hessian kernel is $\mathbb P_1$, because its vanishing
+makes the CR gradient globally constant and the shared edge means fix
+the elementwise additive constants.
+
+\begin{corollary}\label{cor:weakHessianCohomology}
+Let $\mathcal Q_h^\bullet$ denote the unaugmented complex
+\eqref{eq:hesscomplex3dfem2}, indexed from degree zero, and put
+$b_i=\dim H^i(\Omega;\mathbb R)$. Then
+\[
+\dim H^i(\mathcal Q_h^\bullet)=4b_i,\qquad 0\leq i\leq3.
+\]
+In particular, $\dim\mathfrak H_h^{\rm H,2}=4b_1$.
+Together with $\dim\mathfrak H_h^{\rm H}=4b_2$ from
+Theorem~\ref{thm:fullBGG}, this shows that the piecewise constant nodes
+in \eqref{eq:hesscomplex3dfem2} and \eqref{eq:hesscomplex3dfem}
+detect degrees one and two, respectively.
+\end{corollary}
+\begin{proof}
+The two rows of \eqref{discBGG3dHess:MXW2} have cohomology dimensions
+$b_i$ and $3b_i$, by Theorems~\ref{thm:MWXsplice}
+and~\ref{thm:MWXtruncated} and Poincar\'e--Lefschetz duality.
+Their links are $\mathrm{id}$, $-2\vskw$ and $\tr_w$.
+The first is bijective and the other two are surjective;
+for the last, $\tr_w(qI/3)=q$ for $q\in L_{1,h}$.
+The identity $2\vskw\grad_h=\curl_h$ and
+\eqref{anticommu:weakdivvskw} give anticommutativity, so the switch
+index is $J=0$.
+We verify that all links induce zero on cohomology.
+For the identity link, a closed lower-row field is a vector $c$ constant
+on each connected component, and $c=\grad_h(c\cdot x)$ with an affine
+potential in $V_{2,h}^{\rm MWX}$.
+For the middle link, let $A\in\mathbb P_0(\mathcal T_h;\mathbb M)$
+satisfy $\curl_wA=0$. The Helmholtz decomposition
+\eqref{eq:discreteL2HelmholtzDecompCRL} gives
+\[
+\bigl(\curl_h(V_h^{\rm CR}\otimes\mathbb R^3)\bigr)^\perp_
+ {\mathbb P_0(\mathcal T_h;\mathbb R^3)}
+=\mathbb P_0(\mathcal T_h;\mathbb R^3)\cap H_0(\curl;\Omega)=:F_h.
+\]
+For $h\in F_h$, its distributional curl vanishes, and each $x_i h$
+is a piecewise affine field in $H_0(\curl;\Omega)$, hence an admissible
+weak-curl test. Since row $i$ of $\mskw h$ is
+$e_i\times h=\curl(x_i h)$, we obtain
+\[
+(2\vskw A,h)=(A,\mskw h)
+=\sum_{i=1}^3(A_i,\curl(x_i h))=0.
+\]
+Thus $-2\vskw A\in\curl_h(V_h^{\rm CR}\otimes\mathbb R^3)$.
+The trace link has target cohomology of dimension $b_3=0$.
+The equality criterion in \cite[Theorem 6]{ArnoldHu2021} now yields
+$\dim H^i(\mathcal Q_h^\bullet)=b_i+3b_i$.
+\end{proof}
+
+\begin{remark}\label{rem:weakTraceRepresentation}\rm
+The weak trace kernel admits a trace-free representation, with a specified
+inner product. Tangential continuity and the boundary condition imply
+\[
+\ker(\dev|_{E_h})=L_{1,h}I.
+\]
+Indeed, if $qI\in E_h$, its row-wise tangential continuity forces $q$ to be
+continuous across every face, and its boundary tangential trace forces $q=0$
+on $\partial\Omega$. Hence $D=\dev|_{K_h}:K_h\to\dev E_h$ is an isomorphism.
+Equip $\dev E_h$ with
+\[
+(\sigma,\tau)_D=(D^{-1}\sigma,D^{-1}\tau).
+\]
+The transported arrows are $D\curl_w$ and $\div_wD^{-1}$; their composition
+vanishes. With this inner product they are the adjoints of $\sym\curl$ and
+$-\dev\grad$, respectively. To see the latter assertion, note that
+$D^{-1}\dev\grad v=P_{K_h}\grad v$ for $v\in L_{2,h}\otimes\mathbb R^3$,
+where $P_{K_h}$ is the $L^2$-orthogonal projection onto $K_h$.
+For the former, $\sym\curl$ on $\dev E_h$ is understood in the
+distributional sense. Since $\tau-D^{-1}\tau$ is a scalar matrix and
+$\sym\curl(qI)=0$ in distributions for $q\in L^2(\Omega)$, we have
+$\sym\curl\tau=\sym\curl D^{-1}\tau\in L^2(\Omega;\mathbb S)$.
+Thus the relevant trace-free space is $\dev E_h$.
+\end{remark}
+
+\begin{remark}\label{rem:weakTraceBipyramid}\rm
+The space $E_h\cap L^2(\Omega;\mathbb T)$ cannot replace $K_h$.
+Take the convex triangular bipyramid with vertices
+$A_\pm=(0,0,\pm1)$, $B_1=(1,0,0)$, $B_2=(0,1,0)$, and $B_3=(-1,-1,0)$,
+and tetrahedra $[A_+,A_-,B_i,B_{i+1}]$, with cyclic indices.
+There are no interior vertices and only one interior edge, $[A_+,A_-]$.
+Thus $L_{1,h}=0$, $\dim K_h=\dim E_h=6$, and
+$\dim(L_{2,h}\otimes\mathbb R^3)=3$.
+Writing $\lambda_\pm$ for the global piecewise affine vertex functions, each $M\in E_h$
+has the form
+\[
+M=\lambda_+a\otimes\nabla\lambda_-+
+\lambda_-b\otimes\nabla\lambda_+,\qquad a,b\in\mathbb R^3.
+\]
+The three rows $\nabla\lambda_\pm|_T$ form matrices with determinants
+$\pm9/8$. Evaluating $\tr M=0$ at $A_+$ and $A_-$ on each tetrahedron
+therefore gives $a=b=0$. Hence $E_h\cap L^2(\Omega;\mathbb T)=0$.
+There are ten edges and nine faces, so $\dim V_{2,h}^{\rm MWX}=19$.
+Its Hessian kernel is $\mathbb P_1$: a vanishing broken Hessian gives a
+piecewise constant CR gradient, hence a global constant gradient, and the
+shared edge means fix the remaining constants. Thus
+$\dim\nabla_h^2V_{2,h}^{\rm MWX}=15<18=\dim\mathbb P_0(\mathcal T_h;\mathbb S)$.
+The proposed two-term decomposition using the pointwise trace-free intersection
+therefore fails on this convex domain.
+The space in \cite[Section 5.1.2 and Proposition 5.7]{ChenHuang2025} is instead
+$H(\sym\curl;\mathbb T)$-conforming, with different boundary spaces;
+its adjoint does not identify the pointwise intersection used here.
+The bipyramid triangulation is also the join mesh in the proof of
+Theorem~\ref{thm:lowerBGG} for $n=3$ and $m=2$: take $\sigma=[A_+,A_-]$ and
+$\tau=[B_1,B_2,B_3]$. For $j=3$, the first weak link $S^2$ has a
+two-dimensional source and zero target, so it cannot be invertible
+at $J=2$.
+\end{remark}
 
 
-\subsection{Discrete grad\,curl complex in three dimensions}
+\subsection{Discrete grad-curl complex in three dimensions}
 The finite element BGG diagram
 \begin{equation*}
 %\adjustbox{scale=0.9,center}{% \begin{equation*}%\label{eq:BGGelasticity}
@@ -963,30 +1712,76 @@ V_{h}^{\rm CR}\otimes\mathbb R^3
 \end{tikzcd}
 %}
 \end{equation*}
-gives rise to the finite element grad\,curl complex
+gives rise to the finite element grad-curl complex
 \begin{equation}\label{eq:gradcurlcomplex3dfem}
-% \mathbb P_1\xrightarrow{\subset} 
-V_{3,h}^{\rm MWX}
-\xrightarrow{\grad_h}
-V_{2,h}^{\rm MWX}\otimes\mathbb R^3\xrightarrow{\grad_h\curl_h}\mathbb P_0(\mathcal T_h;\mathbb T)\xrightarrow{\curl_w}
-\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3 
-\xrightarrow{\div_w} 
- \mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3.
+\begin{aligned}
+V_{3,h}^{\rm MWX}\xrightarrow{\grad_h}
+V_{2,h}^{\rm MWX}\otimes\mathbb R^3
+&\xrightarrow{\grad_h\curl_h}\mathbb P_0(\mathcal T_h;\mathbb T)\\
+&\xrightarrow{\curl_w}E_h
+\xrightarrow{\div_w}L_{2,h}\otimes\mathbb R^3.
+\end{aligned}
 \end{equation}
-When $\Omega$ is simply connected, this complex yields the discrete Helmholtz decomposition
-\begin{equation*}
+Denote this unaugmented complex by $\mathcal G_h^\bullet$.
+The Hodge decomposition at the piecewise constant node is
+\begin{align*}
 \mathbb P_0(\mathcal T_h;\mathbb T)
-=
-\grad_h\curl_h(V_{2,h}^{\rm MWX}\otimes\mathbb R^3)
-\oplus
-\dev\curl(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3).
-\end{equation*}
-A related decomposition can be found in \cite[Corollary 6.4]{BringmannKettelerSchedensack2025}.
+={}&\grad_h\curl_h(V_{2,h}^{\rm MWX}\otimes\mathbb R^3)
+\oplus^\perp\dev\curl E_h
+\oplus^\perp\mathfrak H_h^{\rm G},
+\end{align*}
+where $\mathfrak H_h^{\rm G}=\mathfrak H(\grad_h\curl_h,\curl_w)$
+uses the adjacent arrows in \eqref{eq:gradcurlcomplex3dfem}.
+Write $b_i=\dim H^i(\Omega;\mathbb R)$, with $b_i=0$ outside
+$0\leq i\leq3$. Then
+\begin{equation}\label{eq:gradcurlcohomology3d}
+\dim H^i(\mathcal G_h^\bullet)=b_i+3b_{i-1},\qquad 0\leq i\leq4.
+\end{equation}
+To prove this, index the full MWX row in degrees $0,\ldots,3$ and append
+zero in degree~$4$. Index the row
+$V_h^{\rm CR}\otimes\mathbb R^3\to\mathbb P_0(\mathcal T_h;\mathbb M)
+\to E_h\to L_{2,h}\otimes\mathbb R^3$
+in degrees $1,\ldots,4$, and prepend zero in degree~$0$.
+The linking maps in degrees $0,\ldots,3$ are
+$(0,\mathrm{id},-\tr,0)$, with switch index $J=1$.
+They have the required injectivity and surjectivity; anticommutativity reduces
+to $\div_h v=\tr\grad_h v$.
+The output is precisely \eqref{eq:gradcurlcomplex3dfem}.
+The cohomology dimensions of the upper and lower rows are $b_i$ and
+$3b_{i-1}$, respectively, by Theorems~\ref{thm:MWXcohomology}
+and~\ref{thm:MWXsplice} and Poincar\'e--Lefschetz duality.
+Every linking map induces zero on cohomology. Indeed, a closed element
+in degree one of the lower row is a vector $c$ constant on each connected
+component, and $c=\curl_h(\tfrac12c\times x)$, with the affine potential
+belonging to $V_{2,h}^{\rm MWX}\otimes\mathbb R^3$.
+The degree-two link has target cohomology $H^3(\Omega;\mathbb R)=0$,
+while the other links vanish. The equality criterion in
+\cite[Theorem 6]{ArnoldHu2021} proves \eqref{eq:gradcurlcohomology3d}.
+In particular, $\dim\mathfrak H_h^{\rm G}=b_2+3b_1$, so this harmonic
+space vanishes when $\Omega$ is contractible.
+A related decomposition, under its stated topology and boundary assumptions,
+can be found in \cite[Corollary 6.4]{BringmannKettelerSchedensack2025}.
+
+\begin{remark}\rm
+If $\Omega$ is contractible, Theorem~\ref{thm:MWXcohomology} gives
+\[
+\ker(\grad_h\curl_h|_{V_{2,h}^{\rm MWX}\otimes\mathbb R^3})
+=\grad_h V_{3,h}^{\rm MWX}\oplus
+\{c\times x:c\in\mathbb R^3\}.
+\]
+Indeed, $\grad_h\curl_h u=0$ makes $\curl_hu$ a piecewise constant CR
+vector, hence a global constant $c$. Subtracting $\tfrac12c\times x$ leaves
+a curl-free field, to which the MWX cohomology theorem applies.
+The sum is direct since $\curl(c\times x)=2c$.
+Thus the cohomology at this node is three-dimensional, as in the continuous
+grad-curl complex \cite[(46)]{ArnoldHu2021}.
+\end{remark}
 
 
 
 
-\subsection{Discrete elasticity complex in three dimensions}
+\subsection{Discrete elasticity complex in three dimensions}\label{sec:elasticity3d}
+Let ${\rm RM}=\{a+b\times x:a,b\in\mathbb R^3\}$ be the rigid-motion space.
 The finite element BGG diagram
 \begin{equation*}
 \adjustbox{scale=0.96,center}{
@@ -1019,17 +1814,60 @@ gives rise to the finite element elasticity complex
 \begin{align*}%\label{eq:femelasticitycomplex3d+421}
 {\rm RM}\xrightarrow{\subset}V_{3,h}^{\rm MWX}\otimes\mathbb R^3 \xrightarrow{\defm_h} V_{2,h}^{\rm MWX}\otimes\mathbb S \xrightarrow{\inc_h}  \mathbb P_0(\mathcal T_h;\mathbb S) \xrightarrow{\div_w} \mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3\rightarrow \boldsymbol{0}.
 \end{align*}
-When $\Omega$ is simply connected, this complex implies the discrete Helmholtz decomposition
-\begin{equation*}
+This augmented sequence is exact on a contractible domain by
+Theorem~\ref{thm:fullBGG} and the kernel identity
+$\ker\defm_h={\rm RM}$.
+For the latter, local rigid motions agree at the three vertices of every
+shared face and hence agree globally.
+
+The corresponding Hodge decomposition is
+\[
 \mathbb P_0(\mathcal T_h;\mathbb S)
-=
-\inc_h(V_{2,h}^{\rm MWX}\otimes\mathbb S)
-\oplus
-\defm(\mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3).
-\end{equation*}
+=\inc_h(V_{2,h}^{\rm MWX}\otimes\mathbb S)
+\oplus^\perp\defm(L_{1,h}\otimes\mathbb R^3)
+\oplus^\perp\mathfrak H_h^{\rm E},
+\]
+where $\mathfrak H_h^{\rm E}=\mathfrak H(\inc_h,\div_w)$ on the adjacent
+spaces above. Here $\div_w\inc_h=0$ follows by applying the weak de Rham
+identity to $\inc_h\tau=\curl_h((\curl_h\tau)^\top)$.
+If $\Omega$ is contractible, $\mathfrak H_h^{\rm E}=0$ by
+Theorem~\ref{thm:fullBGG}.
+
+\begin{remark}\rm
+Simple connectivity does not remove the harmonic terms in three dimensions.
+For example, the shell between two concentric similar tetrahedra admits a
+conforming mesh with $(V,E,F,T)=(8,22,28,12)$ and no interior vertices:
+triangulate each of the four triangular frusta into three tetrahedra using a
+consistent ordering of its vertices. Then $L_{1,h}=0$,
+$\dim V_{3,h}^{\rm MWX}=V+2E+F=80$, and
+$\dim V_{2,h}^{\rm MWX}=E+F=50$.
+The kernel of $\nabla_h^2$ on $V_{3,h}^{\rm MWX}$ is $\mathbb P_1$,
+and that of $\defm_h$ on $V_{3,h}^{\rm MWX}\otimes\mathbb R^3$ is ${\rm RM}$.
+For the first assertion, shared vertex values and the two normal derivative
+means on each shared edge identify the constant gradients of the local affine
+functions. For the second, the local rigid motions agree at the three vertices
+of each common face and hence coincide. Therefore
+\[
+\dim\mathfrak H_h^{\rm H}\geq 8T-[6F-(80-4)]=4,\qquad
+\dim\mathfrak H_h^{\rm E}\geq 6T-[6\cdot50-(3\cdot80-6)]=6.
+\]
+More generally, Theorem~\ref{thm:fullBGG}, with $n=3$ and
+$j=1,2$, respectively, gives
+\[
+\dim\mathfrak H_h^{\rm H}=4b_2,\qquad
+\dim\mathfrak H_h^{\rm E}=6b_2,
+\quad b_2=\dim H^2(\Omega;\mathbb R).
+\]
+For this shell, $b_2=1$, so
+$\dim\mathfrak H_h^{\rm H}=4$ and $\dim\mathfrak H_h^{\rm E}=6$
+for every conforming tetrahedral triangulation, independently of the
+particular mesh used above. Thus the two orthogonal harmonic summands
+cannot be omitted on this simply connected domain.
+\end{remark}
 
 
-\subsection{Discrete div\,div complex in three dimensions}
+\subsection{Discrete div-div complex in three dimensions}\label{sec:divdiv3d}
+Set ${\rm RT}=\{a+bx:a\in\mathbb R^3,\ b\in\mathbb R\}$.
 The finite element BGG diagram
 \begin{equation*}%\label{eq:BGGdivdiv}
 \adjustbox{scale=0.96,center}{
@@ -1058,184 +1896,642 @@ V_{h}^{\rm CR}\otimes\mathbb R^3
 \end{tikzcd}
 }
 \end{equation*}
-gives rise to the finite element div\,div complex
+gives rise to the finite element div-div complex
 \begin{equation*}
 {\rm RT}\xrightarrow{\subset} V_{3,h}^{\rm MWX}\otimes\mathbb R^3 \xrightarrow{\dev\grad_h} V_{2,h}^{\rm MWX}\otimes\mathbb T \xrightarrow{\sym\curl_h} V_{h}^{\rm CR}\otimes\mathbb S \xrightarrow{\div_w\div_h} \mathring{V}_{1,h}^{*}\Lambda^3\rightarrow 0.
 \end{equation*} 
 
 
-\section{Discrete BGG in arbitrary $n$ dimensions}
 
-We use the notation of \cite{ArnoldHu2021}. For $j=1,2,\ldots,n$, the finite element BGG diagram
-\begin{equation*}%\label{eq:BGGdivdiv}
-\adjustbox{scale=0.96,center}{
-\begin{tikzcd}
-V_{n,h}^{\rm MWX}\otimes{\rm Alt}^{0,j-1}
-\arrow{r}{\dd_h}
-& V_{n-1,h}^{\rm MWX}\otimes{\rm Alt}^{1,j-1}
- \arrow{r}{\dd_h} & \cdots \arrow{r}{\dd_h}
- &
-V_{h}^{\rm CR}\otimes{\rm Alt}^{n-1,j-1}
- \arrow{r}{\div_h}
- & \mathbb P_0(\mathcal T_h;{\rm Alt}^{n,j-1})%\to \boldsymbol{0}
- \\
- %
-V_{n-1,h}^{\rm MWX}\otimes{\rm Alt}^{0,j}
- \arrow[ur,swap,"S^{0,j}"'] \arrow{r}{\dd_h}
- & 
-V_{n-2,h}^{\rm MWX}\otimes{\rm Alt}^{1,j}
- \arrow[ur,swap,"S^{1,j}"'] \arrow{r}{\dd_h} & \cdots \arrow{r}{\dd_h}
- & 
-\mathbb P_0(\mathcal T_h;{\rm Alt}^{n-1,j}) 
- \arrow[ur,swap,"S^{n-1,j}"'] \arrow{r}{\div_w} 
- & \mathring{V}_{1,h}^{*}\otimes{\rm Alt}^{n,j}
-\to 0
-% & 0
-\end{tikzcd}
-}
-\end{equation*}
-yields the finite element complex
-\begin{align*}
-&
-V_{n,h}^{\rm MWX}\otimes{\rm Alt}^{0,j-1}
-\longrightarrow
-V_{n-1,h}^{\rm MWX}\otimes\mathcal R(s^{0,j})^{\perp}
-\longrightarrow
-\cdots
-\\
-&\quad\longrightarrow
-V_{n-j+1,h}^{\rm MWX}\otimes\mathcal R(s^{j-2,j})^{\perp}
-\xrightarrow{\dd_h(S^{j-1,j})^{-1}\dd_h}
-V_{n-j-1,h}^{\rm MWX}\otimes\mathcal N(s^{j,j})
-\xrightarrow{\dd_h}
-\\
-&\quad
-V_{n-j-2,h}^{\rm MWX}\otimes\mathcal N(s^{j+1,j})
-\xrightarrow{\dd_h}
-\cdots
-\xrightarrow{\dd_h}
-\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{n-1,j})
-\xrightarrow{\div_w}
-\mathring{V}_{1,h}^{*}\otimes{\rm Alt}^{n,j},
-\end{align*}
-for $1\leq j\leq n-1$. For $j=n$, it yields the finite element div\,div complex
-\begin{align*}
-&V_{n,h}^{\rm MWX}\otimes{\rm Alt}^{0,n-1} \xrightarrow{} V_{n-1,h}^{\rm MWX}\otimes\mathcal R(s^{0,n})^{\perp}\xrightarrow{} \cdots \xrightarrow{}  V_{h}^{\rm CR}\otimes\mathbb S \xrightarrow{\div_w\div_h} \mathring{V}_{1,h}^{*}\Lambda^n.
-\end{align*}
+The last operator is determined by
+\[
+(\div_w\div_h\tau,v)=-(\div_h\tau,\grad v),\qquad
+\tau\in V_h^{\rm CR}\otimes\mathbb S,\quad v\in L_{1,h}.
+\]
+This also verifies the last composition. For
+$\rho\in V_{2,h}^{\rm MWX}\otimes\mathbb T$, set
+$w=\div_h\rho^\top\in V_h^{\rm CR}\otimes\mathbb R^3$. The row-wise identity
+$\div_h\sym\curl_h\rho=\tfrac12\curl_h w$ gives
+\[
+(\div_w\div_h\sym\curl_h\rho,v)
+=-\tfrac12(\curl_h w,\grad v)=0,\qquad v\in L_{1,h},
+\]
+by the weak de Rham identity. The preceding composition vanishes because
+\[
+\sym\curl_h\dev\grad_h=0.
+\]
+Thus the displayed div-div sequence is a complex with the stated boundary test space.
+On a contractible domain it is exact: Theorem~\ref{thm:fullBGG}
+gives positive-degree exactness, while $\dev\grad_hu=0$ implies that $u$
+is a local field $a+bx$. Shared vertex values identify these fields across
+faces, so the initial kernel is precisely ${\rm RT}$.
+
+Table~\ref{tab:BGG3dSummary} lists six members of the standard parameter
+family and the separate degree-shifted grad-curl construction in three
+dimensions. The first six exhaust $1\leq j\leq m\leq3$ for the prescribed
+MWX rows, links and switch $J=j-1$, by Theorems~\ref{thm:fullBGG}
+and~\ref{thm:lowerBGG}. The realization on $\dev E_h$ in
+Remark~\ref{rem:weakTraceRepresentation} is chain-isomorphic to
+\eqref{eq:hesscomplex3dfem2} and is not listed separately.
+
+\begin{table}[!htbp]
+\centering
+\caption{Three-dimensional BGG complexes and unaugmented cohomology.}
+\label{tab:BGG3dSummary}
+\small
+\begin{tabularx}{\textwidth}{@{}cXcc@{}}
+\toprule
+$(m,j)$ & Complex & Reference & $\dim H^i$ \\
+\midrule
+$(3,1)$ & Cubic MWX Hessian
+& \eqref{eq:hesscomplex3dfem} & $4b_i$ \\
+$(2,1)$ & Quadratic MWX weak-trace Hessian
+& \eqref{eq:hesscomplex3dfem2} & $4b_i$ \\
+$(1,1)$ & CR weak Hessian
+& \eqref{eq:linearHessian3d} & $4b_i$ \\
+$(3,2)$ & Cubic MWX elasticity
+& \S\ref{sec:elasticity3d} & $6b_i$ \\
+$(2,2)$ & Quadratic MWX weak-symmetry elasticity
+& \eqref{eq:quadraticElasticity3d} & $6b_i$ \\
+$(3,3)$ & Cubic MWX div-div
+& \S\ref{sec:divdiv3d} & $4b_i$ \\
+\midrule
+--- & Degree-shifted grad-curl
+& \eqref{eq:gradcurlcomplex3dfem} & $b_i+3b_{i-1}$ \\
+\bottomrule
+\end{tabularx}
+\smallskip
+
+\begin{minipage}{\textwidth}
+\footnotesize
+Here $b_i=\dim H^i(\Omega;\mathbb R)$, with $b_i=0$ outside
+$0\leq i\leq3$. The first six rows are indexed by $0\leq i\leq3$;
+the last is indexed by $0\leq i\leq4$ and does not belong to the
+standard $(m,j)$ family.
+\end{minipage}
+\end{table}
+
+\FloatBarrier
+\section{Discrete BGG in arbitrary \texorpdfstring{$n$}{n} dimensions}
+
+We use ${\rm Alt}^{i,j}:={\rm Alt}^i(\mathbb R^n)\otimes{\rm Alt}^j(\mathbb R^n)$ and the algebraic linking maps of \cite{ArnoldHu2021}.
+For an orthonormal basis $e_a$ and its dual basis $e^a$, set
+\[
+s^{i,j}(\alpha\otimes\beta)
+:=\sum_{a=1}^n(e^a\wedge\alpha)\otimes\iota_{e_a}\beta,
+\qquad
+s^{i,j}:{\rm Alt}^{i,j}\longrightarrow{\rm Alt}^{i+1,j-1},
+\]
+where $\iota_{e_a}$ denotes contraction in the second alternating factor.
+This definition is independent of the orthonormal basis. We write $S^{i,j}$ for the pointwise action on finite element fields.
+
+\begin{theorem}\label{thm:fullBGG}
+Fix $1\leq j\leq n$ and put $J=j-1$. Define two rows by
+\[
+Z_h^i=V_{n-i,h}^{\rm MWX}\otimes{\rm Alt}^{i,j-1}
+\quad(0\leq i\leq n),
+\]
+\[
+\widetilde Z_h^i=
+\begin{cases}
+V_{n-i-1,h}^{\rm MWX}\otimes{\rm Alt}^{i,j},&0\leq i<n,\\
+\mathring V_{1,h}^{*}\Lambda^n\otimes{\rm Alt}^j(\mathbb R^n),&i=n.
+\end{cases}
+\]
+The first row has differential $D_h^i=\dd_h$ for $i<n$.
+The second has $\widetilde D_h^i=\dd_h$ for $i<n-1$ and $\widetilde D_h^{n-1}=\dd_w$.
+Set $S^i=S^{i,j}$ for $0\leq i<n$, and $S^{-1}=S^n=0$ at the endpoints.
+Let $P_{\mathcal R(S^i)^\perp}$ denote the $L^2$-orthogonal projection onto the complement of the range in $Z_h^{i+1}$.
+Then the spaces
+\[
+\Upsilon_h^i=
+\begin{cases}
+Z_h^i\cap\mathcal R(S^{i-1})^\perp,&0\leq i\leq J,\\
+\widetilde Z_h^i\cap\ker S^i,&J<i\leq n,
+\end{cases}
+\]
+with differentials
+\[
+\mathcal D_h^i=
+\begin{cases}
+P_{\mathcal R(S^i)^\perp}D_h^i,&i<J,\\
+\widetilde D_h^J(S^J)^{-1}D_h^J,&i=J,\\
+\widetilde D_h^i,&J<i<n,
+\end{cases}
+\]
+form a complex. Write $b_i=\dim H^i(\Omega;\mathbb R)$. The unaugmented
+output complex has cohomology dimensions
+\begin{equation}\label{eq:fullBGGcohomology}
+\dim H^i(\Upsilon_h^\bullet,\mathcal D_h)
+=\binom{n+1}{j}b_i,\qquad 0\leq i\leq n.
+\end{equation}
+In particular, it is exact in every positive degree on a contractible domain.
+On each connected component, its degree-zero kernel consists precisely of
+\begin{equation}\label{eq:fullBGGkernel}
+x\longmapsto a+\iota_xb,\qquad
+ a\in{\rm Alt}^{j-1}(\mathbb R^n),\quad b\in{\rm Alt}^j(\mathbb R^n).
+\end{equation}
+For $1\leq j\leq n-1$, its degree $n-1$ space is
+\[
+\Upsilon_h^{n-1}
+=\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{n-1,j}).
+\]
+\end{theorem}
+
+The key additional property of these discrete input rows is the following
+vanishing result; its proof uses only the rows and links defined above.
+\begin{lemma}[Vanishing of the links on cohomology]\label{lem:BGGzeroCohomology}
+For the two input rows and linking maps of Theorem~\ref{thm:fullBGG},
+\[
+S^i\ker\widetilde D_h^i\subseteq\operatorname{im}D_h^i,
+\qquad 0\leq i<n.
+\]
+Thus every linking map induces zero on cohomology.
+\end{lemma}
+\begin{proof}
+The two rows are complexes by Theorems~\ref{thm:MWXcohomology}
+and~\ref{thm:MWXsplice}. Each $S^i$ acts between spaces with the same
+scalar MWX factor, so it respects all assembled degrees of freedom.
+Exterior multiplication in the first factor gives
+\[
+D_h^{i+1}S^i+S^{i+1}\widetilde D_h^i=0,
+\qquad 0\leq i\leq n-2.
+\]
+Only broken derivatives occur here, so the links send cycles to cycles
+and boundaries to boundaries, with the endpoint maps taken to be zero.
+Use the face-coefficient complexes above with $s=1$. On each face set
+\[
+e_f(v\otimes\beta)=(v,0)\otimes\beta,\qquad
+\Phi_f((v,t)\otimes\beta)=\iota_v\beta.
+\]
+These maps commute with face inclusions and define cochain maps
+\[
+\mathcal C_1^\bullet\otimes{\rm Alt}^j
+\xrightarrow{e}\mathcal B_1^\bullet\otimes{\rm Alt}^j
+\xrightarrow{\Phi}\mathcal C_0^\bullet\otimes{\rm Alt}^{j-1}.
+\]
+Here ${\rm Alt}^r={\rm Alt}^r(\mathbb R^n)$, and $J$ and $J_1$ act on the
+first alternating factor. For $u\in\widetilde Z_h^i$, the
+wedge-integral definition gives
+\begin{equation}\label{eq:BGGfaceFactorization}
+J^{i+1}S^iu=(-1)^i\Phi eJ_1^iu,\qquad 0\leq i<n.
+\end{equation}
+Indeed, if $u=\alpha\otimes\beta$ and $v=(J_1^i\alpha)_f$, then
+$e^a(v)=\int_f\alpha\wedge e^a$ and
+\[
+(J^{i+1}S^iu)_f
+=\sum_{a=1}^n\int_f e^a\wedge\alpha\;\iota_{e_a}\beta
+=(-1)^i\iota_v\beta.
+\]
+For $i<n-1$ and $\widetilde D_h^iu=0$, the cochain $eJ_1^iu$ is closed
+in $\mathcal B_1^{i+1}\otimes{\rm Alt}^j$.
+Lemma~\ref{lem:liftedFaceVanishing} makes it a coboundary.
+Equation~\eqref{eq:BGGfaceFactorization} and the full-row quasi-isomorphism
+$J$ therefore imply $S^iu\in\operatorname{im}D_h^i$.
+For $i=n-1$, this follows directly from $H^n(Z_h^\bullet)=0$,
+since the bounded domain has vanishing absolute top-degree cohomology.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:fullBGG}]
+Lemma~\ref{lem:BGGzeroCohomology} establishes the input complexes and
+well-defined anticommuting links.
+The algebraic map $s^{i,j}$ is injective for $i\leq j-1$, surjective for $i\geq j-1$, and bijective at $i=j-1$; see \cite[Lemma 2]{ArnoldHu2021}.
+Since the scalar factors agree, these properties also hold for $S^i$.
+The finite-dimensional construction in \cite[Theorem 6]{ArnoldHu2021} therefore gives the stated complex and the bound
+\[
+\dim H^i(\Upsilon_h^\bullet,\mathcal D_h)
+\leq \dim H^i(Z_h^\bullet,D_h)
+   +\dim H^i(\widetilde Z_h^\bullet,\widetilde D_h).
+\]
+We show that equality holds in every degree. The full-row comparison and
+Theorem~\ref{thm:MWXtruncated} with $q=n-1$ identify the input cohomology
+before the lower-row splice. At its last two nodes,
+\eqref{eq:relativeHarmonicIdentification} gives relative cohomology in
+degrees one and zero. Poincar\'e--Lefschetz duality identifies their
+dimensions with $b_{n-1}$ and $b_n=0$, respectively. Hence, for all $0\leq i\leq n$,
+\[
+\dim H^i(Z_h^\bullet)=\binom n{j-1}b_i,\qquad
+\dim H^i(\widetilde Z_h^\bullet)=\binom nj b_i.
+\]
+
+Lemma~\ref{lem:BGGzeroCohomology} verifies the equality criterion in
+\cite[Theorem 6]{ArnoldHu2021}. Equality therefore holds in the above
+bound, and Pascal's identity proves \eqref{eq:fullBGGcohomology}.
+
+Finally, every field $v(x)=a+\iota_xb$ in \eqref{eq:fullBGGkernel}
+belongs to $Z_h^0$ and satisfies $D_h^0v=S^0b$.
+For $j>1$, the first projected differential kills this image;
+for $j=1$, the bridge sends $v$ to $\widetilde D_h^0b=0$.
+These fields have dimension $\binom n{j-1}+\binom nj=\binom{n+1}j$
+on each connected component. The degree-zero case of
+\eqref{eq:fullBGGcohomology} shows that they exhaust the kernel.
+\end{proof}
+
+For $j=1,2$ in three dimensions this construction gives the Hessian and elasticity complexes above; $j=n$ gives the div-div complex with bridge $\dd_w(S^{n-1,n})^{-1}\dd_h$.
+The projections before the bridge are part of the differential; in the vector proxies they produce, in particular, the symmetric and deviatoric gradients.
+In three dimensions, \eqref{eq:fullBGGkernel} gives the augmentations
+$\mathbb P_1$, ${\rm RM}$ and ${\rm RT}$ for $j=1,2,3$, respectively.
+
+For $1\leq j\leq n-1$, put $X_h=\Upsilon_h^{n-1}$, $A_h=\mathcal D_h^{n-2}$ and $B_h=\mathcal D_h^{n-1}$.
+The finite-dimensional adjoint $B_h^*$ is taken with the $L^2$ inner products on the stated spaces. On any domain one has
+\[
+X_h=A_h\Upsilon_h^{n-2}\oplus^\perp B_h^*\Upsilon_h^n
+       \oplus^\perp\mathfrak H_h,
+\qquad
+\mathfrak H_h=\ker B_h\cap(A_h\Upsilon_h^{n-2})^\perp.
+\]
+By Theorem~\ref{thm:fullBGG},
+$\dim\mathfrak H_h=\binom{n+1}j b_{n-1}$; in particular, this term
+vanishes on a contractible domain.
+Here $B_h^*$ is the projection onto $X_h$ of $\dd^*$, acting on the differential-form factor; in particular it lowers form degree.
+
+\subsection{Lower-order complexes in arbitrary dimension}
+
+For $0\leq\ell<n$, define the scalar mixed row
+\[
+R_{\ell,h}^i=
+\begin{cases}
+V_{\ell-i,h}^{\rm MWX}\Lambda^i,&0\leq i\leq\ell,\\
+\mathring V_{i-\ell,h}^{*}\Lambda^i,&\ell<i\leq n,
+\end{cases}
+\]
+with differential $\dd_h$ for $i<\ell$ and $\dd_w$ for $i\geq\ell$.
+As before, $V_{0,h}^{\rm MWX}\Lambda^\ell=\mathbb P_0\Lambda^\ell(\mathcal T_h)$.
+For $1\leq m<n$ and $1\leq j\leq n$, take
+\[
+Z_h^i=R_{m,h}^i\otimes{\rm Alt}^{j-1},\qquad
+\widetilde Z_h^i=R_{m-1,h}^i\otimes{\rm Alt}^j,
+\]
+and denote their differentials by $D_h^i$ and $\widetilde D_h^i$.
+For $i<m$, let $S^i=S^{i,j}$ be the pointwise link.
+For $m\leq i<n$, define the reverse map and its assembled $L^2$ adjoint by
+\begin{equation}\label{eq:lowerBGGweakLinks}
+A_i:Z_h^{i+1}\longrightarrow\widetilde Z_h^i,
+\qquad A_i=\sum_{a=1}^n\iota_{e_a}\otimes(e^a\wedge\cdot),
+\qquad S^i=A_i^*.
+\end{equation}
+Here contraction acts on the first alternating factor, and wedge multiplication
+on the second. Set $S^{-1}=S^n=0$.
+
+\begin{theorem}[Sharp range for the prescribed switch]\label{thm:lowerBGG}
+Fix $n\geq2$, $1\leq m<n$, $1\leq j\leq n$ and $J=j-1$.
+If $j\leq m$, the spaces and differentials in Theorem~\ref{thm:fullBGG},
+formed from the rows and links above, define a complex
+$\Upsilon_{h,m,j}^\bullet$ on every conforming simplicial mesh, with
+\begin{equation}\label{eq:lowerBGGcohomology}
+\dim H^i(\Upsilon_{h,m,j}^\bullet)=\binom{n+1}{j}b_i,
+\qquad 0\leq i\leq n.
+\end{equation}
+On each connected component, its degree-zero kernel is
+\eqref{eq:fullBGGkernel}. Thus augmenting by this kernel gives an exact
+sequence on a contractible domain.
+If $j>m$, there is a simplicial mesh of a convex polytope on which
+$S^m$ has positive-dimensional source and zero target. Hence it fails
+the injectivity required at $m\leq J$.
+\end{theorem}
+\begin{proof}
+Assume first that $j\leq m$.
+The scalar rows satisfy $\dim H^i(R_{\ell,h}^\bullet)=b_i$.
+For $\ell>0$, this follows from Theorems~\ref{thm:MWXsplice}
+and~\ref{thm:MWXtruncated}, together with
+\eqref{eq:relativeHarmonicIdentification} and Poincar\'e--Lefschetz duality.
+For $\ell=0$, Hodge star identifies the row with the reversed
+finite-dimensional adjoint of the relative full-polynomial complex
+\[
+\mathring V_{n,h}^{\dd}\Lambda^0\xrightarrow{\dd}
+\mathring V_{n-1,h}^{\dd}\Lambda^1\xrightarrow{\dd}\cdots
+\xrightarrow{\dd}\mathbb P_0\Lambda^n(\mathcal T_h).
+\]
+Its last space contains all piecewise constant top forms.
+The relative FEEC comparison used above therefore gives
+$\dim H^i(R_{0,h}^\bullet)
+=\dim H^{n-i}(\overline\Omega,\partial\Omega;\mathbb R)=b_i$,
+including $i=0$.
+
+The maps $A_i$ are well-defined. Their source and target have the same
+polynomial degree $i+1-m$, and Hodge star converts contraction in the
+first factor into signed exterior multiplication by a constant covector.
+This preserves conformity and the homogeneous trace condition.
+The pointwise links before degree $m$ preserve the common MWX scalar factor.
+Writing $\dd^*=-\sum_a\iota_{e_a}\partial_a$, one has
+\[
+A_i\dd^*+\dd^*A_{i+1}=0.
+\]
+Its transpose proves anticommutativity of the weak squares.
+At the splice use the same formula with
+$A_{m-1}=(S^{m-1})^*$ on the two piecewise constant spaces; testing gives
+\[
+(D_h^mS^{m-1}u+S^m\widetilde D_h^{m-1}u,z)
+=(u,A_{m-1}\dd^*z+\dd^*A_mz)=0.
+\]
+The earlier squares are the usual broken-derivative identities.
+Since $J=j-1<m$, $S^J$ is a pointwise isomorphism and the links before
+it are injective. For $i\geq m$, the fibre map $A_i$ is injective,
+so its finite-dimensional adjoint $S^i$ is surjective.
+For $J<i<m$, pointwise surjectivity gives the same conclusion.
+
+We next show that all links induce zero on cohomology.
+For $i\geq m-1$, take $z\in Z_h^{i+1}$ orthogonal to $D_h^iZ_h^i$.
+At $i=m-1$, the orthogonal-complement characterization in the proof of
+Lemma~1.1 shows that $z$ is co-conforming, piecewise constant, has zero
+boundary co-trace and satisfies $\dd^*z=0$.
+For $i\geq m$, $z$ already has the required conformity and zero boundary
+co-trace, and orthogonality implies $\dd^*z=0$ because $\dd^*z\in Z_h^i$.
+Set
+\[
+B_z=-\sum_a x_a(1\otimes(e^a\wedge\cdot))z.
+\]
+Multiplication by $x_a$ preserves the trace condition and raises the
+polynomial degree by one, so $B_z\in\widetilde Z_h^{i+1}$.
+The product rule gives $\dd^*B_z=A_i z$.
+Consequently, for $\widetilde D_h^iu=0$,
+\[
+(S^iu,z)=(u,A_i z)=(u,\dd^*B_z)
+=(\widetilde D_h^iu,B_z)=0.
+\]
+Thus $S^iu\in\operatorname{im}D_h^i$.
+For the earlier links, suppose $m\geq2$ and $0\leq i\leq m-2$.
+Put $s=n-m$ and $\ell=i+s+1$, and use the wedge-integral maps
+$J_s$ from the proof of Theorem~\ref{thm:MWXtruncated}.
+On each oriented $\ell$-face, the definition of $S^i$ gives
+\begin{equation}\label{eq:lowerBGGfaceFactorization}
+J_s^{i+1}S^iu=(-1)^i\sum_{a=1}^n
+\bigl(\iota_{e^a}\otimes\iota_{e_a}\bigr)J_{s+1}^iu.
+\end{equation}
+The first contraction acts on tangential multivectors and the second
+on coefficient forms. Indeed, for $u=\alpha\otimes\beta$ and
+$\eta\in\Lambda^sT_f^*$, this follows from
+$e^a\wedge\alpha=(-1)^i\alpha\wedge e^a$ and
+$\langle\iota_{e^a}M,\eta\rangle
+=\langle M,e^a\wedge\eta\rangle$.
+Here $s+1\leq n-1$ and $\ell\leq n-1$.
+For a lower-row cycle $u$, $J_{s+1}^iu$ is closed, so
+Lemma~\ref{lem:faceContractionZero} makes every summand on the right
+a coboundary. The strong square makes $S^iu$ closed.
+Since $i<m-1$ and $i+1<m$, both nodes precede the respective
+stopped-row endpoints. The comparison
+\eqref{eq:MWXtruncatedFaceCohomology} therefore gives
+$S^iu\in\operatorname{im}D_h^i$.
+For $m=1$, this early range is empty.
 
 
-Consequently, one obtains the discrete Helmholtz decomposition
-\begin{equation*}
-\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{n-1,j})
-=
-\dd_h(V_{h}^{\rm CR}\otimes\mathcal N(s^{n-2,j}))
-\oplus
-P_{\mathcal N(s^{n-1,j})}
-\grad(\mathring{V}_{1,h}^{*}\otimes{\rm Alt}^{n,j})
-\end{equation*}
-for $1\leq j\leq n-2$, and
-\begin{align*}
-\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{n-1,n-1})
-&=
-\dd_h(S^{n-2,n-1})^{-1}\dd_h
-\bigl(
-V_{2,h}^{\rm MWX}\otimes
-\mathcal R(s^{n-3,n-1})^{\perp}
-\bigr)
-\\
-&\quad \oplus
-P_{\mathcal N(s^{n-1,n-1})}
-\grad(\mathring{V}_{1,h}^{*}\otimes{\rm Alt}^{n,n-1})
-\end{align*}
-for $j=n-1$.
+For completeness, the reduction also applies to the assembled weak links.
+On $Y^i=Z_h^i\oplus\widetilde Z_h^i$, let
+$C(z,u)=(D_hz-Su,\widetilde D_hu)$.
+The connecting map of the row short exact sequence is $-[S]=0$,
+so $\dim H^i(Y^\bullet,C)$ is the sum of the two input dimensions.
+Put $W^i=0\oplus(\ker S^i)^\perp$.
+The subcomplex $W^i\oplus CW^{i-1}$ is acyclic: $C$ is injective on
+$W^i$, its image is $CW^i$, and $W^i\cap CW^{i-1}=0$.
+Eliminating this subcomplex leaves the upper range complements through
+degree $J$ and the lower kernels afterwards.
+The induced differentials are the projected $D_h$, the bridge
+$\widetilde D_h^J(S^J)^{-1}D_h^J$, and the restricted $\widetilde D_h$,
+respectively. This is the finite-dimensional reduction behind
+\cite[Theorem 6, (27)]{ArnoldHu2021}.
+The input dimensions are $\binom n{j-1}b_i$ and $\binom nj b_i$;
+Pascal's identity proves \eqref{eq:lowerBGGcohomology}.
+The affine fields in \eqref{eq:fullBGGkernel} satisfy
+$D_h^0(a+\iota_xb)=S^0b$.
+For $j>1$, the first projection kills this image; for $j=1$, the bridge
+applies $\widetilde D_h^0$ to the constant $b$.
+This vanishes also when $m=1$, by the zero boundary co-trace of the weak
+tests. These fields therefore lie in the initial kernel and exhaust
+its dimension, as in Theorem~\ref{thm:fullBGG}.
 
+For $j>m$, put $p=n-m$ and choose simplices $\sigma^p$ and
+$\tau^m$ in complementary subspaces $\mathbb R^p\oplus\mathbb R^m$,
+each containing the origin in its relative interior.
+Their convex hull $P=\operatorname{conv}(\sigma\cup\tau)$ has the
+triangulation
+\[
+\mathcal K=\sigma*\partial\tau,\qquad
+\partial\mathcal K=\partial\sigma*\partial\tau.
+\]
+Here the maximal cells are $\operatorname{conv}(\sigma\cup F)$ for
+facets $F$ of $\tau$.
+To verify this geometric realization, let
+$\gamma_\tau(y)=\inf\{t\geq0:y\in t\tau\}$, and define $\gamma_\sigma$
+similarly. Then $P$ is given by
+$\gamma_\sigma(x)+\gamma_\tau(y)\leq1$.
+Its intersection with $\mathbb R^p\times\operatorname{cone}(F)$ is
+$\operatorname{conv}(\sigma\cup F)$.
+The facet cones cover $\mathbb R^m$ and meet along common faces.
+The $m$ vertices of $F$ are linearly independent, so together with the
+$p+1$ vertices of $\sigma$ they form an $n$-simplex.
+The exterior facets omit a vertex of $\sigma$, while facets containing
+all of $\sigma$ are shared, giving the stated boundary subcomplex.
+Thus $\sigma$ is the only interior $p$-face, and there are no interior
+$(p-1)$-faces.
 
-More generally, let $1\leq j\leq n-1$ and $j+1\leq m\leq n$. Starting from $V_{m,h}^{\rm MWX}$, we obtain the finite element BGG diagram
-\begin{equation*}%\label{eq:BGGdivdiv}
-\adjustbox{scale=0.96,center}{
-\begin{tikzcd}
-V_{m,h}^{\rm MWX}\otimes{\rm Alt}^{0,j-1}
-\arrow{r}{\dd_h}
-& V_{m-1,h}^{\rm MWX}\otimes{\rm Alt}^{1,j-1}
- \arrow{r}{\dd_h} & \cdots \arrow{r}{\dd_h}
- &
-V_{h}^{\rm CR}\otimes{\rm Alt}^{m-1,j-1}
- \arrow{r}{\dd_h}
- & \mathbb P_0(\mathcal T_h;{\rm Alt}^{m,j-1})
-\arrow{r}{\dd_w}  
- & \mathring{V}_{1,h}^{*}\Lambda^{m+1}\otimes{\rm Alt}^{j-1}
-%\to \boldsymbol{0}
- \\
- %
-V_{m-1,h}^{\rm MWX}\otimes{\rm Alt}^{0,j}
- \arrow[ur,swap,"S^{0,j}"'] \arrow{r}{\dd_h}
- & 
-V_{m-2,h}^{\rm MWX}\otimes{\rm Alt}^{1,j}
- \arrow[ur,swap,"S^{1,j}"'] \arrow{r}{\dd_h} & \cdots \arrow{r}{\dd_h}
- & 
-\mathbb P_0(\mathcal T_h;{\rm Alt}^{m-1,j}) 
- \arrow[ur,swap,"S^{m-1,j}"'] \arrow{r}{\dd_w}  
- & \mathring{V}_{1,h}^{*}\Lambda^m\otimes{\rm Alt}^{j} \arrow[ur,swap,"S_w^{m,j}"']
-\to \cdots
-% & 0
-\end{tikzcd}
-}
-\end{equation*}
-This diagram yields the finite element complex
-\begin{align*}
-&
-V_{m,h}^{\rm MWX}\otimes{\rm Alt}^{0,j-1}
-\longrightarrow
-V_{m-1,h}^{\rm MWX}\otimes\mathcal R(s^{0,j})^{\perp}
-\longrightarrow
-\cdots
-\\
-&\quad\longrightarrow
-V_{m-j+1,h}^{\rm MWX}\otimes\mathcal R(s^{j-2,j})^{\perp}
-\xrightarrow{\dd_h(S^{j-1,j})^{-1}\dd_h}
-V_{m-j-1,h}^{\rm MWX}\otimes\mathcal N(s^{j,j})
-\xrightarrow{\dd_h}
-\\
-&\quad
-V_{m-j-2,h}^{\rm MWX}\otimes\mathcal N(s^{j+1,j})
-\xrightarrow{\dd_h}
-\cdots
-\xrightarrow{\dd_h}
-\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{m-1,j})
-\xrightarrow{\dd_w}
-\\
-&\quad
-\bigl(\mathring{V}_{1,h}^{*}\Lambda^m\otimes{\rm Alt}^{j}\bigr)
-\cap \mathcal N(s^{m,j})
-\to \cdots .
-\end{align*}
+At the first weak link $S^m:\widetilde Z_h^m\to Z_h^{m+1}$,
+Hodge star identifies the source and target, respectively, with
+\[
+\mathring V_{1,h}^{\dd}\Lambda^p\otimes{\rm Alt}^j,
+\qquad
+\mathring V_{1,h}^{\dd}\Lambda^{p-1}\otimes{\rm Alt}^{j-1}.
+\]
+A full affine conforming $k$-form has $k+1$ degrees of freedom on
+each $k$-face and none on other face dimensions
+\cite[Theorem 5.5]{ArnoldFalkWinther2010}.
+Homogeneous boundary conditions retain precisely the interior-face
+degrees of freedom. Consequently
+\[
+\dim\widetilde Z_h^m=(p+1)\binom nj>0,\qquad
+\dim Z_h^{m+1}=0.
+\]
+For $j=m+1$, this rules out bijectivity at $m=J$;
+for $j>m+1$, it rules out injectivity at $m<J$.
+The same mesh works for all $j>m$ with the fixed $n,m$.
+\end{proof}
 
-Consequently, we obtain the discrete Helmholtz decomposition
-\begin{equation*}
-\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{m-1,j})
-=
-\dd_h(V_{h}^{\rm CR}\otimes\mathcal N(s^{m-2,j}))
-\oplus
-P_{\mathcal N(s^{m-1,j})}
-\dd((\mathring{V}_{1,h}^{*}\Lambda^m\otimes{\rm Alt}^{j})\cap\mathcal N(s^{m,j}))
-\end{equation*}
-for $1\leq j\leq m-2$, and
-\begin{align*}
-\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{m-1,m-1})
-&=
-\dd_h(S^{m-2,m-1})^{-1}\dd_h
-\bigl(
-V_{2,h}^{\rm MWX}\otimes
-\mathcal R(s^{m-3,m-1})^{\perp}
-\bigr)
-\\
-&\quad \oplus
-P_{\mathcal N(s^{m-1,m-1})}
-\dd((\mathring{V}_{1,h}^{*}\Lambda^m\otimes{\rm Alt}^{m-1})\cap\mathcal N(s^{m,m-1}))
-\end{align*}
-for $j=m-1$.
+The rank obstructions concern these rows and this prescribed switch.
+At the first weak link, the output uses $\ker S^{m}$ only when
+$m>J$, equivalently $j\leq m$. When $m=J$, the bridge requires $S^m$
+to be invertible; when $m<J$, it must be injective.
+Constructions retaining additional kernel spaces are not excluded.
+Together with the endpoint $m=n$ in Theorem~\ref{thm:fullBGG}, this makes
+$j\leq m$ the sharp parameter range for applying this prescribed BGG
+reduction on every mesh, for all $1\leq m\leq n$.
 
+\begin{corollary}[Discrete Helmholtz decompositions]\label{cor:MWXBGGHelmholtz}
+Let $2\leq m\leq n$ and $1\leq j\leq m-1$, and use the BGG complex of
+Theorem~\ref{thm:lowerBGG} when $m<n$ and of Theorem~\ref{thm:fullBGG}
+when $m=n$. Set
+\[
+X_{m,j}=\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{m-1,j}),\qquad
+K_{m,j}=\bigl(\mathring V_{1,h}^{*}\Lambda^m\otimes{\rm Alt}^j\bigr)
+\cap\ker S^m.
+\]
+Here $S^m$ is the assembled weak link in
+\eqref{eq:lowerBGGweakLinks} for $m<n$, and $S^n=0$ for $m=n$.
+Let $P_{X_{m,j}}$ be the $L^2$-orthogonal projection onto $X_{m,j}$.
+Writing $A$ and $B$ for the incoming and outgoing differentials at
+this node, define
+\[
+\mathfrak H_{h,m,j}^{m-1}
+=\ker B\cap(\operatorname{im}A)^{\perp_{X_{m,j}}}.
+\]
+For $1\leq j\leq m-2$, the orthogonal decomposition is
+\begin{equation}\label{eq:lowerBGGHelmholtzFirst}
+\begin{aligned}
+X_{m,j}={}&\dd_h\bigl(V_h^{\rm CR}\otimes\mathcal N(s^{m-2,j})\bigr)\\
+&\quad\oplus^\perp P_{X_{m,j}}\dd^*K_{m,j}
+\oplus^\perp\mathfrak H_{h,m,j}^{m-1}.
+\end{aligned}
+\end{equation}
+For $j=m-1$, it is
+\begin{equation}\label{eq:lowerBGGHelmholtzBridge}
+\begin{aligned}
+X_{m,m-1}={}&\dd_h(S^{m-2,m-1})^{-1}\dd_h
+\bigl(V_{2,h}^{\rm MWX}\otimes\mathcal R(s^{m-3,m-1})^\perp\bigr)\\
+&\quad\oplus^\perp P_{X_{m,m-1}}\dd^*K_{m,m-1}
+\oplus^\perp\mathfrak H_{h,m,m-1}^{m-1}.
+\end{aligned}
+\end{equation}
+The fibre complement in \eqref{eq:lowerBGGHelmholtzBridge} is taken
+in ${\rm Alt}^{m-2,m-2}$; at $m=2$ we set
+$\mathcal R(s^{-1,1})=\{0\}\subset{\rm Alt}^{0,0}$.
+The operators $\dd_h$ and $\dd^*$ act on the first alternating factor.
+In both cases,
+\[
+\dim\mathfrak H_{h,m,j}^{m-1}=\binom{n+1}{j}b_{m-1}.
+\]
+The harmonic summand therefore vanishes if and only if $b_{m-1}=0$,
+in particular on a contractible domain.
+\end{corollary}
+\begin{proof}
+Since $m-1>J=j-1$, the two consecutive output spaces in degrees
+$m-1$ and $m$ are $X_{m,j}$ and $K_{m,j}$.
+If $j\leq m-2$, the preceding node is also after the switch, so $A$
+is $\dd_h$ on $V_h^{\rm CR}\otimes\mathcal N(s^{m-2,j})$.
+If $j=m-1$, the preceding node is the switch node and $A$ is the
+bridge differential in \eqref{eq:lowerBGGHelmholtzBridge}.
+In either case, anticommutativity of the links gives
+$B=\dd_w|_{X_{m,j}}:X_{m,j}\to K_{m,j}$.
+For $x\in X_{m,j}$ and $k\in K_{m,j}$, the defining adjoint relation gives
+\[
+(Bx,k)=(x,\dd^*k)=(x,P_{X_{m,j}}\dd^*k).
+\]
+Hence $B^*=P_{X_{m,j}}\dd^*|_{K_{m,j}}$. The finite-dimensional Hodge
+decomposition
+\[
+X_{m,j}=\operatorname{im}A\oplus^\perp\operatorname{im}B^*
+\oplus^\perp\mathfrak H_{h,m,j}^{m-1}
+\]
+yields both formulas. The dimension of the harmonic space follows from
+Theorems~\ref{thm:fullBGG} and~\ref{thm:lowerBGG}.
+\end{proof}
 
+The weak kernel $K_{m,j}$ in these formulas cannot in general be replaced
+by a pointwise algebraic kernel; Remark~\ref{rem:weakTraceBipyramid}
+illustrates the distinction. The parameter $j=m$ has a different
+switch node: its degree-$m-1$ output is an upper-row range complement,
+not $X_{m,j}$.
+
+We next spell out three low-dimensional instances of
+Theorem~\ref{thm:lowerBGG} with $j=m$. Write
+\[
+L_{r,h}=\mathbb P_r(\mathcal T_h)\cap H_0^1(\Omega),\qquad
+D_{1,h}=\mathbb P_1(\mathcal T_h;\mathbb R^n)\cap H_0(\div;\Omega),
+\]
+and, for $n=3$, set
+$F_{r,h}=\mathbb P_r(\mathcal T_h;\mathbb R^3)\cap H_0(\curl;\Omega)$.
+A superscript $n$ on these vector spaces denotes $n$ matrix rows.
+All weak operators below are defined by their $L^2$ pairings on the
+displayed full polynomial spaces.
+
+\smallskip\noindent\emph{Planar weak Hessian, $m=j=1$.}
+Set
+\[
+K_h^{\rm 2D}=\{A\in D_{1,h}^2:
+(A,\mskw q)=0\ \text{for every }q\in L_{1,h}\}.
+\]
+The resulting complex, augmented on a connected contractible domain, is
+\begin{equation}\label{eq:linearHessian2d}
+\mathbb P_1\hookrightarrow V_h^{\rm CR}
+\xrightarrow{\nabla_w\nabla_h}K_h^{\rm 2D}
+\xrightarrow{\rot_w}L_{2,h}^2\longrightarrow0.
+\end{equation}
+Here $(\nabla_wv,A)=-(v,\div A)$ for $A\in D_{1,h}^2$, and
+$(\rot_wA,z)=(A,\curl z)$ for $z\in L_{2,h}^2$.
+The links are the identity and $S^1=-2P_{L_{1,h}}\sskw$, whose adjoint
+is $q\mapsto-\mskw q$. The identity
+$\div(\mskw q)=-\curl q$ verifies the weak square.
+The last arrow is restricted to the orthogonal kernel $K_h^{\rm 2D}$.
+Equivalently, on the quotient by $\mskw L_{1,h}$ it is
+$[A]\mapsto\rot_w(P_{K_h^{\rm 2D}}A)$.
+Remark~\ref{rem:weakRotationQuotient} explains why one cannot use an
+arbitrary representative. The unaugmented cohomology dimensions are $3b_i$.
+
+\smallskip\noindent\emph{Spatial weak Hessian, $m=j=1$.}
+The scalar rows are
+$V_h^{\rm CR}\to\mathbb P_0(\mathcal T_h;\mathbb R^3)\to F_{1,h}\to L_{2,h}$
+and $\mathbb P_0(\mathcal T_h)\to D_{1,h}\to F_{2,h}\to L_{3,h}$.
+The links are the identity and the adjoints of
+$h\mapsto-\mskw h$ and $q\mapsto qI$.
+The former maps $F_{1,h}$ to $D_{1,h}^3$: row $a$ of $\mskw h$ is
+$e_a\times h$, whose normal trace depends only on the tangential trace of $h$.
+Define
+\[
+K_{h,1}^{\rm H}=D_{1,h}^3\cap(\mskw F_{1,h})^\perp,\qquad
+K_{h,2}^{\rm H}=F_{2,h}^3\cap(L_{2,h}I)^\perp.
+\]
+The reduced complex is
+\begin{equation}\label{eq:linearHessian3d}
+\mathbb P_1\hookrightarrow V_h^{\rm CR}
+\xrightarrow{\nabla_w\nabla_h}K_{h,1}^{\rm H}
+\xrightarrow{\curl_w}K_{h,2}^{\rm H}
+\xrightarrow{\div_w}L_{3,h}^3\longrightarrow0.
+\end{equation}
+Its unaugmented cohomology dimensions are $4b_i$, and the augmentation
+is exact on a connected contractible domain. Both intermediate spaces
+impose weak matrix constraints against the indicated test spaces.
+The case $m=2,j=1$ is already \eqref{eq:hesscomplex3dfem2} and
+Corollary~\ref{cor:weakHessianCohomology}.
+
+\smallskip\noindent\emph{Weak-symmetry elasticity, $m=j=2$.}
+Set $K_h^{\rm el}=E_h\cap(\mskw L_{1,h}^3)^\perp$, where $E_h=F_{1,h}^3$.
+The reduced complex is
+\begin{equation}\label{eq:quadraticElasticity3d}
+\begin{aligned}
+{\rm RM}\hookrightarrow (V_{2,h}^{\rm MWX})^3
+\xrightarrow{\defm_h}V_h^{\rm CR}\otimes\mathbb S
+\xrightarrow{\inc_{wh}}K_h^{\rm el}
+\xrightarrow{\div_w}L_{2,h}^3\longrightarrow0,\\
+\inc_{wh}\tau=\curl_w((\curl_h\tau)^\top).
+\end{aligned}
+\end{equation}
+The links are $\mskw$, $S:A\mapsto A^\top-(\tr A)I$, and
+$(S^2A,v)=-(A,\mskw v)$ for $v\in L_{1,h}^3$.
+At the switch, $S$ is invertible on piecewise constant matrices.
+For symmetric $\tau$, $\tr(\curl_h\tau)=0$ cellwise, so
+$S^{-1}\curl_h\tau=(\curl_h\tau)^\top$.
+The weak square follows from $S^*=S$ and
+$\curl(\mskw v)=-S\nabla v$, while $S^2(\mskw v)=-2v$
+proves surjectivity of the last link.
+The adjoint of the last differential is
+$v\mapsto-P_{K_h^{\rm el}}\nabla v$ for $v\in L_{2,h}^3$.
+
+The middle link also admits a direct cohomology check.
+If $A\in\mathbb P_0(\mathcal T_h;\mathbb M)$ satisfies $\curl_wA=0$,
+take $H\in\mathbb P_0(\mathcal T_h;\mathbb M)$ orthogonal to
+$\curl_h(V_h^{\rm CR}\otimes\mathbb M)$.
+Lemma~1.1 makes every row of $H$ a piecewise constant field in
+$H_0(\curl;\Omega)$ with distributional curl zero.
+Thus $B=-\mskw(x)H\in E_h$ and $\curl B=SH$ row-wise. Hence
+\[
+(SA,H)=(A,SH)=(A,\curl B)=(\curl_wA,B)=0.
+\]
+This verifies $SA\in\curl_h(V_h^{\rm CR}\otimes\mathbb M)$ on any topology.
+The unaugmented dimensions in \eqref{eq:quadraticElasticity3d} are $6b_i$,
+and the augmentation is exact on a connected contractible domain.
+The degree-shifted grad-curl complex \eqref{eq:gradcurlcomplex3dfem}
+has different grading and retains the formula \eqref{eq:gradcurlcohomology3d}.
+
+Any Helmholtz decomposition for these complexes must use the adjoint of
+the actual restricted differential, with its specified inner product and
+tensor projection.
 
 
 \bibliographystyle{abbrv}

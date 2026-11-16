@@ -144,21 +144,35 @@ A three-dimensional weak-trace Hessian complex illustrates why the assembled con
 Finite element differential complexes organize compatibility conditions, discrete potentials, and Helmholtz decompositions within a common framework.
 Conforming finite element exterior calculus provides this structure for the de Rham complex \cite{ArnoldFalkWinther2006,ArnoldFalkWinther2010,Arnold2018}.
 The construction of complexes from complexes developed by Arnold and Hu \cite{ArnoldHu2021} transfers such structure to tensor-valued differential operators.
+Chen and Huang develop finite element complexes with varying smoothness
+in two dimensions \cite{ChenHuang2024a} and de Rham and Stokes complexes
+in three dimensions \cite{ChenHuang2024}. Their three-dimensional BGG
+construction yields finite element Hessian, elasticity, and div-div
+complexes \cite{ChenHuangBGG2026}.
 Bonizzoni, Hu, Kanschat and Sap \cite{BonizzoniHuKanschatSap2025}
 construct tensor-product BGG diagrams and complexes on cubical meshes in
 arbitrary dimension using splines and finite elements.
-Chen and Huang \cite{ChenHuangBGG2026} develop corresponding three-dimensional finite element Hessian, elasticity, and div-div complexes using smooth finite element sequences and trace decompositions.
+Huang \cite{Huang2025Conformal} constructs conformal Hessian and conformal
+elasticity complexes in three dimensions using local bubble BGG constructions.
 
-Distributional constructions also provide cohomological descriptions of
-discrete tensor complexes.
+Distributional finite element complexes relax conformity requirements
+for tensor-valued differential operators.
+Chen and Huang \cite[Section~5.2]{ChenHuang2025} construct three-dimensional
+distributional div-div complexes using weak div-div operators, including
+low-order cases. Their lowest-order weak div-div stability proof also
+uses MWX elements \cite[Theorem~4.2]{ChenHuang2025}.
+Chen, Huang and Zhang \cite{ChenHuangZhang2025CurlDiv} use tangential-normal
+continuity to construct three-dimensional distributional curl-div
+complexes and apply them to quad-curl problems.
 Hu, Lin and Zhang \cite{HuLinZhang2025} construct distributional Hessian
 and div-div complexes on triangulations in two and three dimensions
 and identify their cohomology with de Rham cohomology with coefficients.
 Christiansen, Hu and Lin \cite{ChristiansenHuLin2026} establish the
 corresponding identification for the three-dimensional Regge complex,
 with coefficients in the space of infinitesimal rigid motions.
+Our focus is the cohomology of assembled MWX rows and the sharp admissible
+range of their prescribed BGG reductions in arbitrary dimension.
 
-Nonconforming spaces offer a different starting point.
 The Morley--Wang--Xu elements \cite{WangXu2006,WangXu2013} use degree-$m$ polynomials with moments of derivatives on subsimplices to approximate $H^m$ functions for $1\leq m\leq n$.
 The sequence structure has direct precedents.
 On convex polygons, Falk and Morley \cite[Theorem 4.1]{FalkMorley1990}
@@ -222,7 +236,7 @@ To obtain equality in the abstract BGG cohomology bound
 \cite[Theorem 6]{ArnoldHu2021}, we prove that every discrete link induces
 zero on cohomology. A continuous homotopy need not preserve the spaces
 in a discrete BGG diagram, an issue also arising in tensor-product
-constructions \cite{BonizzoniHuKanschatSap2025}.
+constructions \cite[Remark~5]{BonizzoniHuKanschatSap2025}.
 For the assembled MWX spaces, contractions on the face-coefficient
 complexes handle the early links, while coordinate multipliers and
 finite-dimensional adjoints handle the splice and weak tail.
@@ -2195,18 +2209,30 @@ The scalar rows satisfy $\dim H^i(R_{\ell,h}^\bullet)=b_i$.
 For $\ell>0$, this follows from Theorems~\ref{thm:MWXsplice}
 and~\ref{thm:MWXtruncated}, together with
 \eqref{eq:relativeHarmonicIdentification} and Poincar\'e--Lefschetz duality.
-For $\ell=0$, Hodge star identifies the row with the reversed
-finite-dimensional adjoint of the relative full-polynomial complex
+For $\ell=0$, Hodge star identifies the row, up to degree-dependent
+signs, with the reversed finite-dimensional adjoint of the relative
+full-polynomial complex
 \[
 \mathring V_{n,h}^{\dd}\Lambda^0\xrightarrow{\dd}
 \mathring V_{n-1,h}^{\dd}\Lambda^1\xrightarrow{\dd}\cdots
 \xrightarrow{\dd}\mathbb P_0\Lambda^n(\mathcal T_h).
 \]
-Its last space contains all piecewise constant top forms.
-The relative FEEC comparison used above therefore gives
-$\dim H^i(R_{0,h}^\bullet)
-=\dim H^{n-i}(\overline\Omega,\partial\Omega;\mathbb R)=b_i$,
-including $i=0$.
+Its last space contains all piecewise constant top forms, with no
+zero-mean constraint. Before imposing homogeneous traces, this is a
+standard full-polynomial FEEC complex
+\cite[Sections~5.2 and~5.6]{ArnoldFalkWinther2010}.
+The Whitney comparison on the mesh and its boundary, followed by the
+restriction argument in the proof of Theorem~\ref{thm:MWXsplice},
+identifies its degree-$k$ cohomology with
+$H^k(\overline\Omega,\partial\Omega;\mathbb R)$.
+The reversed finite-dimensional adjoint has the same harmonic dimensions
+in complementary degrees. Hence, by Poincar\'e--Lefschetz duality,
+\[
+\dim H^i(R_{0,h}^\bullet)
+=\dim H^{n-i}(\overline\Omega,\partial\Omega;\mathbb R)=b_i,
+\qquad 0\leq i\leq n.
+\]
+In particular, the initial node $i=0$ corresponds to relative degree $n$.
 
 The maps $A_i$ are well-defined. Their source and target have the same
 polynomial degree $i+1-m$, and Hodge star converts contraction in the
@@ -2231,19 +2257,37 @@ so its finite-dimensional adjoint $S^i$ is surjective.
 For $J<i<m$, pointwise surjectivity gives the same conclusion.
 
 We next show that all links induce zero on cohomology.
-For $i\geq m-1$, take $z\in Z_h^{i+1}$ orthogonal to $D_h^iZ_h^i$.
+For $m-1\leq i<n$, take $z\in Z_h^{i+1}$ orthogonal to $D_h^iZ_h^i$.
 At $i=m-1$, the orthogonal-complement characterization in the proof of
 Lemma~1.1 shows that $z$ is co-conforming, piecewise constant, has zero
 boundary co-trace and satisfies $\dd^*z=0$.
 For $i\geq m$, $z$ already has the required conformity and zero boundary
 co-trace, and orthogonality implies $\dd^*z=0$ because $\dd^*z\in Z_h^i$.
-Set
+Put $r=i+1-m\geq0$ and $C_a=1\otimes(e^a\wedge\cdot)$.
+The preceding argument gives
+$z\in\mathring V_{r,h}^{*}\Lambda^{i+1}\otimes{\rm Alt}^{j-1}$
+and $\dd^*z=0$. Set
 \[
-B_z=-\sum_a x_a(1\otimes(e^a\wedge\cdot))z.
+B_z=-\sum_{a=1}^n x_aC_a z.
 \]
-Multiplication by $x_a$ preserves the trace condition and raises the
-polynomial degree by one, so $B_z\in\widetilde Z_h^{i+1}$.
-The product rule gives $\dd^*B_z=A_i z$.
+Here $C_a$ acts only on the coefficient factor. With $\star$ acting on
+the first alternating factor, every facet trace satisfies
+\[
+\tr_F\star(x_aC_a z)=(x_a|_F)C_a\tr_F\star z.
+\]
+Thus multiplication by the global coordinate $x_a$ preserves single-valued
+interior co-traces and zero boundary co-traces. Since the polynomial
+degree is at most $r+1$,
+\[
+B_z\in\mathring V_{r+1,h}^{*}\Lambda^{i+1}\otimes{\rm Alt}^{j}
+=\widetilde Z_h^{i+1}.
+\]
+Using $\dd^*=-\sum_b\iota_{e_b}\partial_b$ and $\dd^*z=0$, we obtain
+\begin{align*}
+\dd^*(x_aC_a z)
+&=x_aC_a\dd^*z-\bigl(\iota_{e_a}\otimes(e^a\wedge\cdot)\bigr)z,\\
+\dd^*B_z&=A_i z-\sum_a x_aC_a\dd^*z=A_i z.
+\end{align*}
 Consequently, for $\widetilde D_h^iu=0$,
 \[
 (S^iu,z)=(u,A_i z)=(u,\dd^*B_z)

@@ -1,0 +1,1379 @@
+\documentclass[10pt]{amsart}
+
+% \newcommand{\LC}[1]{\textcolor{cyan}{#1}}
+\newcommand{\LC}[1]{\textcolor{red}{#1}}
+\newcommand{\XH}[1]{\textcolor{red}{#1}}
+\newcommand{\revision}[1]{\textcolor{red!80!black}{#1}}
+
+\newcounter{mnote}
+  \setcounter{mnote}{0}
+  \newcommand{\mnote}[1]{\addtocounter{mnote}{1}
+    \ensuremath{{}^{\bullet\arabic{mnote}}}
+    \marginpar{\footnotesize\em\color{red}\ensuremath{\bullet\arabic{mnote}}#1}}
+  \let\oldmarginpar\marginpar
+    \renewcommand\marginpar[1]{\-\oldmarginpar[\raggedleft\footnotesize #1]%
+    {\raggedright\footnotesize #1}}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+%\usepackage[utf8x]{inputenc}
+%\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+% \usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+
+
+%\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage[leqno]{amsmath}
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+\usepackage{chemarrow}
+\usepackage[norelsize]{algorithm2e}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage[all]{xy}
+\usepackage{tikz,tikz-cd}
+\usetikzlibrary{arrows}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[hyperpageref]{backref}
+\usepackage{subcaption} % The primary package for subfigures
+\usepackage{adjustbox}
+\numberwithin{equation}{section}
+\allowdisplaybreaks
+
+% theorems
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{alg}[theorem]{Algorithm}
+\newtheorem{hypothesis}[theorem]{Hypothesis}
+
+\newcommand{\dx}{\,{\rm d}x}
+\newcommand{\dd}{\,{\rm d}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\mcal}{\mathcal}
+
+\DeclareMathOperator*{\img}{img}
+%\DeclareMathOperator*{\span}{span}
+\newcommand{\sign}{\operatorname{sign}}
+\newcommand{\curl}{\operatorname{curl}}
+\renewcommand{\div}{\operatorname{div}}
+\newcommand{\grad}{\operatorname{grad}}
+\newcommand{\tr}{\operatorname{tr}}
+% \DeclareMathOperator*{\tr}{tr}
+\DeclareMathOperator*{\rot}{rot}
+\DeclareMathOperator*{\var}{Var}
+\newcommand{\dev}{\operatorname{dev}}
+\newcommand{\sym}{\operatorname{sym}}
+\newcommand{\skw}{\operatorname{skw}}
+\newcommand{\spn}{\operatorname{spn}}
+\newcommand{\mspn}{\operatorname{mspn}}
+\newcommand{\mskw}{\operatorname{mskw}}
+\newcommand{\vskw}{\operatorname{vskw}}
+\newcommand{\vspn}{\operatorname{vspn}}
+\newcommand{\defm}{\operatorname{def}}
+\newcommand{\hess}{\operatorname{hess}}
+\newcommand{\inc}{\operatorname{inc}}
+\newcommand{\air}{\operatorname{Air}}
+\newcommand{\sskw}{\operatorname{sskw}}
+
+
+\begin{document}
+\title[Nonconforming BGG]{Nonconforming BGG}
+% \author{Xuewei Cui}%
+% \address{School of Mathematics, Shanghai University of Finance and Economics, Shanghai 200433, China}%
+% \email{xueweicui@stu.sufe.edu.cn }%
+% \author{Xuehai Huang}%
+% \address{School of Mathematics, Shanghai University of Finance and Economics, Shanghai 200433, China}%
+% \email{huang.xuehai@sufe.edu.cn}%
+
+% \thanks{The second author is corresponding author.
+% This work was supported by the National Natural Science Foundation of China Project 12171300. %, and the Natural Science Foundation of Shanghai  (Grant No.\ 21ZR1480500).
+% }
+% \keywords{Nonconforming finite element complex, Fourth-order elliptic singular perturbation problem,
+% Generalized singularly perturbed Stokes-type equation, Decoupled finite element method, Interpolation operator, Robust and optimal convergence.}
+% \makeatletter
+% \@namedef{subjclassname@2020}{\textup{2020} Mathematics Subject Classification}
+% \makeatother
+% \subjclass[2020]{
+% %65N55;   %% Multigrid methods; domain decomposition
+% %65F10;   %%  Iterative methods for linear systems
+% 65N30;   %%  Finite elements, Rayleigh-Ritz and Galerkin methods, finite methods;
+% 65N12;   %%  Stability and convergence of numerical methods;
+% 65N22;   %%  Solution of discretized equations
+% %65N15;   %%  Error bounds
+% }
+
+\begin{abstract}
+\end{abstract} 
+
+
+ 
+\maketitle
+
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\section{Nonconforming Finite Element Complex}
+
+
+
+\subsection{Notation}
+Let $\Omega\subset \mathbb{R}^n$ be a bounded polytope,  where integer $n\geq2$.
+Given an integer $m \geq 0$ and a bounded domain $D \subset \mathbb{R}^{n}$,
+we define $H^{m}(D)$  as the standard Sobolev space of functions on $D$. The corresponding norm and
+semi-norm are denoted by $\| \cdot \|_{ m,D}$ and $|\cdot |_{m,D}$, respectively. Set $L^{2}(D) = H^{0}(D)$.
+For integer $r\geq0$,
+let $\mathbb{P}_{r}(D)$ represent the space of all polynomials in $D$ with the total degree no more than $r$.
+Set $\mathbb{P}_{r}(D)=\{0\}$ for $r<0$.
+% The vector version of $H^{m}(D)$,\,$H_{0}^{m}(D)$ and $\mathbb{P}_{k}(D)$  are denoted, respectively, by $ H^{m}(D; \mathbb{R}^{3})$, $ H_{0}^{m}(D; \mathbb{R}^{3})$
+% and $\mathbb{P}_{k}(D; \mathbb{R}^{3})$.
+Let $L_{0}^{2}(D)$ be the space of functions in $L^{2}(D)$ with vanishing integral average values. For a space $B(D)$ defined on $D$,
+let $B(D; \mathbb{R}^n):=B(D) \otimes \mathbb{R}^n$ be its vector version.
+We denote $(\cdot, \cdot)_{D}$
+as the usual inner product on $L^{2}(D)$ or $L^{2}(D; \mathbb{R}^n)$. We denote $H_{0}^{m}(D)\,(H_{0}^{m}(D; \mathbb{R}^n))$ as the closure of $C_{0}^{\infty}(D)\,(C_{0}^{\infty}(D; \mathbb{R}^n))$
+with respect to the norm $\| \cdot \|_{m,D}$.  
+In case $D$ is $\Omega$, we abbreviate $\| \cdot \|_{ m,D}$, $|\cdot|_{m,D}$
+and $(\cdot, \cdot)_{D}$  as $\| \cdot \|_{m}$, $|\cdot|_{m}$ and $(\cdot, \cdot)$, respectively. Let $Q_D^k: L^{2}(D) \to \mathbb{P}_{k}(D)$ denote the $L^2$-orthogonal projection operator.
+Its vector-valued analogue is still denoted by $Q_D^k$. For brevity, we write $Q_D := Q_D^0$ for the projection onto piecewise constants.   
+We use $\boldsymbol{n}_{\partial D}$ to denote the unit outward normal vector of $\partial D$, which will be abbreviated as $\boldsymbol{n}$ if it does not cause any confusion.
+
+For an $n$-dimensional multi-index $\alpha = (\alpha_1, \cdots , \alpha_n)$ with $\alpha_i\in\mathbb Z^+\cup\{0\}$, define $|\alpha|:=\sum_{i=1}^n\alpha_i$.
+%We will use $\alpha, \beta$ to denote the multi-indexes.
+For $0\leq \ell \leq n$, let $A_{\ell}$ be the set consisting of all multi-indexes $\alpha$ with $\sum_{i=\ell+1}^n\alpha_i=0$, i.e., non-zero index only exists for $1\leq i\leq\ell$.
+
+For any $\ell$-dimensional face $F$, let $\nu_{F,1}, \cdots, \nu_{F,n-\ell}$ be its
+%linearly independent
+mutually perpendicular unit normal vectors, and define the surface gradient on $F$ as
+\begin{equation}\label{eq:surfacegrad}
+\nabla_{F}v:=\nabla v-\sum_{i=1}^{n-\ell}\frac{\partial v}{\partial\nu_{F,i}}\nu_{F,i},
+\end{equation}
+namely the projection of $\nabla v$ to the face $F$, which is independent of the choice of the normal vectors.
+When $v$ is a tensor, the surface gradient $\nabla_{F}v$ is defined element-wisely in convention, which is a one-order higher tensor.
+And denote by $\div_{F}$ the corresponding surface divergence.
+For any $\alpha\in A_{n-\ell}$ for $\ell=n-1,\ldots, n-m$, set
+\[
+\frac{\partial^{|\alpha|}v}{\partial\nu_{F}^{\alpha}}:=\frac{\partial^{|\alpha|}v}{\partial\nu_{F, 1}^{\alpha_1}\cdots\partial\nu_{F, n-\ell}^{\alpha_{n-\ell}}}.
+\]
+
+A differential $k$-form $\omega$ is a section of the $k$-alternating bundle, i.e., a map which assigns to each $x \in D$ an element $\omega_x\in{\rm Alt}^kT_x D$, where $T_x D$ denotes the tangent space to $D$ at $x$.
+For a space $B(D)$ defined on $D$, let $B\Lambda^k(D)$ be the space of all $k$-forms whose coefficient function belongs to $B(D)$. Notice that $B\Lambda^0(D)=B(D)$.
+The norm $\| \cdot \|_{ m,D}$ and semi-norm $|\cdot|_{m,D}$ are extended to space $H^m\Lambda^k(D)$, and inner product $(\cdot, \cdot)_{D}$ to space $L^2\Lambda^k(D)$. 
+Define 
+\begin{align*}
+	H\Lambda^k(D)&:=\{\omega\in L^2\Lambda^k(D): \dd\omega\in L^2\Lambda^{k+1}(D)\},\\
+	H^{*}\Lambda^k(D)&:=\{\omega\in L^2\Lambda^k(D): \dd^*\omega\in L^2\Lambda^{k-1}(D)\},
+\end{align*}
+where $\dd$ is the exterior derivative, and 
+the codifferential operator $\dd^*$ is defined as
+\begin{equation}\label{eq:stardelta}
+	\star\dd^*\omega=(-1)^k\dd\star\omega.
+\end{equation}
+We equip the following squared norms for the spaces $H\Lambda^k(D)$ and $H^{*}\Lambda^k(D)$:
+\begin{equation*}
+	\|\omega\|_{H\Lambda^k(D)}^2:=\|\omega\|_{0,D}^2+\|\dd\omega\|_{0,D}^2,\quad
+	\|\omega\|_{H^{*}\Lambda^k(D)}^2:=\|\omega\|_{0,D}^2+\|\dd^*\omega\|_{0,D}^2.
+\end{equation*}
+When $D=\Omega$, we use the abbreviations $\|\cdot\|_{H\Lambda^k}$ and $\|\cdot\|_{H^{*}\Lambda^k}$ for $\|\cdot\|_{H\Lambda^k(D)}$ and $\|\cdot\|_{H^{*}\Lambda^k(D)}$, respectively.
+Denote by $H_0\Lambda^k(D)$ the subspace of $H\Lambda^k(D)$ with vanishing trace.
+We can identify $H_0^m\Lambda^{d}(D)$ and $H_0\Lambda^{d-1}(D)$ as $H_0^m(D)\cap L_0^2(D)$ and $H_0(\div, D)$, respectively.
+The spaces $L^2\Lambda^k(D)$ and $H^*\Lambda^k(D)$ are to be interpreted as the trivial space $\{0\}$ for $k\geq d+1$, whereas $\mathbb{P}_{k}\Lambda^{d+1}(D)$ is to be interpreted as $\mathbb R$.
+We will abbreviate the Sobolev space $B(D)$ as $B$ when $D=\Omega$ if not causing any confusion.
+
+Let $\{\mathcal{T}_{h}\}_{h>0}$ be a regular family of simpilical meshes of $\Omega\subset \mathbb{R}^{n}$, where $h=\max_{T\in\mathcal{T}_{h}}h_T$ with $h_T$ being the diameter of tetrahedron $T$. For $\ell=0,1,\ldots,n-1$,
+denote by $\Delta_{\ell}(\mathcal T_h)$ and $\Delta_{\ell}(\mathring{\mathcal T}_h)$ the set of all subsimplices and all interior subsimplices of dimension $\ell$ in the partition $\mathcal{T}_{h}$, respectively. For a tetrahedron $T$, we let $\Delta_{\ell}(T)$ denote the set of subsimplices of dimension $\ell$. %, for $\ell=0,1,2$. 
+For a subsimplex $f$ of $\mathcal{T}_{h}$, let $\mathcal T_f$ be the set of all tetrahedrons in $\mathcal{T}_h$ sharing $f$.
+Denote by $\omega_{T}$ the union of all the simplices in the set $\{\mathcal T_{\texttt{v}}\}_{\texttt{v}\in\Delta_0(T)}$.
+For a face $F\in \Delta_{2}(\mathcal T_h)$, let $\Delta_{1}(F)$ be the set of all edges of $F$, and $\boldsymbol{n}_F$ be its unit normal vector, which will be abbreviated as $\boldsymbol{n}$. 
+For an edge $e\in \Delta_{1}(\mathcal T_h)$, let $\boldsymbol{t}_e$ be its unit tangent vector, which will be abbreviated as $\boldsymbol{t}$. 
+%For each $e\in\Delta_{1}(F)$, denote by $\boldsymbol{n}_{F,e}$ the
+%unit vector being parallel to $F$ and outward normal to $\partial F$. Set $\boldsymbol{t}_{F,e} :=\boldsymbol{n}_F \times\boldsymbol{n}_{F,e} $, where $\times$ is the exterior product.
+%Consider two adjacent tetrahedrons, $T_1$ and $T_2$ sharing an interior face $F$. 
+Define the jump of a function $w$ on $F$ as
+\begin{equation*}
+[w]:=(w|_{T_1})|_F\boldsymbol{n}_F\cdot\boldsymbol{n}_{\partial T_1}+(w|_{T_2})|_F\boldsymbol{n}_F\cdot\boldsymbol{n}_{\partial T_2}.
+\end{equation*}
+On a face $F$ lying on the boundary $\partial\Omega$, the jump becomes $[w]:=w|_F$.
+% For a vector-valued function $\boldsymbol{v}$, define
+% \begin{equation*}
+% \div\boldsymbol{v}=\nabla\cdot\boldsymbol{v},\quad \curl\boldsymbol{v}=\nabla\times\boldsymbol{v},
+% \end{equation*}
+% where $\nabla$ denotes the gradient operator.
+
+For integers $m, r$,
+let 
+\begin{equation*}
+H^{m}(\mathcal{T}_h):=\prod_{T\in \mathcal{T}_h}H^{m}(T), \quad \mathbb{P}_{r}(\mathcal{T}_h):=\prod_{T\in \mathcal{T}_h}\mathbb{P}_{r}(T). 
+\end{equation*}
+Define %$\mathbb P_k(\mathcal T_h;\mathbb R^d):=\mathbb P_k(\mathcal T_h)\otimes \mathbb R^d$ and 
+% $\mathbb P_r(\mathcal T_h):=\mathbb P_r\Lambda^{0}(\mathcal T_h)$ with
+\begin{align*}
+	\mathbb P_r\Lambda^k(\mathcal T_h)&:=\{v\in L^2\Lambda^k(\Omega): v|_T\in\mathbb P_r\Lambda^k(T) \;\textrm{ for all } T\in\mathcal{T}_h\}, \\
+	\mathbb P_{r}^-\Lambda^k(\mathcal T_h)&:=\{v\in L^2\Lambda^k(\Omega): v|_T\in\mathbb P_{r}^-\Lambda^k(T) \;\textrm{ for all } T\in \mathcal{T}_{h}\}.
+\end{align*}
+% \textcolor{red}{Set $V_{r,h}^{\grad}:=\mathbb P_k(\mathcal T_h)\cap H^1(\Omega)$ and $\mathring{V}_{r,h}^{\grad}:=\mathbb P_k(\mathcal T_h)\cap H_{0}^{1}(\Omega)$.}
+Let $Q_{r,T} : L^{2}\Lambda^k(T)\rightarrow \mathbb P_r\Lambda^k(T)$ for $T\in\mathcal T_h$ and $Q_{r,h} : L^{2}\Lambda^k(\Omega)\rightarrow \mathbb P_r\Lambda^k(\mathcal T_h)$ be the $ L^2$-orthogonal projection operators.
+
+Let $\dd_{h}$ be the element-wise counterpart of the differential operator $\dd$ with respect to $\mathcal{T}_{h}$, respectively. For piecewise smooth function $v$, introduce broken norms:
+\begin{equation*}
+\|v\|_{1,h}:=(\|v\|_{0}^2+|v|_{1,h}^2)^{1/2},\quad\;\; |v|_{j,h}:=\|\nabla_{h}^jv\|_0\;\;\;  \textrm{ for integer } j.
+\end{equation*}
+
+%\begin{equation*}
+%\textcolor{red}{ |v|_{2,h}:=(\sum_{T\in\mathcal{T}_{h}}|v|_{2,T}^2)^{1/2}.}
+%\end{equation*}
+In this paper, we use ``$\lesssim \cdots$'' to mean that ``$\leq C \cdots$'',
+where $C$ is a generic positive constant independent of the mesh size $h$ and the singular perturbation parameter $\varepsilon$, which may take different values in different contexts. Moreover, $A \eqsim B$ means that $A \lesssim B$ and $B \lesssim A$.
+
+\subsection{Morley-Wang-Xu element space}
+Recall the Morley--Wang--Xu element \cite{WangXu2013,WangXu2006}. Let \(1\le m\le n\).
+On a simplex \(T\), the \(H^m\)-nonconforming Morley--Wang--Xu element uses
+\(\mathbb P_m(T)\) as its shape function space. The degrees of freedom (DoFs) are given by
+\begin{align}\label{MWXdof}
+\int_F \frac{\partial^{|\alpha|} v}{\partial \nu_F^\alpha}\,\dd s,
+\qquad \forall\, F\in \Delta_\ell(T),
+\end{align}
+where \(\ell=n-1,\ldots,n-m\), \(\alpha\in A_{n-\ell}\), and
+\(|\alpha|=\ell-(n-m)\).
+
+The global $H^m$-nonconforming Morley-Wang-Xu element space is defined by
+\begin{align*}
+V_{m,h}^{\rm MWX}:=\{v\in \mathbb P_m(\mathcal T_h):& \textrm{ all the DoFs in \eqref{MWXdof} are single-valued } \\
+& \textrm{ across } \Delta_{\ell}(\mathring{\mathcal T}_h) \textrm{ for } \ell=n-1,\ldots, n-m\}.
+\end{align*}
+When $m=1$, $V_{1,h}^{\rm MWX}$ is the $H^1$-nonconforming linear element space \cite{CrouzeixRaviart1973}, denoted by $V_{h}^{\rm CR}$.
+Let $I_{h}^{\rm MWX}: H^m(\Omega) \to V_{m,h}^{\rm MWX}$ be the nodal interpolation operator determined by the DoFs in \eqref{MWXdof}. It holds that
+\begin{equation}\label{eq:nablajIhMWX}
+\int_F\nabla^{\ell-(n-m)}(v-I_{h}^{\rm MWX}v)\dd s=0,\quad\forall\,F\in \Delta_\ell(T),\; \ell=n-1,\ldots,n-m.
+\end{equation}
+
+For \(k=0,1,\ldots,n-1\), set
+\[
+V_{m,h}^{\rm MWX}\Lambda^k
+:= V_{m,h}^{\rm MWX}\otimes \Lambda^k(\Omega),
+\qquad
+V_h^{\rm CR}\Lambda^k
+:= V_h^{\rm CR}\otimes \Lambda^k(\Omega).
+\]
+The corresponding interpolation operator for \(k\)-forms is still denoted by
+\(I_h^{\rm MWX}\).
+
+\subsection{Finite element differential forms}
+
+Let 
+\begin{align*}
+	V_{r,h}^{\dd}\Lambda^k&:=\mathbb P_{r}\Lambda^{k}(\mathcal T_h)\cap H\Lambda^k(\Omega),\quad\;\, V_{r,h}^{*}\Lambda^k:=\star V_{r,h}^{\dd}\Lambda^{n-k},\\
+	V_{r,h}^{\dd,-}\Lambda^k&:=\mathbb P_{r}^-\Lambda^{k}(\mathcal T_h)\cap H\Lambda^k(\Omega),\quad V_{r,h}^{*,-}\Lambda^k:=\star V_{r,h}^{\dd,-}\Lambda^{n-k}.
+\end{align*}
+Set $\mathring{V}_{r,h}^{\dd}\Lambda^k:=V_{r,h}^{\dd}\Lambda^k\cap H_{0}\Lambda^k(\Omega)$ and $\mathring{V}_{r,h}^{\dd,-}\Lambda^k:=V_{r,h}^{\dd,-}\Lambda^k\cap H_{0}\Lambda^k(\Omega)$.
+We have the short exact sequences \cite{Hiptmair2001,Hiptmair2002,Arnold2018,ArnoldFalkWinther2006}
+\begin{equation}\label{femderhamcomplex1form1}
+	\mathring{V}_{r+1,h}^{\dd,-}\Lambda^{k-1}\xrightarrow{\dd} 
+	\mathring{V}_{r,h}^{\dd}\Lambda^k\xrightarrow{\dd} \dd \mathring{V}_{r,h}^{\dd}\Lambda^k \to0,
+\end{equation}
+\begin{equation}\label{femderhamcomplex1form2}
+	\mathring{V}_{r,h}^{\dd,-}\Lambda^{k-1}\xrightarrow{\dd} 
+	\mathring{V}_{r,h}^{\dd,-}\Lambda^k\xrightarrow{\dd} \dd \mathring{V}_{r,h}^{\dd,-}\Lambda^k \to0,
+\end{equation}
+\begin{equation}\label{femderhamcomplex1form}
+	V_{r,h}^{*,-}\Lambda^{k+1} \xrightarrow{\dd^*} 
+	V_{r,h}^{*,-}\Lambda^k\xrightarrow{\dd^*} \dd^* V_{r,h}^{*,-}\Lambda^k \to0.
+\end{equation}
+
+Let $I_{r,h}^{\dd}: L^2\Lambda^k(\Omega)\to V_{r,h}^{\dd}\Lambda^k$ and $I_{r,h}^{\dd,-}: L^2\Lambda^k(\Omega)\to V_{r,h}^{\dd,-}\Lambda^k$ be the $L^2$ bounded projection operators devised in~\cite{ArnoldGuzman2021,ChristiansenWinther2008}, then $I_{r,h}^{\dd}\omega,\, I_{r,h}^{\dd,-}\omega\in H_0\Lambda^k(\Omega)$ for $\omega\in H_0\Lambda^k(\Omega)$.
+Define $I_{r,h}^{*}: L^2\Lambda^k(\Omega)\to V_{r,h}^{*}\Lambda^k$ and $I_{r,h}^{*,-}: L^2\Lambda^k(\Omega)\to V_{r,h}^{*,-}\Lambda^k$ as 
+\begin{equation*}
+	\star I_{r,h}^{*}\omega=I_{r,h}^{\dd}(\star\omega),\;\; \star I_{r,h}^{*,-}\omega=I_{r,h}^{\dd,-}(\star\omega), \quad\omega\in L^2\Lambda^k(\Omega).
+\end{equation*}
+Then $I_{r,h}^{*}$ and $I_{r,h}^{*,-}$ are also $L^2$ bounded. 
+We will abbreviate $I_{r,h}^{\dd}$ and $I_{r,h}^{\dd,-}$ as $I_{h}^{\dd}$, and $I_{r,h}^{*}$ and $I_{r,h}^{*,-}$ as $I_{h}^{*}$, if not causing any confusions.
+We have (cf. \cite{ArnoldGuzman2021,ChristiansenWinther2008})
+\begin{equation}\label{eq:IhdCDprop}
+	\dd(I_h^{\dd}\omega)=I_h^{\dd}(\dd \omega),\quad \omega\in H\Lambda^k(\Omega),\, 0\leq k\leq d,
+\end{equation}
+%\begin{equation}\label{eq:IhdeltaCDprop}
+%	\dd^*(I_h^{*}\omega)=I_h^{*}(\dd^* \omega),\quad \omega\in H^*\Lambda^k(\Omega),\, 0\leq j\leq d,
+%\end{equation}
+\begin{equation}\label{eq:Ihddelta-estimate}
+	\|\omega-I_{r,h}^{\dd,-}\omega\| + \|\omega-I_{r,h}^{*,-}\omega\| \lesssim h^r|\omega|_r,\quad \omega\in H^r\Lambda^k(\Omega),
+\end{equation}
+%\eqref{eq:stardelta} and \eqref{eq:IhdCDprop}-\eqref{eq:Ihdestimate} we have
+\begin{equation}\label{eq:Ihddeltaestimate}
+	\|\omega-I_{r,h}^{\dd}\omega\| + h\|\dd(\omega-I_{r,h}^{\dd}\omega)\| \lesssim h^{r+1}|\omega|_{r+1},\quad \omega\in H^{r+1}\Lambda^k(\Omega).
+\end{equation}
+
+\subsection{Discrete Helmholtz decomposition}
+Now we establish the discrete Helmholtz decomposition of piecewise constant differential forms.
+
+\begin{lemma}
+Let $1\leq k\leq d$.
+It holds the discrete Helmholtz decomposition
+\begin{equation}\label{eq:discreteL2HelmholtzDecompCRL} 
+\mathbb P_0\Lambda^k(\mathcal T_h)=\dd_h V_h^{\rm CR}\Lambda^{k-1} \oplus^{\perp} \dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1} \oplus^{\perp} \mathring{\mathfrak{H}}_h^k, \quad k=1,\ldots, d,
+\end{equation}
+where notation $\oplus^{\perp}$ means the direct sum is $L^2$ orthogonal, and
+the space of discrete harmonic forms
+\begin{equation*}
+\mathring{\mathfrak{H}}_h^k:=\{\omega\in\mathring{V}_{1,h}^{*,-}\Lambda^{k}: \dd^*\omega=0, (\omega,\dd^*\tau)=0\;\;\forall\,\tau\in\mathring{V}_{1,h}^{*}\Lambda^{k+1}\}.
+\end{equation*}
+\end{lemma}
+\begin{proof}
+	Apparently, $\dd_h V_h^{\rm CR}\Lambda^{k-1} \oplus^{\perp} (\mathbb P_0\Lambda^k(\mathcal T_h)\cap \mathring{H}^{*}\Lambda^k(\Omega))\subseteq \mathbb P_{0}\Lambda^k(\mathcal T_h)$.
+	Then we prove the other side. Take $ q_h\in\mathbb P_{0}\Lambda^k(\mathcal T_h)$. 
+	Consider the following nonconforming finite element method: find $\phi_h\in V_h^{\rm CR}\Lambda^{k-1}$ and $\lambda_h\in V_h^{\rm CR}\Lambda^{k-1}\cap\ker(\dd_h):=\{\psi\in V_h^{\rm CR}\Lambda^{k-1}: \dd_h\psi=0\}$ such that
+	\begin{align*}
+		(\dd_h\phi_h, \dd_h\psi) + (\psi,\lambda_h)&=( q_h, \dd_h\psi), \\
+		(\phi_h,\mu)&=0
+	\end{align*}
+	for any $\psi\in V_h^{\rm CR}\Lambda^{k-1}$ and $\mu\in V_h^{\rm CR}\Lambda^{k-1}\cap\ker(\dd_h)$.
+	This discrete method is well-posed. Choose $\psi=\lambda_h$ in the first equation to get $\lambda_h=0$, which implies
+	\begin{equation*}
+		( q_h-\dd_h\phi_h, \dd_h\psi)=0\qquad\forall~\psi\in V_h^{\rm CR}\Lambda^{k-1}.
+	\end{equation*}
+	Apply the integration by parts to acquire
+	\begin{equation*}
+\sum_{F\in \Delta_{d-1}(\mathcal T_h)}\int_F\tr\psi\wedge[\tr(\star(q_h-\dd_h\phi_h))]=0.
+	\end{equation*}
+	Thanks to DoFs \eqref{MWXdof}, $q_h-\dd_h\phi_h\in \mathbb P_0\Lambda^k(\mathcal T_h)\cap \mathring{H}^{*}\Lambda^k(\Omega)$.
+As $\mathbb P_0\Lambda^k(\mathcal T_h)\cap \mathring{H}^{*}\Lambda^k(\Omega)=\mathring{V}_{1,h}^{*,-}\Lambda^{k}\cap\ker(\dd^*)$, the Helmholtz decomposition \eqref{eq:discreteL2HelmholtzDecompCRL} follows from the discrete Hodge decomposition \cite{Arnold2018,ArnoldFalkWinther2006,ArnoldFalkWinther2010}.
+\end{proof}
+
+
+%\begin{remark}\rm
+%	When $j=d-1$, the Helmholtz decomposition \eqref{eq:discreteL2HelmholtzDecompCR}  become
+%	\begin{equation*}
+	%\mathbb P_0\Lambda^{d+1}(\mathcal T_h)=	\{0\}.
+%	\end{equation*}
+%\end{remark}
+\begin{remark}\rm
+	In three dimensions, Helmholtz decomposition \eqref{eq:discreteL2HelmholtzDecompCRL} is 
+	\begin{equation*}
+		\mathbb P_0(\mathcal T_h;\mathbb R^3)=\curl_h(V_h^{\rm CR}\otimes\mathbb R^3) \oplus^{\perp}\nabla \mathring{V}_{1,h}^{\grad} \oplus^{\perp} \mathring{\mathfrak{H}}_h^1 = \nabla_hV_h^{\rm CR} \oplus^{\perp}\curl \mathring{V}_{1,h}^{\rm ND} \oplus^{\perp} \mathring{\mathfrak{H}}_h^0,
+	\end{equation*}
+	which is presented in \cite{BringmannKettelerSchedensack2025}. 
+	%Here $V_{1,h}^{\rm ND}$ is the lowest N\'{e}d\'{e}lec element space of the first kind \cite{Nedelec1980}.
+\end{remark}
+
+\subsection{Weak exterior differential operator}
+For an integer $r\geq 0$, we define the weak exterior derivative
+\[
+\dd_w: \mathbb P_r\Lambda^k(\mathcal T_h)
+    \to \mathring{V}_{r+1,h}^{*}\Lambda^{k+1}
+\]
+as the $L^2$-adjoint of the coderivative operator
+\[
+\dd^*: \mathring{V}_{r+1,h}^{*}\Lambda^{k+1}
+    \to \mathbb P_r\Lambda^k(\mathcal T_h). %\mathring{V}_{r,h}^{*}\Lambda^k .
+\]
+More precisely, for $\omega\in \mathbb P_r\Lambda^k(\mathcal T_h)$,
+$\dd_w\omega\in \mathring{V}_{r+1,h}^{*}\Lambda^{k+1}$ is defined by
+\begin{equation*}
+    (\dd_w\omega,\eta)=(\omega,\dd^*\eta),
+    \qquad
+    \forall\,\eta\in \mathring{V}_{r+1,h}^{*}\Lambda^{k+1}.
+\end{equation*}
+We emphasize that $\dd_w$ differs from the exterior derivative $\dd$,
+since $\mathring{V}_{r,h}^{*}\Lambda^k$ is not necessarily a subspace of
+$H\Lambda^k(\Omega)$. Related weak differential operators were introduced in
+\cite[Section 2.1]{ChenWuZhongZhou2018}.
+
+The following discrete Hodge decomposition holds:
+\begin{equation}\label{eq:discreteL2hodgeDecomp}
+\mathring{V}_{r,h}^{*}\Lambda^k
+=
+\dd_w \mathring{V}_{r-1,h}^{*}\Lambda^{k-1}
+\oplus^{\perp}
+\dd^*\mathring{V}_{r+1,h}^{*}\Lambda^{k+1}
+\oplus^{\perp}
+\mathring{\mathfrak H}_h^k,
+\qquad k=1,\ldots,d .
+\end{equation}
+
+\begin{lemma}
+The restriction of $\dd_w$ to
+$\dd^*\mathring{V}_{r+1,h}^{*}\Lambda^{k+1}$ is injective.
+\end{lemma}
+\begin{proof}
+Let $\omega\in \dd^*\mathring{V}_{r+1,h}^{*}\Lambda^{k+1}$ satisfy
+$\dd_w\omega=0$. By the definition of $\dd_w$,
+\begin{equation*}
+    (\omega,\dd^*\eta)=0,
+    \qquad
+    \forall\,\eta\in \mathring{V}_{r+1,h}^{*}\Lambda^{k+1}.
+\end{equation*}
+Hence $\omega=0$, and the asserted injectivity follows.
+\end{proof}
+
+\begin{lemma}
+For $k=1,\ldots,d$, there hold
+\begin{align}
+\mathbb P_0\Lambda^k(\mathcal T_h)\cap\ker(\dd_w)
+&=
+\dd_h V_h^{\rm CR}\Lambda^{k-1}
+\oplus^{\perp}
+\mathring{\mathfrak H}_h^k,
+\label{eq:P0kerweakd}
+\\
+\mathring{V}_{r,h}^{*}\Lambda^k\cap\ker(\dd_w)
+&=
+\dd_w \mathring{V}_{r-1,h}^{*}\Lambda^{k-1}
+\oplus^{\perp}
+\mathring{\mathfrak H}_h^k .
+\label{eq:Vrstarkerweakd}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+We first prove \eqref{eq:P0kerweakd}. By the definition of $\dd_w$, one readily
+verifies that
+\[
+\dd_h V_h^{\rm CR}\Lambda^{k-1}
+\oplus^{\perp}
+\mathring{\mathfrak H}_h^k
+\subseteq
+\mathbb P_0\Lambda^k(\mathcal T_h)\cap\ker(\dd_w).
+\]
+It remains to compare dimensions.
+
+Using the discrete Helmholtz decomposition
+\eqref{eq:discreteL2HelmholtzDecompCRL}, we obtain
+\begin{equation*}
+\dd_w\mathbb P_0\Lambda^k(\mathcal T_h)
+=
+\dd_w\bigl(\dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1}\bigr).
+\end{equation*}
+By the preceding lemma, $\dd_w$ is injective on
+$\dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1}$. Hence
+\begin{equation*}
+\dim\bigl(\dd_w\mathbb P_0\Lambda^k(\mathcal T_h)\bigr)
+=
+\dim\bigl(\dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1}\bigr).
+\end{equation*}
+Consequently,
+\begin{equation*}
+\dim\bigl(\mathbb P_0\Lambda^k(\mathcal T_h)\cap\ker(\dd_w)\bigr)
+=
+\dim \mathbb P_0\Lambda^k(\mathcal T_h)
+-
+\dim\bigl(\dd^*\mathring{V}_{1,h}^{*}\Lambda^{k+1}\bigr).
+\end{equation*}
+The desired identity \eqref{eq:P0kerweakd} follows from
+\eqref{eq:discreteL2HelmholtzDecompCRL}.
+
+The proof of \eqref{eq:Vrstarkerweakd} is analogous. Indeed, using
+\eqref{eq:discreteL2hodgeDecomp} and the injectivity of $\dd_w$ on
+$\dd^*\mathring{V}_{r+1,h}^{*}\Lambda^{k+1}$, one obtains
+\[
+\dim\bigl(\mathring{V}_{r,h}^{*}\Lambda^k\cap\ker(\dd_w)\bigr)
+=
+\dim\bigl(\dd_w \mathring{V}_{r-1,h}^{*}\Lambda^{k-1}\bigr)
++
+\dim \mathring{\mathfrak H}_h^k .
+\]
+Together with the inclusion
+\[
+\dd_w \mathring{V}_{r-1,h}^{*}\Lambda^{k-1}
+\oplus^{\perp}
+\mathring{\mathfrak H}_h^k
+\subseteq
+\mathring{V}_{r,h}^{*}\Lambda^k\cap\ker(\dd_w),
+\]
+this proves \eqref{eq:Vrstarkerweakd}.
+\end{proof}
+
+Thus, the discrete Helmholtz decomposition
+\eqref{eq:discreteL2HelmholtzDecompCRL} is equivalent to
+\eqref{eq:P0kerweakd}, while the discrete Hodge decomposition
+\eqref{eq:discreteL2hodgeDecomp} is equivalent to
+\eqref{eq:Vrstarkerweakd}.
+
+
+
+\subsection{Finite element complex}
+
+We always assume $1\leq m\leq n$.
+\begin{lemma}
+Let $0\leq k\leq n-1$.
+It holds the following commuting property:
+\begin{equation}\label{eq:dIhMWXcommute}
+\dd_h(I_{h}^{\rm MWX}\omega)=I_{h}^{\rm MWX}(\dd\omega),\quad\forall\,\omega\in H^m\Lambda^k(\Omega).
+\end{equation}
+That is we have the commutative diagram
+\begin{equation*}
+\begin{array}{c}
+\xymatrix{
+H^m\Lambda^k(\Omega)\ar[r]^-{\dd} \ar[d]^{I_{h}^{\rm MWX}}&  H^{m-1}\Lambda^{k+1}(\Omega) \ar[d]^{I_{h}^{\rm MWX}} \\
+V_{m,h}^{\rm MWX}\Lambda^k\ar[r]^-{\dd_h} & V_{m-1,h}^{\rm MWX}\Lambda^{k+1}
+}
+\end{array}
+.
+\end{equation*}
+\end{lemma}
+\begin{proof}
+The property \eqref{eq:nablajIhMWX} implies
+\begin{equation*}
+\int_F\nabla^{\ell-(n-m)-1}\dd_h(\omega-I_{h}^{\rm MWX}\omega)\dd s=0,\;\;\forall\,F\in \Delta_\ell(T)
+\end{equation*}
+for $\ell=n-1,\ldots,n-(m-1)$.
+Thus, the commuting property \eqref{eq:dIhMWXcommute} is true.
+\end{proof}
+
+
+\begin{theorem}
+Assume $k+m<n$. The following nonconforming finite element de Rham complex
+\begin{equation}\label{complex:ncfem1}
+V_{m,h}^{\rm MWX}\Lambda^{k}\xrightarrow{\dd} 
+	V_{m-1,h}^{\rm MWX}\Lambda^{k+1}\xrightarrow{\dd}\cdots\xrightarrow{\dd}\mathbb P_0\Lambda^{k+m}(\mathcal T_h)\xrightarrow{\dd_w} \mathring{V}_{1,h}^{*}\Lambda^{k+m+1} \xrightarrow{\dd_w}\cdots
+\end{equation}
+is exact, when the domain $\Omega$ is contractible.
+\end{theorem}
+\begin{proof}
+The exactness of the complex \eqref{complex:ncfem1} follows from the commuting property \eqref{eq:dIhMWXcommute} and \eqref{eq:P0kerweakd}-\eqref{eq:Vrstarkerweakd}.
+\end{proof}
+
+
+
+\begin{lemma}
+Let $0\leq k\leq n-1$.
+It holds the following commuting property:
+\begin{equation}\label{eq:IhdMWXcommute}
+\dd(I_{1,h}^{\dd,-}\omega)=I_{1,h}^{\dd,-}(\dd_h\omega),\quad\forall\,\omega\in V_{n-k,h}^{\rm MWX}\Lambda^k.
+\end{equation}
+That is we have the commutative diagram
+\begin{equation*}
+\begin{array}{c}
+\xymatrix{
+V_{n-k,h}^{\rm MWX}\Lambda^k\ar[r]^-{\dd_h} \ar[d]^{I_{1,h}^{\dd,-}}&  V_{n-k-1,h}^{\rm MWX}\Lambda^{k+1} \ar[d]^{I_{1,h}^{\dd,-}} \\
+V_{1,h}^{\dd,-}\Lambda^k\ar[r]^-{\dd} & V_{1,h}^{\dd,-}\Lambda^{k+1}
+}
+\end{array}
+.
+\end{equation*}
+\end{lemma}
+\begin{proof}
+It follows from the fact that all the DoFs of space $V_{1,h}^{\dd,-}\Lambda^k$ are a subset of those of space $V_{n-k,h}^{\rm MWX}\Lambda^k$. 
+\end{proof}
+
+\begin{theorem}
+The nonconforming finite element de Rham complex
+\begin{equation}\label{complex:ncfem2}
+\mathbb R
+\to V_{n,h}^{\rm MWX}\Lambda^{0}
+\xrightarrow{\dd}
+V_{n-1,h}^{\rm MWX}\Lambda^{1}
+\xrightarrow{\dd}\cdots
+\xrightarrow{\dd}
+\mathbb P_0\Lambda^{n}(\mathcal T_h)
+\to 0
+\end{equation}
+has the same cohomology as the continuous de Rham complex.
+\end{theorem}
+
+\begin{proof}
+This follows from the commuting properties \eqref{eq:dIhMWXcommute} and
+\eqref{eq:IhdMWXcommute}, together with the fact that the Whitney complex has
+the same cohomology as the continuous de Rham complex.
+\end{proof}
+
+
+For $1\leq m\leq n$ and $0\leq k\leq m$, the DoFs for space $V_{n-m+1,h}^{\dd,-}\Lambda^k$ are
+\begin{align}\label{feecnm1stdof}
+\int_f \tr_f\omega\wedge\eta,
+\quad \forall\, \eta\in \mathbb P_{n-m+k-\ell}\Lambda^{\ell-k}(f), f\in \Delta_\ell(\mathcal{T}_h), \ell=k,\ldots,n-m+k.
+\end{align}
+Introduce a subspace of $V_{n-m+1,h}^{\dd,-}\Lambda^k$ by
+\begin{align*}
+\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^k := \{ \omega \in V_{n-m+1,h}^{\dd,-}\Lambda^k&: \textrm{ all the DoFs in \eqref{feecnm1stdof} vanish on } \\
+&\quad f\in \Delta_\ell(\mathcal{T}_h) \textrm{ for } \ell=k,\ldots,n-m+k-1\}.
+\end{align*}
+Then the DoFs for space $\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^k$ are
+\begin{align}\label{feecnm1st0dof}
+\int_f \tr_f\omega\wedge\eta,
+\quad \forall\, \eta\in \mathbb P_{0}\Lambda^{n-m}(f), f\in \Delta_{n-m+k}(\mathcal{T}_h).
+\end{align}
+Clearly, we have $\widehat{V}_{1,h}^{\dd,-}\Lambda^k=V_{1,h}^{\dd,-}\Lambda^k$ when $m=n$.
+The space $\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^k$ has homogeneous boundary conditions on subsimplices with dimension less than $n-m+k$.
+
+By $\tr_f\dd=\dd_f\tr_f$, it holds that $\dd \widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^k\subseteq \widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^{k+1}$. Thus, we have the subcomplex
+\begin{equation}\label{complex:derham0}
+\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^{0}
+\xrightarrow{\dd}
+\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^{1}
+\xrightarrow{\dd}\cdots
+\xrightarrow{\dd}
+\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^{m}
+\to 0.
+\end{equation}
+
+\textcolor{red}{
+Does the complex \eqref{complex:derham0} have the same cohomology as the continuous de Rham complex?}
+
+
+\begin{lemma}
+Let $1\leq m\leq n$ and $0\leq k\leq m-1$.
+It holds the following commuting property:
+\begin{equation}\label{eq:IhdMWXcommute0}
+\dd(\widehat{I}_{n-m+1,h}^{\dd,-}\omega)=\widehat{I}_{n-m+1,h}^{\dd,-}(\dd_h\omega),\quad\forall\,\omega\in V_{n-k,h}^{\rm MWX}\Lambda^k,
+\end{equation}
+where $\widehat{I}_{n-m+1,h}^{\dd,-}: V_{m-k,h}^{\rm MWX}\Lambda^k\to\widehat{V}_{n-m+1,h}^{\dd,-}$ is the interpolation operator based on DoF \eqref{feecnm1st0dof}.
+That is we have the commutative diagram
+\begin{equation*}
+\begin{array}{c}
+\xymatrix{
+V_{m-k,h}^{\rm MWX}\Lambda^k\ar[r]^-{\dd_h} \ar[d]^{\widehat{I}_{n-m+1,h}^{\dd,-}}&  V_{m-k-1,h}^{\rm MWX}\Lambda^{k+1} \ar[d]^{\widehat{I}_{n-m+1,h}^{\dd,-}} \\
+\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^k\ar[r]^-{\dd} &\widehat{V}_{n-m+1,h}^{\dd,-}\Lambda^{k+1}
+}
+\end{array}
+.
+\end{equation*}
+\end{lemma}
+\begin{proof}
+It follows from $\tr_f\dd=\dd_f\tr_f$ and the integration by parts. 
+\end{proof}
+
+
+\section{Discrete BGG in two dimensions}
+
+\subsection{Discrete Hessian complex in two dimensions}
+The finite element BGG diagram
+\begin{equation*}
+\begin{tikzcd}
+%\mathbb R \arrow{r}{\subset}
+%&
+V_{2,h}^{\rm MWX}
+\arrow{r}{\grad_h}
+ &
+V_{h}^{\rm CR}\otimes\mathbb R^2
+   \arrow{r}{\rot_h}
+ &
+\mathbb P_0(\mathcal T_h)
+% \arrow{r}{}
+% & 0 \\
+\\
+ %
+% \mathbb R \arrow{r}{\subset}
+%&
+V_{h}^{\rm CR}\otimes\mathbb R^2
+ \arrow[ur,swap,"{\rm id}"] \arrow{r}{\grad_h}
+ & 
+\mathbb P_0(\mathcal T_h;\mathbb M) 
+ \arrow[ur,swap,"{\rm -2\sskw}"] \arrow{r}{\rot_w}
+ & \mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^2
+%\arrow[r] 
+% &0 
+\end{tikzcd}
+\end{equation*}
+gives rise to the finite element Hessian complex
+\begin{equation}\label{eq:hesscomplex2dfem}
+\mathbb P_1\xrightarrow{\subset} V_{2,h}^{\rm MWX}\xrightarrow{\nabla_h^2}\mathbb P_0(\mathcal T_h;\mathbb S)\xrightarrow{\rot_w} \mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^2\xrightarrow{}0,
+\end{equation}
+where $\mathring{V}_{1,h}^{*}\Lambda^2$ denotes the linear Lagrange element space with homogeneous boundary conditions. When $\Omega$ is simply connected, this complex is equivalent to the discrete Helmholtz decomposition in \cite[Theorem 3.1]{CarstensenGallistlHu2014} and \cite[Theorem 4.5]{Gallistl2015}:
+\begin{equation*}
+\mathbb P_0(\mathcal T_h;\mathbb S)
+=
+\nabla_h^2 V_{2,h}^{\rm MWX}
+\oplus
+\sym\curl(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^2).
+\end{equation*}
+
+
+\textcolor{red}{The continuity mismatch case.}
+The finite element BGG diagram
+\begin{equation*}
+\begin{tikzcd}
+%\mathbb R \arrow{r}{\subset}
+%&
+V_{h}^{\rm CR}
+\arrow{r}{\grad_h}
+ &
+\mathbb P_0(\mathcal T_h;\mathbb R^2)
+   \arrow{r}{\rot_w}
+ &
+\mathring{V}_{1,h}^{*}\Lambda^2
+% \arrow{r}{}
+% & 0 \\
+\\
+ %
+% \mathbb R \arrow{r}{\subset}
+%&
+\mathbb P_0(\mathcal T_h;\mathbb R^2)
+ \arrow[ur,swap,"{\rm id}"] \arrow{r}{\grad_w}
+ & \mathring{V}_{1,h}^{*}\Lambda^1 \otimes\mathbb R^2
+ \arrow[ur,swap,"{\rm -2\sskw}"] \arrow{r}{\rot_w}
+ & \mathring{V}_{2,h}^{*}\Lambda^2 \otimes\mathbb R^2
+%\arrow[r] 
+% &0 
+\end{tikzcd}
+\end{equation*}
+\textcolor{red}{
+gives rise to the finite element Hessian complex
+\begin{equation*}
+\mathbb P_1\xrightarrow{\subset} V_{h}^{\rm CR}\xrightarrow{\grad_w\grad_h} (\mathring{V}_{1,h}^{*}\Lambda^1 \otimes\mathbb R^2)/\mskw\mathring{V}_{1,h}^{*}\Lambda^2 \xrightarrow{\rot_w} \mathring{V}_{2,h}^{*}\Lambda^2\otimes\mathbb R^2\xrightarrow{}0,
+\end{equation*}
+where
+$\mathring{V}_{1,h}^{*}\Lambda^1$ is the linear BDM element space, and $\mathring{V}_{2,h}^{*}\Lambda^2$ is the quadratic Lagrange element space.
+}
+
+\subsection{Discrete grad\,curl complex in two dimensions}
+The finite element BGG diagram
+\begin{equation*}
+\begin{tikzcd}
+%\mathbb R \arrow{r}{\subset}
+%&
+V_{2,h}^{\rm MWX}
+\arrow{r}{\curl_h}
+ &
+V_{h}^{\rm CR}\otimes\mathbb R^2
+   \arrow{r}{\div_h}
+ &
+\mathbb P_0(\mathcal T_h)
+% \arrow{r}{}
+% & 0 \\
+\\
+ %
+% \mathbb R \arrow{r}{\subset}
+%&
+V_{h}^{\rm CR}\otimes\mathbb R^2
+ \arrow[ur,swap,"{\rm id}"] \arrow{r}{\grad_h}
+ & 
+\mathbb P_0(\mathcal T_h;\mathbb M) 
+ \arrow[ur,swap,"{\rm -\tr}"] \arrow{r}{\rot_w}
+ & \mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^2
+%\arrow[r] 
+% &0 
+\end{tikzcd}
+\end{equation*}
+gives rise to the finite element Hessian complex
+\begin{equation}\label{eq:gradcurlcomplex2dfem}
+\mathbb P_1\xrightarrow{\subset} V_{2,h}^{\rm MWX}\xrightarrow{\grad_h\curl_h}\mathbb P_0(\mathcal T_h;\mathbb T)\xrightarrow{\rot_w} \mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^2\xrightarrow{}0.
+\end{equation}
+When $\Omega$ is simply connected, this complex is equivalent to the discrete Helmholtz decomposition:
+\begin{equation*}
+\mathbb P_0(\mathcal T_h;\mathbb T)
+=
+\grad_h\curl_h V_{2,h}^{\rm MWX}
+\oplus
+\dev\curl(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^2).
+\end{equation*}
+A related decomposition can be found in
+\cite[Corollary 6.4]{BringmannKettelerSchedensack2025}.
+
+
+
+\subsection{Discrete div\,div complex in two dimensions}
+
+The finite element BGG diagram
+ \begin{equation}\label{eq:femdivdivbgg}
+\begin{tikzcd}[column sep=0.378cm]
+\mathbb R^2 \arrow{r}{\subset}
+&
+V_{2,h}^{\rm MWX}\otimes\mathbb R^2
+\arrow{r}{\curl_h}
+ &
+V_{h}^{\rm CR}\otimes\mathbb M
+   \arrow{r}{\div_h}
+ &
+\mathbb P_0(\mathcal T_h;\mathbb R^2)
+ \arrow{r}{}
+ & \boldsymbol{0} \\
+ %
+ \mathbb R \arrow[ur,swap,"{\rm -\bs x}"] \arrow{r}{\subset}
+&
+V_{h}^{\rm CR}
+ \arrow[ur,swap,"{\rm mskw}"] \arrow{r}{\curl_h}
+ & 
+\mathbb P_0(\mathcal T_h;\mathbb R^2) 
+ \arrow[ur,swap,"{\rm id}"] \arrow{r}{\div_w}
+ & \mathring{V}_{1,h}^{*}\Lambda^2
+\arrow[r] 
+ &0 
+\end{tikzcd}
+\end{equation}
+gives rise to the finite element div\,div complex
+\begin{equation}\label{eq:continuousdivdivcomplex}
+{\rm RT}\xrightarrow{\subset} 
+V_{2,h}^{\rm MWX}\otimes\mathbb R^2
+\xrightarrow{{\sym\curl_h}}
+V_{h}^{\rm CR}\otimes\mathbb S\xrightarrow{\div_w\div_h}  
+\mathring{V}_{1,h}^{*}\Lambda^2 
+\xrightarrow{}0.
+\end{equation}
+
+
+\section{Discrete BGG in three dimensions}
+
+\subsection{Discrete Hessian complex in three dimensions}
+The finite element BGG diagram
+\begin{equation*}
+%\adjustbox{scale=0.9,center}{% \begin{equation*}%\label{eq:BGGelasticity}
+\begin{tikzcd}
+V_{3,h}^{\rm MWX}
+\arrow{r}{\grad_h}
+&
+V_{2,h}^{\rm MWX}\otimes\mathbb R^3
+% \arrow[dl,swap,"{\rm id}"]   
+ \arrow{r}{\curl_h}
+ &
+V_{h}^{\rm CR}\otimes\mathbb R^3
+ \arrow{r}{\div_h}
+ & \mathbb P_0(\mathcal T_h)
+ \\
+ %
+V_{2,h}^{\rm MWX}\otimes\mathbb R^3
+ \arrow[ur,swap,"{\rm id}"'] 
+ \arrow{r}{\grad_h}
+ & 
+V_{h}^{\rm CR}\otimes\mathbb M
+ \arrow[ur,"- 2\vskw"] \arrow{r}{\curl_h}
+ & 
+\mathbb P_0(\mathcal T_h; \mathbb M) 
+ \arrow[ur,"\tr"] \arrow{r}{\div_w} \arrow[r] 
+ &\mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3
+\end{tikzcd}
+%}
+\end{equation*}
+gives rise to the finite element Hessian complex
+\begin{equation}\label{eq:hesscomplex3dfem}
+\mathbb P_1\xrightarrow{\subset} V_{3,h}^{\rm MWX}\xrightarrow{\nabla_h^2}V_{h}^{\rm CR}\otimes\mathbb S\xrightarrow{\curl_h}\mathbb P_0(\mathcal T_h;\mathbb T)\xrightarrow{\div_w} \mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3\xrightarrow{}0.
+\end{equation}
+When $\Omega$ is simply connected, this complex implies the discrete Helmholtz decomposition
+\begin{equation*}
+\mathbb P_0(\mathcal T_h;\mathbb T)
+=
+\curl_h(V_{h}^{\rm CR}\otimes\mathbb S)
+\oplus
+\dev\grad(\mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3).
+\end{equation*}
+
+We can start from $V_{2,h}^{\rm MWX}$ to have the following finite element BGG diagram
+\begin{equation}\label{discBGG3dHess:MXW2}
+%\adjustbox{scale=0.9,center}{% \begin{equation*}%\label{eq:BGGelasticity}
+\begin{tikzcd}
+V_{2,h}^{\rm MWX}
+\arrow{r}{\grad_h}
+&
+V_{h}^{\rm CR}\otimes\mathbb R^3
+% \arrow[dl,swap,"{\rm id}"]   
+ \arrow{r}{\curl_h}
+ &
+\mathbb P_0(\mathcal T_h;\mathbb R^3)
+ \arrow{r}{\div_w}
+ & \mathring{V}_{1,h}^{*}\Lambda^{3}
+ \\
+ %
+V_{h}^{\rm CR}\otimes\mathbb R^3
+ \arrow[ur,swap,"{\rm id}"'] 
+ \arrow{r}{\grad_h}
+ & 
+\mathbb P_0(\mathcal T_h; \mathbb M)
+ \arrow[ur,"- 2\vskw"] \arrow{r}{\curl_w}
+ & 
+\mathring{V}_{1,h}^{*}\Lambda^{2}\otimes\mathbb R^3
+ \arrow[ur,"\tr_w"] \arrow{r}{\div_w} \arrow[r] 
+ &\mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3,
+\end{tikzcd}
+%}
+\end{equation}
+where $\tr_w: \mathring{V}_{1,h}^{*}\Lambda^{2}\otimes\mathbb R^3\to \mathring{V}_{1,h}^{*}\Lambda^{3}$ is the adjoint of $\iota: \mathring{V}_{1,h}^{*}\Lambda^{3}\to\mathring{V}_{1,h}^{*}\Lambda^{2}\otimes\mathbb R^3$.
+
+\begin{lemma}
+It holds that
+\begin{equation}\label{anticommu:weakdivvskw}
+\div_w(2\vskw\boldsymbol{\tau}) = \tr_w(\curl_w\boldsymbol{\tau}),\quad\forall\,\boldsymbol{\tau}\in\mathbb P_0(\mathcal T_h; \mathbb M).
+\end{equation}
+\end{lemma}
+\begin{proof}
+It suffices to prove
+\begin{equation*}
+-(2\vskw\boldsymbol{\tau},\grad v) = (\boldsymbol{\tau}, \curl(\iota(v))),\quad\forall\,\boldsymbol{\tau}\in\mathbb P_0(\mathcal T_h; \mathbb M), v\in\mathring{V}_{1,h}^{*}\Lambda^{3}.
+\end{equation*}
+Then \eqref{anticommu:weakdivvskw} follows from $\curl(\iota(v))=-\mskw(\grad v)$ and $\vskw = \mskw^{-1}\circ \skw$.
+\end{proof}
+
+Thanks to the commuting property \eqref{anticommu:weakdivvskw},
+the finite element BGG diagram \eqref{discBGG3dHess:MXW2} yields the finite element Hessian complex
+\begin{equation*}%\label{eq:hesscomplex3dfem}
+% \mathbb P_1\xrightarrow{\subset} 
+V_{2,h}^{\rm MWX}\xrightarrow{\nabla_h^2}\mathbb P_0(\mathcal T_h;\mathbb S)\xrightarrow{\curl_w}(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap\ker(\tr_w)\xrightarrow{\div_w} \mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3\xrightarrow{}0.
+\end{equation*}
+The explicit charactization of space $(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap\ker(\tr_w)$ is unknown. However, since
+\begin{equation*}
+(\curl_w\boldsymbol{\sigma}, \iota(v))=(\boldsymbol{\sigma}, \sym\curl\iota(v))=0,\quad\forall\,\boldsymbol{\sigma}\in\mathbb P_0(\mathcal T_h;\mathbb S), v\in L^2(\Omega),
+\end{equation*}
+we can revise the last complex as the following
+\begin{equation}\label{eq:hesscomplex3dfem2}
+% \mathbb P_1\xrightarrow{\subset} 
+V_{2,h}^{\rm MWX}\xrightarrow{\nabla_h^2}\mathbb P_0(\mathcal T_h;\mathbb S)\xrightarrow{\curl_w}(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)\xrightarrow{\div_w} \mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3\xrightarrow{}0,
+\end{equation}
+where $\curl_w:\mathbb P_0(\mathcal T_h;\mathbb S)\to (\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)$ is understood as the adjoint of $\sym\curl: (\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)\to \mathbb P_0(\mathcal T_h;\mathbb S)$, and $\div_w: (\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)\to \mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3$ is understood as the adjoint of $\dev\grad: \mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3\to(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)$.
+
+Indeed, the finite element Hessian complex \eqref{eq:hesscomplex3dfem2} is the adjoint of the finite element div\,div complex in \cite[Proposition 5.7 and Remark 5.10]{ChenHuang2025}. When $\Omega$ is simply connected, this complex implies the discrete Helmholtz decomposition
+\begin{equation*}
+\mathbb P_0(\mathcal T_h;\mathbb S)
+=\nabla_h^2V_{2,h}^{\rm MWX}
+\oplus\sym\curl((\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3)\cap L^2(\Omega;\mathbb T)).
+\end{equation*}
+A similar decomposition can be found in \cite[Theorem 7.4]{BringmannKettelerSchedensack2025}.
+
+
+\subsection{Discrete grad\,curl complex in three dimensions}
+The finite element BGG diagram
+\begin{equation*}
+%\adjustbox{scale=0.9,center}{% \begin{equation*}%\label{eq:BGGelasticity}
+\begin{tikzcd}
+V_{3,h}^{\rm MWX}
+\arrow{r}{\grad_h}
+&
+V_{2,h}^{\rm MWX}\otimes\mathbb R^3
+% \arrow[dl,swap,"{\rm id}"]   
+ \arrow{r}{\curl_h}
+ &
+V_{h}^{\rm CR}\otimes\mathbb R^3
+ \arrow{r}{\div_h}
+ & \mathbb P_0(\mathcal T_h)
+ \\
+ %
+V_{h}^{\rm CR}\otimes\mathbb R^3
+ \arrow[urr,swap,"{\rm id}"'] 
+ \arrow{r}{\grad_h}
+ & 
+\mathbb P_0(\mathcal T_h; \mathbb M)
+ \arrow[urr,"-\tr"] \arrow{r}{\curl_w}
+ & 
+\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3 
+%  \arrow[ur,"\tr"] 
+\arrow{r}{\div_w} \arrow[r] 
+ &\mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3
+\end{tikzcd}
+%}
+\end{equation*}
+gives rise to the finite element grad\,curl complex
+\begin{equation}\label{eq:gradcurlcomplex3dfem}
+% \mathbb P_1\xrightarrow{\subset} 
+V_{3,h}^{\rm MWX}
+\xrightarrow{\grad_h}
+V_{2,h}^{\rm MWX}\otimes\mathbb R^3\xrightarrow{\grad_h\curl_h}\mathbb P_0(\mathcal T_h;\mathbb T)\xrightarrow{\curl_w}
+\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3 
+\xrightarrow{\div_w} 
+ \mathring{V}_{2,h}^{*}\Lambda^3\otimes\mathbb R^3.
+\end{equation}
+When $\Omega$ is simply connected, this complex yields the discrete Helmholtz decomposition
+\begin{equation*}
+\mathbb P_0(\mathcal T_h;\mathbb T)
+=
+\grad_h\curl_h(V_{2,h}^{\rm MWX}\otimes\mathbb R^3)
+\oplus
+\dev\curl(\mathring{V}_{1,h}^{*}\Lambda^2\otimes\mathbb R^3).
+\end{equation*}
+A related decomposition can be found in \cite[Corollary 6.4]{BringmannKettelerSchedensack2025}.
+
+
+
+
+\subsection{Discrete elasticity complex in three dimensions}
+The finite element BGG diagram
+\begin{equation*}
+\adjustbox{scale=0.96,center}{
+\begin{tikzcd}
+%\mathbb V_{k+2}^{\curl} (\boldsymbol{r}_0)
+V_{3,h}^{\rm MWX}\otimes\mathbb R^3
+\arrow{r}{\grad_h}
+&
+V_{2,h}^{\rm MWX}\otimes\mathbb M
+ \arrow{r}{\curl_h}
+ &
+V_{h}^{\rm CR}\otimes\mathbb M
+ \arrow{r}{\div_h}
+ & \mathbb P_0(\mathcal T_h;\mathbb R^3)
+ \\
+ %
+V_{2,h}^{\rm MWX}\otimes\mathbb R^3
+ \arrow[ur,swap,"\mskw"'] \arrow{r}{\grad_h}
+ & 
+V_{h}^{\rm CR}\otimes\mathbb M
+ \arrow[ur,swap,"S"'] \arrow{r}{\curl_h}
+ & 
+\mathbb P_0(\mathcal T_h;\mathbb M)
+ \arrow[ur,swap,"-2\vskw"'] \arrow{r}{\div_w} \arrow[r] 
+ & \mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3
+\end{tikzcd}
+}
+\end{equation*}
+gives rise to the finite element elasticity complex
+\begin{align*}%\label{eq:femelasticitycomplex3d+421}
+{\rm RM}\xrightarrow{\subset}V_{3,h}^{\rm MWX}\otimes\mathbb R^3 \xrightarrow{\defm_h} V_{2,h}^{\rm MWX}\otimes\mathbb S \xrightarrow{\inc_h}  \mathbb P_0(\mathcal T_h;\mathbb S) \xrightarrow{\div_w} \mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3\rightarrow \boldsymbol{0}.
+\end{align*}
+When $\Omega$ is simply connected, this complex implies the discrete Helmholtz decomposition
+\begin{equation*}
+\mathbb P_0(\mathcal T_h;\mathbb S)
+=
+\inc_h(V_{2,h}^{\rm MWX}\otimes\mathbb S)
+\oplus
+\defm(\mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3).
+\end{equation*}
+
+
+\subsection{Discrete div\,div complex in three dimensions}
+The finite element BGG diagram
+\begin{equation*}%\label{eq:BGGdivdiv}
+\adjustbox{scale=0.96,center}{
+\begin{tikzcd}
+V_{3,h}^{\rm MWX}\otimes\mathbb R^3
+\arrow{r}{\grad_h}
+& V_{2,h}^{\rm MWX}\otimes\mathbb M
+ \arrow{r}{\curl_h}
+ &
+V_{h}^{\rm CR}\otimes\mathbb M
+ \arrow{r}{\div_h}
+ & \mathbb P_0(\mathcal T_h;\mathbb R^3)\to \boldsymbol{0}
+ \\
+ %
+V_{2,h}^{\rm MWX}
+ \arrow[ur,swap,"\iota"'] \arrow{r}{\grad_h}
+ & 
+V_{h}^{\rm CR}\otimes\mathbb R^3 
+ \arrow[ur,swap,"\mskw"'] \arrow{r}{\curl_h}
+ & 
+\mathbb P_0(\mathcal T_h;\mathbb R^3) 
+ \arrow[ur,swap,"\mathrm{id}"'] \arrow{r}{\div_w} \arrow[r] 
+ & \mathring{V}_{1,h}^{*}\Lambda^3 
+\to 0
+% & 0
+\end{tikzcd}
+}
+\end{equation*}
+gives rise to the finite element div\,div complex
+\begin{equation*}
+{\rm RT}\xrightarrow{\subset} V_{3,h}^{\rm MWX}\otimes\mathbb R^3 \xrightarrow{\dev\grad_h} V_{2,h}^{\rm MWX}\otimes\mathbb T \xrightarrow{\sym\curl_h} V_{h}^{\rm CR}\otimes\mathbb S \xrightarrow{\div_w\div_h} \mathring{V}_{1,h}^{*}\Lambda^3\rightarrow 0.
+\end{equation*} 
+
+
+\section{Discrete BGG in arbitrary $n$ dimensions}
+
+We use the notation of \cite{ArnoldHu2021}. For $j=1,2,\ldots,n$, the finite element BGG diagram
+\begin{equation*}%\label{eq:BGGdivdiv}
+\adjustbox{scale=0.96,center}{
+\begin{tikzcd}
+V_{n,h}^{\rm MWX}\otimes{\rm Alt}^{0,j-1}
+\arrow{r}{\dd_h}
+& V_{n-1,h}^{\rm MWX}\otimes{\rm Alt}^{1,j-1}
+ \arrow{r}{\dd_h} & \cdots \arrow{r}{\dd_h}
+ &
+V_{h}^{\rm CR}\otimes{\rm Alt}^{n-1,j-1}
+ \arrow{r}{\div_h}
+ & \mathbb P_0(\mathcal T_h;{\rm Alt}^{n,j-1})%\to \boldsymbol{0}
+ \\
+ %
+V_{n-1,h}^{\rm MWX}\otimes{\rm Alt}^{0,j}
+ \arrow[ur,swap,"S^{0,j}"'] \arrow{r}{\dd_h}
+ & 
+V_{n-2,h}^{\rm MWX}\otimes{\rm Alt}^{1,j}
+ \arrow[ur,swap,"S^{1,j}"'] \arrow{r}{\dd_h} & \cdots \arrow{r}{\dd_h}
+ & 
+\mathbb P_0(\mathcal T_h;{\rm Alt}^{n-1,j}) 
+ \arrow[ur,swap,"S^{n-1,j}"'] \arrow{r}{\div_w} 
+ & \mathring{V}_{1,h}^{*}\otimes{\rm Alt}^{n,j}
+\to 0
+% & 0
+\end{tikzcd}
+}
+\end{equation*}
+yields the finite element complex
+\begin{align*}
+&
+V_{n,h}^{\rm MWX}\otimes{\rm Alt}^{0,j-1}
+\longrightarrow
+V_{n-1,h}^{\rm MWX}\otimes\mathcal R(s^{0,j})^{\perp}
+\longrightarrow
+\cdots
+\\
+&\quad\longrightarrow
+V_{n-j+1,h}^{\rm MWX}\otimes\mathcal R(s^{j-2,j})^{\perp}
+\xrightarrow{\dd_h(S^{j-1,j})^{-1}\dd_h}
+V_{n-j-1,h}^{\rm MWX}\otimes\mathcal N(s^{j,j})
+\xrightarrow{\dd_h}
+\\
+&\quad
+V_{n-j-2,h}^{\rm MWX}\otimes\mathcal N(s^{j+1,j})
+\xrightarrow{\dd_h}
+\cdots
+\xrightarrow{\dd_h}
+\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{n-1,j})
+\xrightarrow{\div_w}
+\mathring{V}_{1,h}^{*}\otimes{\rm Alt}^{n,j},
+\end{align*}
+for $1\leq j\leq n-1$. For $j=n$, it yields the finite element div\,div complex
+\begin{align*}
+&V_{n,h}^{\rm MWX}\otimes{\rm Alt}^{0,n-1} \xrightarrow{} V_{n-1,h}^{\rm MWX}\otimes\mathcal R(s^{0,n})^{\perp}\xrightarrow{} \cdots \xrightarrow{}  V_{h}^{\rm CR}\otimes\mathbb S \xrightarrow{\div_w\div_h} \mathring{V}_{1,h}^{*}\Lambda^n.
+\end{align*}
+
+
+Consequently, one obtains the discrete Helmholtz decomposition
+\begin{equation*}
+\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{n-1,j})
+=
+\dd_h(V_{h}^{\rm CR}\otimes\mathcal N(s^{n-2,j}))
+\oplus
+P_{\mathcal N(s^{n-1,j})}
+\grad(\mathring{V}_{1,h}^{*}\otimes{\rm Alt}^{n,j})
+\end{equation*}
+for $1\leq j\leq n-2$, and
+\begin{align*}
+\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{n-1,n-1})
+&=
+\dd_h(S^{n-2,n-1})^{-1}\dd_h
+\bigl(
+V_{2,h}^{\rm MWX}\otimes
+\mathcal R(s^{n-3,n-1})^{\perp}
+\bigr)
+\\
+&\quad \oplus
+P_{\mathcal N(s^{n-1,n-1})}
+\grad(\mathring{V}_{1,h}^{*}\otimes{\rm Alt}^{n,n-1})
+\end{align*}
+for $j=n-1$.
+
+
+More generally, let $1\leq j\leq n-1$ and $j+1\leq m\leq n$. Starting from $V_{m,h}^{\rm MWX}$, we obtain the finite element BGG diagram
+\begin{equation*}%\label{eq:BGGdivdiv}
+\adjustbox{scale=0.96,center}{
+\begin{tikzcd}
+V_{m,h}^{\rm MWX}\otimes{\rm Alt}^{0,j-1}
+\arrow{r}{\dd_h}
+& V_{m-1,h}^{\rm MWX}\otimes{\rm Alt}^{1,j-1}
+ \arrow{r}{\dd_h} & \cdots \arrow{r}{\dd_h}
+ &
+V_{h}^{\rm CR}\otimes{\rm Alt}^{m-1,j-1}
+ \arrow{r}{\dd_h}
+ & \mathbb P_0(\mathcal T_h;{\rm Alt}^{m,j-1})
+\arrow{r}{\dd_w}  
+ & \mathring{V}_{1,h}^{*}\Lambda^{m+1}\otimes{\rm Alt}^{j-1}
+%\to \boldsymbol{0}
+ \\
+ %
+V_{m-1,h}^{\rm MWX}\otimes{\rm Alt}^{0,j}
+ \arrow[ur,swap,"S^{0,j}"'] \arrow{r}{\dd_h}
+ & 
+V_{m-2,h}^{\rm MWX}\otimes{\rm Alt}^{1,j}
+ \arrow[ur,swap,"S^{1,j}"'] \arrow{r}{\dd_h} & \cdots \arrow{r}{\dd_h}
+ & 
+\mathbb P_0(\mathcal T_h;{\rm Alt}^{m-1,j}) 
+ \arrow[ur,swap,"S^{m-1,j}"'] \arrow{r}{\dd_w}  
+ & \mathring{V}_{1,h}^{*}\Lambda^m\otimes{\rm Alt}^{j} \arrow[ur,swap,"S_w^{m,j}"']
+\to \cdots
+% & 0
+\end{tikzcd}
+}
+\end{equation*}
+This diagram yields the finite element complex
+\begin{align*}
+&
+V_{m,h}^{\rm MWX}\otimes{\rm Alt}^{0,j-1}
+\longrightarrow
+V_{m-1,h}^{\rm MWX}\otimes\mathcal R(s^{0,j})^{\perp}
+\longrightarrow
+\cdots
+\\
+&\quad\longrightarrow
+V_{m-j+1,h}^{\rm MWX}\otimes\mathcal R(s^{j-2,j})^{\perp}
+\xrightarrow{\dd_h(S^{j-1,j})^{-1}\dd_h}
+V_{m-j-1,h}^{\rm MWX}\otimes\mathcal N(s^{j,j})
+\xrightarrow{\dd_h}
+\\
+&\quad
+V_{m-j-2,h}^{\rm MWX}\otimes\mathcal N(s^{j+1,j})
+\xrightarrow{\dd_h}
+\cdots
+\xrightarrow{\dd_h}
+\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{m-1,j})
+\xrightarrow{\dd_w}
+\\
+&\quad
+\bigl(\mathring{V}_{1,h}^{*}\Lambda^m\otimes{\rm Alt}^{j}\bigr)
+\cap \mathcal N(s^{m,j})
+\to \cdots .
+\end{align*}
+
+Consequently, we obtain the discrete Helmholtz decomposition
+\begin{equation*}
+\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{m-1,j})
+=
+\dd_h(V_{h}^{\rm CR}\otimes\mathcal N(s^{m-2,j}))
+\oplus
+P_{\mathcal N(s^{m-1,j})}
+\dd((\mathring{V}_{1,h}^{*}\Lambda^m\otimes{\rm Alt}^{j})\cap\mathcal N(s^{m,j}))
+\end{equation*}
+for $1\leq j\leq m-2$, and
+\begin{align*}
+\mathbb P_0(\mathcal T_h)\otimes\mathcal N(s^{m-1,m-1})
+&=
+\dd_h(S^{m-2,m-1})^{-1}\dd_h
+\bigl(
+V_{2,h}^{\rm MWX}\otimes
+\mathcal R(s^{m-3,m-1})^{\perp}
+\bigr)
+\\
+&\quad \oplus
+P_{\mathcal N(s^{m-1,m-1})}
+\dd((\mathring{V}_{1,h}^{*}\Lambda^m\otimes{\rm Alt}^{m-1})\cap\mathcal N(s^{m,m-1}))
+\end{align*}
+for $j=m-1$.
+
+
+
+
+\bibliographystyle{abbrv}
+\bibliography{./refs}
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

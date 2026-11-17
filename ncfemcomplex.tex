@@ -138,15 +138,15 @@ A three-dimensional convex counterexample shows that the weak trace kernel in a 
  
 \maketitle
 
-\vspace*{-2\baselineskip}
-\tableofcontents
+% \vspace*{-2\baselineskip}
+% \tableofcontents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
 \section{Introduction}
 Finite element differential complexes organize compatibility conditions, discrete potentials, and Helmholtz decompositions within a common framework.
-Conforming finite element exterior calculus provides this structure for the de Rham complex \cite{Arnold2018,ArnoldFalkWinther2006,ArnoldFalkWinther2010}.
+Conforming finite element exterior calculus (FEEC) provides this structure for the de Rham complex \cite{Arnold2018,ArnoldFalkWinther2006,ArnoldFalkWinther2010}.
 Arnold and Hu \cite{ArnoldHu2021} constructed tensor-valued differential complexes from existing complexes.
 Chen and Huang constructed finite element complexes with varying smoothness
 in two dimensions \cite{ChenHuang2024a}, de Rham and Stokes complexes
@@ -162,8 +162,16 @@ bubble BGG constructions \cite{Huang2025Conformal}.
 Hu and Lin \cite[Sections~1 and~5.3]{HuLin2025} constructed finite element
 spaces for form-valued forms on simplicial meshes in arbitrary dimensions,
 including BGG-type tensor elements and distributional spaces.
+For domains whose closures are topological balls, they verified that the
+candidate sequences in their Section~5.3 have the same Euler characteristics
+as the corresponding smooth BGG complexes.
 The general discrete complex property and the corresponding cohomology
 identification were not established in \cite{HuLin2025}.
+The trace-structure framework of
+\cite[Theorems~2.1--2.3]{HuLiangLin2025} identifies the cohomology of
+conforming complexes with additional smoothness under its structural
+hypotheses. Under further local analytical and scaling assumptions,
+it also yields uniformly $L^2$-bounded commuting projections.
 
 Distributional finite element complexes relax conformity requirements
 for tensor-valued differential operators.
@@ -182,13 +190,12 @@ The lowest-order weak div-div stability analysis in
 
 The MWX elements \cite{WangXu2006,WangXu2013} use degree-$m$ polynomials with moments of derivatives on subsimplices to approximate $H^m$ functions for $1\leq m\leq n$.
 The sequence structure has direct precedents.
-On convex polygons, Falk and Morley \cite[Theorem 4.1]{FalkMorley1990}
-identified discretely divergence-free Crouzeix--Raviart vector fields
-with broken curls of Morley functions, under the homogeneous boundary
-conditions imposed there.
-Counterparts of the two-dimensional Morley--Crouzeix--Raviart--DG
-sequence in the higher-dimensional MWX family were noted in
-\cite[Section 7]{ChristiansenHuHu2018}.
+On convex polygons, discretely divergence-free Crouzeix--Raviart fields
+were identified as the piecewise curls of Morley functions, with
+homogeneous boundary conditions on both spaces
+\cite[Theorem~4.1]{FalkMorley1990};
+see also the two-dimensional discrete Stokes complex and commuting diagram
+reviewed in \cite[Section~3.1.2]{Brenner2015}.
 An arbitrary-dimensional nonconforming FEEC framework based on piecewise
 Whitney forms, including discrete de Rham complexes and Helmholtz--Hodge
 decompositions of piecewise constants, was developed in
@@ -196,10 +203,13 @@ decompositions of piecewise constants, was developed in
 Our focus is the cohomology of assembled MWX rows and the sharp admissible
 range of their prescribed BGG reductions in arbitrary dimension.
 
-Two questions arise for the assembled MWX spaces. Does integration over
-mesh faces recover simplicial cohomology? For which parameter pairs
-$(m,j)$ does the prescribed BGG reduction apply on every conforming
-simplicial mesh, and what is the cohomology of the resulting complex?
+Two questions arise. Does oriented face integration recover simplicial
+cohomology in every degree of the full MWX complex? For the BGG
+construction, let $m$ be the starting polynomial degree of the upper row,
+and let ${\rm Alt}^{j-1}(\mathbb R^n)$ and ${\rm Alt}^{j}(\mathbb R^n)$
+be the coefficient spaces of the upper and lower rows, respectively.
+For which pairs $(m,j)$ does the reduction with switch $J=j-1$ apply on
+every conforming simplicial mesh, and what is the cohomology of its output?
 
 For the full componentwise MWX complex, with polynomial degrees decreasing
 from $n$ to zero, oriented face integration defines an explicit
@@ -211,9 +221,9 @@ cohomology, leaving one cochain value on each oriented face of the
 matching dimension. The resulting comparison holds in every degree.
 
 For a truncated row $U_q^\bullet$, Theorem~\ref{thm:MWXtruncated}
-identifies the cohomology before the piecewise constant endpoint, using
-lifted face coefficients and height contraction. At the endpoint,
-Remark~\ref{rem:MWXterminalCohomology} gives
+identifies $H^a(U_q^\bullet)$ with $H^a(\Omega;\mathbb R)$ for
+$0\leq a<q$, using lifted face coefficients and contraction with the
+height covector. At the endpoint, Remark~\ref{rem:MWXterminalCohomology} gives
 \[
 \dim H^q(U_q^\bullet)
 =b_q+\operatorname{rank}\delta_{K,\partial K}^{n-q-1},
@@ -221,15 +231,17 @@ Remark~\ref{rem:MWXterminalCohomology} gives
 \]
 where $K$ is the mesh with boundary subcomplex $\partial K$,
 $b_q=\dim H^q(\Omega;\mathbb R)$, and $\delta_{K,\partial K}$ is
-the relative simplicial coboundary. Relative FEEC identifies the splice
-and weak tail of the mixed row (Theorem~\ref{thm:MWXsplice}). At the same
-piecewise constant node, the mixed cohomology has dimension $b_q$:
+the relative simplicial coboundary.
+Equation~\eqref{eq:relativeHarmonicIdentification} in the proof of
+Theorem~\ref{thm:MWXsplice} identifies the cohomology at the splice and
+along the weak tail with relative cohomology in complementary degrees.
+At the same piecewise constant node, the mixed cohomology has dimension $b_q$:
 the weak continuation removes exactly the mesh-dependent excess.
 
 For the prescribed adjacent MWX rows, linking maps and switch $J=j-1$,
 Theorems~\ref{thm:fullBGG} and~\ref{thm:lowerBGG} together give a sharp
-classification. With $m$ the upper starting polynomial degree, the BGG
-reduction applies on every conforming simplicial mesh precisely for
+classification. The BGG reduction applies on every conforming simplicial
+mesh precisely for
 $1\leq j\leq m\leq n$. Throughout this range its unaugmented output satisfies
 \[
 \dim H^i(\Upsilon_{h,m,j}^\bullet)
@@ -265,21 +277,24 @@ constructions using different spaces or retaining additional kernels
 are not excluded.
 
 Tables~\ref{tab:BGG2dSummary} and~\ref{tab:BGG3dSummary} collect the planar
-and spatial realizations. A convex triangular bipyramid makes the role
-of the assembled constraints concrete: its weak trace kernel $K_h$ has
-dimension six, while $E_h\cap L^2(\Omega;\mathbb T)$ has dimension zero
-(Remark~\ref{rem:weakTraceBipyramid}). This is also the $n=3,m=2$ join
-mesh in the general obstruction. For $j=1$ it supports the weak-trace
+and spatial realizations. Table~\ref{tab:BGG3dSummary} also includes the
+degree-shifted grad-curl complex \eqref{eq:gradcurlcomplex3dfem}, whose
+$i$th cohomology has dimension $b_i+3b_{i-1}$ for $0\leq i\leq4$,
+with $b_r=0$ for $r\notin\{0,1,2,3\}$.
+On the convex triangular bipyramid of Remark~\ref{rem:weakTraceBipyramid},
+the weak trace kernel has dimension six, although the only pointwise
+trace-free field in the assembled matrix space is zero.
+This is also the $n=3,m=2$ join mesh in the general obstruction. For $j=1$ it supports the weak-trace
 Hessian complex, whereas for $j=3$ the first weak link maps a
 two-dimensional space to zero.
 
-Section~\ref{sec:MWXComplexes} develops MWX complexes, weak exterior
-derivatives and their cohomology. Sections~\ref{sec:BGG2d} and~\ref{sec:BGG3d}
-present planar and spatial BGG tensor realizations.
-Section~\ref{sec:BGGArbitrary} establishes the arbitrary-dimensional BGG
-construction, its sharp parameter range and discrete Helmholtz decompositions.
+Section~\ref{sec:MWXComplexes} develops MWX cohomology.
+Section~\ref{sec:BGG2d} presents two-dimensional nonconforming BGG complexes.
+Section~\ref{sec:BGG3d} constructs their three-dimensional counterparts.
+Section~\ref{sec:BGGArbitrary} establishes the BGG classification in arbitrary dimensions and derives discrete Helmholtz decompositions.
 
-\Needspace{8\baselineskip}
+
+% \Needspace{8\baselineskip}
 \section{Nonconforming Finite Element Complex}\label{sec:MWXComplexes}
 
 
@@ -2005,7 +2020,7 @@ standard $(m,j)$ family.
 \end{table}
 
 \FloatBarrier
-\section{Discrete BGG in arbitrary \texorpdfstring{$n$}{n} dimensions}\label{sec:BGGArbitrary}
+\section{Discrete BGG complexes in arbitrary dimension}\label{sec:BGGArbitrary}
 
 We use ${\rm Alt}^{i,j}:={\rm Alt}^i(\mathbb R^n)\otimes{\rm Alt}^j(\mathbb R^n)$ and the algebraic linking maps of \cite{ArnoldHu2021}.
 For an orthonormal basis $e_a$ and its dual basis $e^a$, set
@@ -2206,7 +2221,7 @@ A_i:Z_h^{i+1}\longrightarrow\widetilde Z_h^i,
 Here contraction acts on the first alternating factor, and wedge multiplication
 on the second. Set $S^{-1}=S^n=0$.
 
-\Needspace{17\baselineskip}
+% \Needspace{17\baselineskip}
 \begin{theorem}[Sharp range for the prescribed switch]\label{thm:lowerBGG}
 Fix $n\geq2$, $1\leq m<n$, $1\leq j\leq n$ and $J=j-1$.
 If $j\leq m$, the spaces and differentials in Theorem~\ref{thm:fullBGG},
@@ -2282,7 +2297,7 @@ At $i=m-1$, the orthogonal-complement characterization in the proof of
 Lemma~\ref{lem:discreteHelmholtz} shows that $z$ is co-conforming, piecewise constant, has zero
 boundary co-trace and satisfies $\dd^*z=0$.
 
-\Needspace{4\baselineskip}
+% \Needspace{4\baselineskip}
 For $i\geq m$, $z$ already has the required conformity and zero boundary
 co-trace, and orthogonality implies $\dd^*z=0$ because $\dd^*z\in Z_h^i$.
 Put $r=i+1-m\geq0$ and $C_a=1\otimes(e^a\wedge\cdot)$.
@@ -2600,6 +2615,7 @@ the actual restricted differential, with its specified inner product and
 tensor projection.
 
 
+% \clearpage
 \bibliographystyle{abbrv}
 \bibliography{./refs}
 \end{document}

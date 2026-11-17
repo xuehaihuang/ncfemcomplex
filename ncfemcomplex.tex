@@ -125,14 +125,13 @@
 \subjclass[2020]{Primary 65N30; Secondary 58J10}
 
 \begin{abstract}
-We compute the cohomology of Morley--Wang--Xu (MWX) complexes on simplicial meshes in arbitrary dimension $n\geq2$ and characterize the starting degrees that admit a nonconforming Bernstein--Gelfand--Gelfand (BGG) reduction.
-For the prescribed adjacent input rows and linking maps, with upper starting polynomial degree $m$, the reduction with switch $J=j-1$ applies on every conforming simplicial mesh precisely when $1\leq j\leq m\leq n$.
-Throughout this range, the discrete links induce zero on cohomology, and the unaugmented output has $i$th cohomology dimension $\binom{n+1}{j}b_i$ for $0\leq i\leq n$, where $b_i$ is the $i$th Betti number of the domain.
-For each fixed $n$ and $1\leq m<n$, a single mesh of a convex polytope violates the required rank condition for all $m<j\leq n$.
-The proof begins with an explicit quasi-isomorphism from the full MWX complex to simplicial cochains, given by integration over oriented faces.
-A filtration of the assembled degrees of freedom and a Koszul homotopy in the normal variables establish this comparison.
-For truncated rows, we determine the mesh-dependent excess dimension at the piecewise constant endpoint and show how adjoining weak exterior derivatives removes it.
-A three-dimensional weak-trace Hessian complex illustrates why the assembled constraints matter: a convex counterexample rules out replacing its weak trace kernel by pointwise trace-freeness.
+We determine the cohomology of Morley--Wang--Xu (MWX) complexes in arbitrary dimension $n\geq2$ and the sharp parameter range for a prescribed nonconforming Bernstein--Gelfand--Gelfand (BGG) reduction.
+For the adjacent input rows and linking maps considered here, with upper starting polynomial degree $m$ and switch $J=j-1$, the reduction applies on every conforming simplicial mesh exactly when $1\leq j\leq m\leq n$.
+In this range, the links induce zero maps in cohomology, and the unaugmented BGG complex has $i$th cohomology dimension $\binom{n+1}{j}b_i$ for $0\leq i\leq n$, where $b_i$ is the domain's $i$th Betti number.
+For fixed $n$ and $1\leq m<n$, a single conforming simplicial mesh of a convex polytope violates the required rank condition for every $m<j\leq n$.
+Oriented face integration defines an explicit quasi-isomorphism from the full MWX complex to simplicial cochains, established using a normal-variable Koszul homotopy.
+For truncated rows, we determine the mesh-dependent excess cohomology at the piecewise constant endpoint and show how adjoining weak exterior derivatives removes it.
+A three-dimensional convex counterexample shows that the weak trace kernel in a Hessian complex cannot generally be replaced by the pointwise trace-free subspace.
 \end{abstract} 
 
 
@@ -145,7 +144,7 @@ A three-dimensional weak-trace Hessian complex illustrates why the assembled con
 
 
 
-\section*{Introduction}
+\section{Introduction}
 Finite element differential complexes organize compatibility conditions, discrete potentials, and Helmholtz decompositions within a common framework.
 Conforming finite element exterior calculus provides this structure for the de Rham complex \cite{ArnoldFalkWinther2006,ArnoldFalkWinther2010,Arnold2018}.
 The construction of complexes from complexes developed by Arnold and Hu \cite{ArnoldHu2021} transfers such structure to tensor-valued differential operators.

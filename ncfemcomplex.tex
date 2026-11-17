@@ -127,7 +127,7 @@
 \begin{abstract}
 We determine the cohomology of Morley--Wang--Xu (MWX) complexes in arbitrary dimension $n\geq2$ and the sharp parameter range for a prescribed nonconforming Bernstein--Gelfand--Gelfand (BGG) reduction.
 For the adjacent input rows and linking maps considered here, with upper starting polynomial degree $m$ and switch $J=j-1$, the reduction applies on every conforming simplicial mesh exactly when $1\leq j\leq m\leq n$.
-In this range, the links induce zero maps in cohomology, and the unaugmented BGG complex has $i$th cohomology dimension $\binom{n+1}{j}b_i$ for $0\leq i\leq n$, where $b_i$ is the domain's $i$th Betti number.
+In this range, the linking maps induce zero maps on cohomology, and the unaugmented BGG complex has $i$th cohomology dimension $\binom{n+1}{j}b_i$ for $0\leq i\leq n$, where $b_i$ is the domain's $i$th Betti number.
 For fixed $n$ and $1\leq m<n$, a single conforming simplicial mesh of a convex polytope violates the required rank condition for every $m<j\leq n$.
 Oriented face integration defines an explicit quasi-isomorphism from the full MWX complex to simplicial cochains, established using a normal-variable Koszul homotopy.
 For truncated rows, we determine the mesh-dependent excess cohomology at the piecewise constant endpoint and show how adjoining weak exterior derivatives removes it.
@@ -146,52 +146,55 @@ A three-dimensional convex counterexample shows that the weak trace kernel in a 
 
 \section{Introduction}
 Finite element differential complexes organize compatibility conditions, discrete potentials, and Helmholtz decompositions within a common framework.
-Conforming finite element exterior calculus provides this structure for the de Rham complex \cite{ArnoldFalkWinther2006,ArnoldFalkWinther2010,Arnold2018}.
-The construction of complexes from complexes developed by Arnold and Hu \cite{ArnoldHu2021} transfers such structure to tensor-valued differential operators.
-Chen and Huang develop finite element complexes with varying smoothness
-in two dimensions \cite{ChenHuang2024a} and de Rham and Stokes complexes
-in three dimensions \cite{ChenHuang2024}. Their three-dimensional BGG
-construction yields finite element Hessian, elasticity, and div-div
-complexes \cite{ChenHuangBGG2026}.
-Bonizzoni, Hu, Kanschat and Sap \cite{BonizzoniHuKanschatSap2025}
-construct tensor-product BGG diagrams and complexes on cubical meshes in
-arbitrary dimension using splines and finite elements.
-Huang \cite{Huang2025Conformal} constructs conformal Hessian and conformal
-elasticity complexes in three dimensions using local bubble BGG constructions.
+Conforming finite element exterior calculus provides this structure for the de Rham complex \cite{Arnold2018,ArnoldFalkWinther2006,ArnoldFalkWinther2010}.
+Arnold and Hu \cite{ArnoldHu2021} construct tensor-valued differential complexes from existing complexes.
+Chen and Huang construct finite element complexes with varying smoothness
+in two dimensions \cite{ChenHuang2024a}, de Rham and Stokes complexes
+in three dimensions \cite{ChenHuang2024}, and three-dimensional Hessian,
+elasticity, and div-div complexes through BGG constructions
+\cite{ChenHuangBGG2026}.
+Other developments include $H(\div)$-conforming tensor elements with
+algebraic constraints from BGG maps in arbitrary dimensions
+\cite{ChenHuang2024Constraints}, tensor-product BGG complexes on cubical
+meshes in arbitrary dimensions \cite{BonizzoniHuKanschatSap2025}, and
+three-dimensional conformal Hessian and elasticity complexes using local
+bubble BGG constructions \cite{Huang2025Conformal}.
 
 Distributional finite element complexes relax conformity requirements
 for tensor-valued differential operators.
-Chen and Huang \cite[Section~5.2]{ChenHuang2025} construct three-dimensional
-distributional div-div complexes using weak div-div operators, including
-low-order cases. Their lowest-order weak div-div stability proof also
-uses MWX elements \cite[Theorem~4.2]{ChenHuang2025}.
-Chen, Huang and Zhang \cite{ChenHuangZhang2025CurlDiv} use tangential-normal
-continuity to construct three-dimensional distributional curl-div
-complexes and apply them to quad-curl problems.
-Hu, Lin and Zhang \cite{HuLinZhang2025} construct distributional Hessian
-and div-div complexes on triangulations in two and three dimensions
-and identify their cohomology with de Rham cohomology with coefficients.
-Christiansen, Hu and Lin \cite{ChristiansenHuLin2026} establish the
-corresponding identification for the three-dimensional Regge complex,
-with coefficients in the space of infinitesimal rigid motions.
-Our focus is the cohomology of assembled MWX rows and the sharp admissible
-range of their prescribed BGG reductions in arbitrary dimension.
+Such constructions include three-dimensional div-div complexes with
+weak operators and low-order variants \cite[Section~5.2]{ChenHuang2025},
+and three-dimensional curl-div complexes based on tangential-normal
+continuity, with applications to quad-curl problems
+\cite{ChenHuangZhang2025CurlDiv}.
+The cohomology of distributional Hessian and div-div complexes in two
+and three dimensions is identified in \cite{HuLinZhang2025} with de Rham
+cohomology with coefficients. An analogous identification for
+the three-dimensional Regge complex uses coefficients in the space of
+infinitesimal rigid motions \cite{ChristiansenHuLin2026}.
+The lowest-order weak div-div stability analysis in
+\cite[Theorem~4.2]{ChenHuang2025} also uses Morley--Wang--Xu (MWX) elements.
 
-The Morley--Wang--Xu elements \cite{WangXu2006,WangXu2013} use degree-$m$ polynomials with moments of derivatives on subsimplices to approximate $H^m$ functions for $1\leq m\leq n$.
+The MWX elements \cite{WangXu2006,WangXu2013} use degree-$m$ polynomials with moments of derivatives on subsimplices to approximate $H^m$ functions for $1\leq m\leq n$.
 The sequence structure has direct precedents.
 On convex polygons, Falk and Morley \cite[Theorem 4.1]{FalkMorley1990}
 identify discretely divergence-free Crouzeix--Raviart vector fields
 with broken curls of Morley functions, under the homogeneous boundary
 conditions imposed there.
-Christiansen, J.~Hu and K.~Hu \cite[Section 7]{ChristiansenHuHu2018}
-point out that the two-dimensional Morley--Crouzeix--Raviart--DG
-sequence has counterparts in the higher-dimensional MWX family.
-Zhang \cite{ZhangNCFEEC2026} constructs an arbitrary-dimensional nonconforming FEEC framework from piecewise Whitney forms, including discrete de Rham complexes and Helmholtz--Hodge decompositions of piecewise constants.
+Counterparts of the two-dimensional Morley--Crouzeix--Raviart--DG
+sequence in the higher-dimensional MWX family are noted in
+\cite[Section 7]{ChristiansenHuHu2018}.
+An arbitrary-dimensional nonconforming FEEC framework based on piecewise
+Whitney forms, including discrete de Rham complexes and Helmholtz--Hodge
+decompositions of piecewise constants, is developed in
+\cite{ZhangNCFEEC2026}.
+Our focus is the cohomology of assembled MWX rows and the sharp admissible
+range of their prescribed BGG reductions in arbitrary dimension.
 
 Two questions arise for the assembled MWX spaces. Does integration over
-mesh faces recover simplicial cohomology? For which starting degrees do
-the discrete linking maps admit the prescribed BGG reduction on every
-mesh, and what is the cohomology of the resulting complex?
+mesh faces recover simplicial cohomology? For which parameter pairs
+$(m,j)$ does the prescribed BGG reduction apply on every conforming
+simplicial mesh, and what is the cohomology of the resulting complex?
 
 For the full componentwise MWX complex, with polynomial degrees decreasing
 from $n$ to zero, oriented face integration defines an explicit
@@ -234,7 +237,7 @@ For $1\leq j<m\leq n$, Corollary~\ref{cor:MWXBGGHelmholtz} gives an
 orthogonal decomposition at the piecewise constant node in degree $m-1$,
 identifies the coexact summand through the adjoint of the restricted
 weak differential, and determines the harmonic dimension as
-$\binom{n+1}{j}b_{m-1}$.
+$\tbinom{n+1}{j}b_{m-1}$.
 
 To obtain equality in the abstract BGG cohomology bound
 \cite[Theorem 6]{ArnoldHu2021}, we prove that every discrete link induces
@@ -265,7 +268,14 @@ mesh in the general obstruction. For $j=1$ it supports the weak-trace
 Hessian complex, whereas for $j=3$ the first weak link maps a
 two-dimensional space to zero.
 
-\section{Nonconforming Finite Element Complex}
+Section~\ref{sec:MWXComplexes} develops MWX complexes, weak exterior
+derivatives and their cohomology. Sections~\ref{sec:BGG2d} and~\ref{sec:BGG3d}
+present planar and spatial BGG tensor realizations.
+Section~\ref{sec:BGGArbitrary} establishes the arbitrary-dimensional BGG
+construction, its sharp parameter range and discrete Helmholtz decompositions.
+
+\Needspace{8\baselineskip}
+\section{Nonconforming Finite Element Complex}\label{sec:MWXComplexes}
 
 
 
@@ -438,7 +448,7 @@ approximation estimates, see \cite{ArnoldGuzman2021,ChristiansenWinther2008}.
 \subsection{Discrete Helmholtz decomposition}
 We decompose piecewise constant differential forms.
 
-\begin{lemma}
+\begin{lemma}\label{lem:discreteHelmholtz}
 Let $1\leq k\leq n$.
 It holds the discrete Helmholtz decomposition
 \begin{equation}\label{eq:discreteL2HelmholtzDecompCRL} 
@@ -963,7 +973,7 @@ at every positive degree strictly before its piecewise constant endpoint.
 \end{theorem}
 
 We isolate the local cohomology calculation used in the proof and again in
-Section~4.
+Section~\ref{sec:BGGArbitrary}.
 \begin{lemma}[Vanishing for lifted face coefficients]\label{lem:liftedFaceVanishing}
 For $1\leq s<n$, the lifted face-coefficient complex satisfies
 \[
@@ -1090,7 +1100,7 @@ cohomological degrees understood as zero.
 \end{proof}
 
 
-\section{Discrete BGG in two dimensions}
+\section{Discrete BGG in two dimensions}\label{sec:BGG2d}
 
 \subsection{Discrete Hessian complex in two dimensions}
 In this section, set
@@ -1405,7 +1415,7 @@ dimension triples are $(\dim H^0,\dim H^1,\dim H^2)=(3,3g,0)$.
 \end{minipage}
 \end{table}
 
-\section{Discrete BGG in three dimensions}
+\section{Discrete BGG in three dimensions}\label{sec:BGG3d}
 
 In this section, gradients of vector fields, curls, and divergences of matrices
 are taken row-wise. We set $\mskw(a)b=a\times b$ and define
@@ -1990,7 +2000,7 @@ standard $(m,j)$ family.
 \end{table}
 
 \FloatBarrier
-\section{Discrete BGG in arbitrary \texorpdfstring{$n$}{n} dimensions}
+\section{Discrete BGG in arbitrary \texorpdfstring{$n$}{n} dimensions}\label{sec:BGGArbitrary}
 
 We use ${\rm Alt}^{i,j}:={\rm Alt}^i(\mathbb R^n)\otimes{\rm Alt}^j(\mathbb R^n)$ and the algebraic linking maps of \cite{ArnoldHu2021}.
 For an orthonormal basis $e_a$ and its dual basis $e^a$, set
@@ -2264,7 +2274,7 @@ For $J<i<m$, pointwise surjectivity gives the same conclusion.
 We next show that all links induce zero on cohomology.
 For $m-1\leq i<n$, take $z\in Z_h^{i+1}$ orthogonal to $D_h^iZ_h^i$.
 At $i=m-1$, the orthogonal-complement characterization in the proof of
-Lemma~1.1 shows that $z$ is co-conforming, piecewise constant, has zero
+Lemma~\ref{lem:discreteHelmholtz} shows that $z$ is co-conforming, piecewise constant, has zero
 boundary co-trace and satisfies $\dd^*z=0$.
 
 \Needspace{4\baselineskip}
@@ -2568,7 +2578,7 @@ The middle link also admits a direct cohomology check.
 If $A\in\mathbb P_0(\mathcal T_h;\mathbb M)$ satisfies $\curl_wA=0$,
 take $H\in\mathbb P_0(\mathcal T_h;\mathbb M)$ orthogonal to
 $\curl_h(V_h^{\rm CR}\otimes\mathbb M)$.
-Lemma~1.1 makes every row of $H$ a piecewise constant field in
+Lemma~\ref{lem:discreteHelmholtz} makes every row of $H$ a piecewise constant field in
 $H_0(\curl;\Omega)$ with distributional curl zero.
 Thus $B=-\mskw(x)H\in E_h$ and $\curl B=SH$ row-wise. Hence
 \[

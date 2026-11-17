@@ -147,8 +147,8 @@ A three-dimensional convex counterexample shows that the weak trace kernel in a 
 \section{Introduction}
 Finite element differential complexes organize compatibility conditions, discrete potentials, and Helmholtz decompositions within a common framework.
 Conforming finite element exterior calculus provides this structure for the de Rham complex \cite{Arnold2018,ArnoldFalkWinther2006,ArnoldFalkWinther2010}.
-Arnold and Hu \cite{ArnoldHu2021} construct tensor-valued differential complexes from existing complexes.
-Chen and Huang construct finite element complexes with varying smoothness
+Arnold and Hu \cite{ArnoldHu2021} constructed tensor-valued differential complexes from existing complexes.
+Chen and Huang constructed finite element complexes with varying smoothness
 in two dimensions \cite{ChenHuang2024a}, de Rham and Stokes complexes
 in three dimensions \cite{ChenHuang2024}, and three-dimensional Hessian,
 elasticity, and div-div complexes through BGG constructions
@@ -159,6 +159,11 @@ algebraic constraints from BGG maps in arbitrary dimensions
 meshes in arbitrary dimensions \cite{BonizzoniHuKanschatSap2025}, and
 three-dimensional conformal Hessian and elasticity complexes using local
 bubble BGG constructions \cite{Huang2025Conformal}.
+Hu and Lin \cite[Sections~1 and~5.3]{HuLin2025} constructed finite element
+spaces for form-valued forms on simplicial meshes in arbitrary dimensions,
+including BGG-type tensor elements and distributional spaces.
+The general discrete complex property and the corresponding cohomology
+identification were not established in \cite{HuLin2025}.
 
 Distributional finite element complexes relax conformity requirements
 for tensor-valued differential operators.
@@ -168,25 +173,25 @@ and three-dimensional curl-div complexes based on tangential-normal
 continuity, with applications to quad-curl problems
 \cite{ChenHuangZhang2025CurlDiv}.
 The cohomology of distributional Hessian and div-div complexes in two
-and three dimensions is identified in \cite{HuLinZhang2025} with de Rham
+and three dimensions was identified in \cite{HuLinZhang2025} with de Rham
 cohomology with coefficients. An analogous identification for
 the three-dimensional Regge complex uses coefficients in the space of
 infinitesimal rigid motions \cite{ChristiansenHuLin2026}.
 The lowest-order weak div-div stability analysis in
-\cite[Theorem~4.2]{ChenHuang2025} also uses Morley--Wang--Xu (MWX) elements.
+\cite[Theorem~4.2]{ChenHuang2025} also used Morley--Wang--Xu (MWX) elements.
 
 The MWX elements \cite{WangXu2006,WangXu2013} use degree-$m$ polynomials with moments of derivatives on subsimplices to approximate $H^m$ functions for $1\leq m\leq n$.
 The sequence structure has direct precedents.
 On convex polygons, Falk and Morley \cite[Theorem 4.1]{FalkMorley1990}
-identify discretely divergence-free Crouzeix--Raviart vector fields
+identified discretely divergence-free Crouzeix--Raviart vector fields
 with broken curls of Morley functions, under the homogeneous boundary
 conditions imposed there.
 Counterparts of the two-dimensional Morley--Crouzeix--Raviart--DG
-sequence in the higher-dimensional MWX family are noted in
+sequence in the higher-dimensional MWX family were noted in
 \cite[Section 7]{ChristiansenHuHu2018}.
 An arbitrary-dimensional nonconforming FEEC framework based on piecewise
 Whitney forms, including discrete de Rham complexes and Helmholtz--Hodge
-decompositions of piecewise constants, is developed in
+decompositions of piecewise constants, was developed in
 \cite{ZhangNCFEEC2026}.
 Our focus is the cohomology of assembled MWX rows and the sharp admissible
 range of their prescribed BGG reductions in arbitrary dimension.
@@ -235,9 +240,9 @@ affine fields in \eqref{eq:fullBGGkernel}. Adjoining this kernel makes
 the complex exact on a contractible domain.
 For $1\leq j<m\leq n$, Corollary~\ref{cor:MWXBGGHelmholtz} gives an
 orthogonal decomposition at the piecewise constant node in degree $m-1$,
-identifies the coexact summand through the adjoint of the restricted
-weak differential, and determines the harmonic dimension as
-$\tbinom{n+1}{j}b_{m-1}$.
+with harmonic dimension $\tbinom{n+1}{j}b_{m-1}$.
+The coexact summand is characterized by the adjoint of the restricted
+weak differential.
 
 To obtain equality in the abstract BGG cohomology bound
 \cite[Theorem 6]{ArnoldHu2021}, we prove that every discrete link induces

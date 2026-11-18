@@ -148,6 +148,9 @@ A three-dimensional convex counterexample shows that the weak trace kernel in a 
 Finite element differential complexes organize compatibility conditions, discrete potentials, and Helmholtz decompositions within a common framework.
 Conforming finite element exterior calculus (FEEC) provides this structure for the de Rham complex \cite{Arnold2018,ArnoldFalkWinther2006,ArnoldFalkWinther2010}.
 Arnold and Hu \cite{ArnoldHu2021} constructed tensor-valued differential complexes from existing complexes.
+The cohomology of BGG constructions was also analyzed through short
+exact sequences of complexes and their associated long exact sequences
+in \cite{Christiansen2026BGG}.
 Chen and Huang constructed finite element complexes with varying smoothness
 in two dimensions \cite{ChenHuang2024a}, de Rham and Stokes complexes
 in three dimensions \cite{ChenHuang2024}, and three-dimensional Hessian,
@@ -315,6 +318,8 @@ following \cite[Section~2]{ArnoldHu2021}.
 For a topological space $X$, $\mathscr H^k(X;\mathbb R)$ denotes cohomology
 with real coefficients; $\mathscr H^k(X,A;\mathbb R)$ denotes relative
 cohomology for a pair $(X,A)$.
+For the domain, relative cohomology is taken with respect to the pair
+$(\overline\Omega,\partial\Omega)$.
 
 Given an integer $m \geq 0$ and a bounded domain $D \subset \mathbb{R}^{n}$,
 we define $H^{m}(D)$ as the standard Sobolev space of functions on $D$,
@@ -456,12 +461,14 @@ Let $I_{h}^{\rm MWX}: H^m(\Omega) \to V_{m,h}^{\rm MWX}$ be the nodal interpolat
 Repeated integration by parts in tangential directions on subsimplices,
 together with preservation of the normal-derivative moments in
 \eqref{MWXdof}, implies preservation of all derivative moments of the
-corresponding orders. Thus
+corresponding orders. Thus for $\ell=n-1,\ldots,n-m$,
 \begin{equation}\label{eq:nablajIhMWX}
-\begin{gathered}
-\int_F\nabla^{\ell-(n-m)}\bigl((v-I_{h}^{\rm MWX}v)|_T\bigr)\dd s=0,\\
-\forall\,T\in\mathcal T_h,\quad F\in\Delta_\ell(T),\quad \ell=n-1,\ldots,n-m.
-\end{gathered}
+\int_F\nabla^{\ell-(n-m)}\bigl((v-I_{h}^{\rm MWX}v)|_T\bigr)\dd s=0,\quad
+\forall\,T\in\mathcal T_h,\; F\in\Delta_\ell(T).
+% \begin{gathered}
+% \int_F\nabla^{\ell-(n-m)}\bigl((v-I_{h}^{\rm MWX}v)|_T\bigr)\dd s=0,\\
+% \forall\,T\in\mathcal T_h,\quad F\in\Delta_\ell(T),\quad \ell=n-1,\ldots,n-m.
+% \end{gathered}
 \end{equation}
 
 For \(k=0,1,\ldots,n\), set
@@ -659,22 +666,24 @@ For $r=0$, however, $\mathring{\mathfrak H}_{0,h}^k
 
 
 \begin{lemma}
+Let $r\geq0$ and $0\leq k<n$.
 The restriction of $\dd_w$ to
 $\dd^*\mathring{V}_{r+1,h}^{*}\Lambda^{k+1}$ is injective.
 \end{lemma}
 \begin{proof}
-Let $\omega\in \dd^*\mathring{V}_{r+1,h}^{*}\Lambda^{k+1}$ satisfy
+Let $\omega=\dd^*\eta_0$ for some
+$\eta_0\in\mathring V_{r+1,h}^{*}\Lambda^{k+1}$, and suppose that
 $\dd_w\omega=0$. By the definition of $\dd_w$,
-\begin{equation*}
-    (\omega,\dd^*\eta)=0,
-    \qquad
-    \forall\,\eta\in \mathring{V}_{r+1,h}^{*}\Lambda^{k+1}.
-\end{equation*}
-Hence $\omega=0$, and the asserted injectivity follows.
+\[
+\|\omega\|_{L^2}^2
+=(\omega,\dd^*\eta_0)
+=(\dd_w\omega,\eta_0)=0.
+\]
+Hence $\omega=0$.
 \end{proof}
 
 \begin{lemma}
-For $k=1,\ldots,n$, there hold
+For $r\geq0$ and $1\leq k\leq n$, the following identities hold:
 \begin{align}
 \mathbb P_0\Lambda^k(\mathcal T_h)\cap\ker(\dd_w)
 &=
@@ -732,12 +741,17 @@ For $m\geq2$, property \eqref{eq:nablajIhMWX} gives
 \qquad \ell=n-m+1,\ldots,n-1.
 \]
 These include all the target degrees of freedom. To check the mapping
-property, split each derivative into tangential and normal components on
-$F$. Integrating a tangential derivative over $F$ expresses it in terms
-of moments on $\partial F$; repeat this reduction on lower-dimensional
-faces whenever a derivative has a tangential component. The remaining normal
-derivative moments are source degrees of freedom. The all-face assembly therefore makes each target
-moment single-valued, including on shared boundary subsimplices.
+property, consider a target normal moment on an $\ell$-face $F$ and put
+$r=\ell-(n-m)-1$, where $n-m+1\leq\ell\leq n-1$.
+Splitting the exterior derivative into normal and tangential parts,
+the normal terms are source moments on $F$ of order
+$r+1=\ell-(n-m)$.
+Integration by parts on $F$ turns the tangential terms into moments
+on facets $G$ of order $r=(\ell-1)-(n-m)$.
+Every direction normal to $F$ is also normal to $G$, so these are
+linear combinations of the source normal moments on $G$.
+The all-face assembly therefore makes each target moment single-valued,
+including on shared boundary subsimplices.
 For $m=1$, componentwise integration by parts and the facet means give
 $\int_T\dd(\omega-I_h^{\rm MWX}\omega)=0$.
 Unisolvence proves \eqref{eq:dIhMWXcommute} in both cases.
@@ -760,10 +774,12 @@ is a complex. On an arbitrary domain $\Omega$, the cohomology at each
 displayed node of form degree $a$, with $k<a\leq n$, has dimension
 $b_a(\Omega)$. When $k=0$, the initial kernel consists of functions that
 are constant on each connected component.
-If $\Omega$ is contractible, the sequence is exact at every space
-following its first displayed term. If, in addition, $k=0$, adjoining
-the constants $\mathbb R\hookrightarrow V_{m,h}^{\rm MWX}$ at the left
-makes the entire sequence exact.
+If $\Omega$ is contractible, the sequence is exact
+at every node except possibly the first displayed one.
+When $k=0$, the kernel of the first differential
+consists precisely of the constants. Hence,
+adjoining $\mathbb R\hookrightarrow
+V_{m,h}^{\rm MWX}$ at the left yields an exact complex.
 \end{theorem}
 \begin{proof}
 The preceding lemma and $\dd_h^2=0$ give the complex property along
@@ -797,7 +813,9 @@ Consequently
 which is the space of orthogonal representatives of relative Whitney
 cohomology in degree $p$.
 
-For the weak tail, use the compatible relative FEEC complex
+To identify the harmonic spaces along the weak tail, we use the following
+compatible relative FEEC complex, whose degrees are reversed under the
+Hodge star:
 \[
 X_h^j=
 \begin{cases}
@@ -825,9 +843,15 @@ The canonical Whitney projections induce cohomology isomorphisms on both
 $K$ and $\partial K$ and commute with restriction; see
 \cite[Section 5.6]{ArnoldFalkWinther2010} and
 \cite[Theorem 2]{ChristiansenHu2023}.
-Since the trace degrees of freedom make both restriction maps surjective
-\cite[Proposition~2]{ChristiansenHu2023}, comparison of the associated long
-exact sequences gives
+Before imposing homogeneous traces, the polynomial system defining
+$X_h^\bullet$ has the extension property: compatible finite element
+boundary traces on a simplex extend by prescribing their face degrees
+of freedom and setting all remaining degrees of freedom to zero,
+using unisolvence \cite[Theorem~5.5]{ArnoldFalkWinther2010}.
+The same holds for the Whitney system. Hence both restriction maps
+to $\partial K$ are surjective in every degree
+\cite[Proposition~2]{ChristiansenHu2023}, and comparison of the associated
+long exact sequences gives
 $\mathscr H^j(X_h^\bullet)\simeq \mathscr H^j(K,\partial K;\mathbb R)
 \simeq \mathscr H^j(\overline\Omega,\partial\Omega;\mathbb R)$; see also
 \cite[Section 6.2]{ArnoldFalkWinther2010}.
@@ -836,10 +860,23 @@ $\mathring V_{r,h}^{*}\Lambda^{q+r}$ with $X_h^{p-r}$.
 The incoming image in this relative complex is the star of
 $\dd^*\mathring V_{r+1,h}^{*}\Lambda^{q+r+1}$.
 Its outgoing kernel is the star of $\ker\dd^*$ at the weak-tail node.
-For $r=1$, this remains true because the derivative of a full affine form
-is piecewise constant and belongs to the Whitney target $W_h^p$;
-for $r>1$ the target has degree $r-1$ as in the original adjoint sequence.
+For $r=1$, the required mapping property is
+$\dd X_h^{p-1}\subseteq X_h^p=W_h^p$, since the derivative of a form in
+$X_h^{p-1}$ is conforming and piecewise constant, with homogeneous trace.
+Here only this inclusion is needed; \eqref{eq:fullWhitneyDerivativeImage}
+was used to identify the harmonic space at the splice.
+For $r>1$, the target has degree $r-1$ as in the original adjoint sequence.
 At $r=p$, the incoming space is zero in both descriptions.
+Since $\dd_w$ is the finite-dimensional adjoint of $\dd^*$ and $\star$
+is an $L^2$ isometry, for $1\leq r\leq p$ we obtain
+\[
+\star\mathring{\mathfrak H}_{r,h}^{q+r}
+=\ker(\dd|_{X_h^{p-r}})
+\cap\bigl(\dd X_h^{p-r-1}\bigr)^\perp,
+\]
+where $X_h^{-1}=\{0\}$ and the orthogonal complement is taken in
+$X_h^{p-r}$. The right-hand side is the space of orthogonal representatives
+of the relative cohomology of $X_h^\bullet$ in degree $p-r$.
 The harmonic identifications are thus
 \begin{equation}\label{eq:relativeHarmonicIdentification}
 \mathring{\mathfrak H}_h^q\simeq \mathscr H^p(\overline\Omega,\partial\Omega;\mathbb R),
@@ -906,9 +943,14 @@ The finite-dimensional adjoint relation, Hodge star and
 \operatorname{rank}(\dd_w|_P)
 =\dim\dd U_h^{p-1}
 =\dim\dd W_h^{p-1}
-=\operatorname{rank}\delta_{K,\partial K}^{p-1},
+=\operatorname{rank}\delta_{K,\partial K}^{p-1}.
 \]
-where the last equality uses oriented face integration.
+The last equality follows from the canonical
+identification of the relative Whitney complex
+with the relative simplicial cochain complex
+by oriented face integration, under which
+the exterior derivative corresponds to the
+relative simplicial coboundary.
 The short exact sequence proves the formula.
 In particular,
 \[
@@ -983,8 +1025,8 @@ $\dd_hF^\ell C_h^k\subset F^\ell C_h^{k+1}$.
 
 Consider the associated quotient $F^\ell C_h^\bullet/F^{\ell+1}C_h^\bullet$.
 By unisolvence, it is the direct sum of independent blocks indexed by
-the $\ell$-faces. For $\ell<n$, the block on a face $f$ has degree-$k$
-space
+the $\ell$-faces. For $\ell<n$, the normalized MWX moments identify the
+degree-$k$ space of the block on an $\ell$-face $f$ with
 \[
 \operatorname{Sym}^{\ell-k}(N_f^*)\otimes
 \Lambda^k(\mathbb R^n)^*,\qquad 0\leq k\leq\ell,
@@ -1016,7 +1058,8 @@ conormal coefficients. Since $N_f\subset N_g$ and
 $|\beta|=\dim g-k$, each resulting integral is a linear combination
 of the MWX moments on $g$. These moments vanish for
 $u\in F^\ell C_h^k$, so only the normal terms remain in the induced
-differential.
+differential. The cohomology of each such face block can therefore be
+computed by the normal Koszul homotopy.
 
 Split the exterior factor into components with $a$ tangential and
 $k-a$ normal factors. Contraction $\kappa_N$ with the normal Euler
@@ -1030,13 +1073,19 @@ within this block. The only remaining component is $k=a=\ell$:
 the one-dimensional space of constant tangential top forms on $f$.
 For $\ell=n$, the quotient consists only of the element constants in
 degree $n$, one per element, giving the same conclusion.
+Thus, the cohomology of each associated $\ell$-face block is concentrated
+in degree $\ell$ and is one-dimensional, represented by a constant
+tangential top form.
 
 Filter simplicial cochains by
 $F^\ell\mathcal C^k=0$ for $k<\ell$ and
 $F^\ell\mathcal C^k=\mathcal C^k$ for $k\geq\ell$.
-The map $J$ respects these filtrations. On each associated quotient,
-$J$ maps the sole surviving tangential top-form component to its
-oriented face integral, and hence induces a cohomology isomorphism.
+The map $J$ respects these filtrations. For both complexes, the
+cohomology of the $\ell$th associated quotient is concentrated in degree
+$\ell$, with a one-dimensional summand for each oriented $\ell$-face.
+The map induced by $J^\ell$ sends the surviving constant tangential
+top form to its oriented integral and is therefore an isomorphism
+on each summand.
 Induction over this finite filtration, using the long exact
 cohomology sequences of successive quotients, shows that $J$ is a
 quasi-isomorphism. The final identification is the simplicial de Rham
@@ -1099,12 +1148,23 @@ For $1\leq s<n$, the lifted face-coefficient complex satisfies
 \]
 \end{lemma}
 \begin{proof}
-The lifted vertices of each face are linearly independent. Their exterior
-products split $\mathcal B_s^\bullet$ into summands indexed by
-$(s-1)$-faces $\sigma$. The summand for $\sigma$ has one generator on
-each coface of $\sigma$, and is the relative cochain complex
-$\mathcal C^\bullet(\mathcal K,\mathcal K_\sigma;\mathbb R)$, where
-$\mathcal K_\sigma=\{f\in\mathcal K:\sigma\not\subset f\}$.
+The lifted vertices of each face are linearly independent. For each
+oriented $(s-1)$-face $\sigma=[v_0,\ldots,v_{s-1}]$, set
+\[
+\widetilde x_\sigma
+=\widetilde x_{v_0}\wedge\cdots\wedge\widetilde x_{v_{s-1}}.
+\]
+For each face $f$, these exterior products form a basis of
+$\Lambda^s\widetilde T_f$ as $\sigma$ ranges over the $(s-1)$-faces of $f$.
+Face inclusions preserve each $\widetilde x_\sigma$, so the incidence
+differential preserves the index $\sigma$. Consequently,
+\[
+\mathcal B_s^\bullet\simeq
+\bigoplus_{\sigma\in\Delta_{s-1}(\mathcal K)}
+\mathcal C^\bullet(\mathcal K,\mathcal K_\sigma;\mathbb R),
+\]
+where $\mathcal K_\sigma=\{f\in\mathcal K:\sigma\not\subseteq f\}$.
+The summand indexed by $\sigma$ has one generator on each coface of $\sigma$.
 The link of $\sigma$ is
 \[
 \operatorname{lk}_{\mathcal K}\sigma
@@ -1151,6 +1211,8 @@ Thus every component contracts except
 $a=b=\ell-s$, which leaves $\Lambda^{\ell-s}T_f^*$.
 At $\ell=n$, only the element constants in degree $q$ occur, giving the
 same surviving component $\Lambda^qT_f^*$.
+For $s\leq\ell\leq n$, each surviving block has dimension
+$\binom{\ell}{s}$, whereas in the full MWX row it is one-dimensional.
 The wedge pairing and oriented integration identify each surviving block
 with $\Lambda^sT_f$.
 Filter the shifted complex $\mathcal C_s^{a+s}$ by the same face dimensions.
@@ -1186,6 +1248,8 @@ simplicial cochain complex, proves
 $\mathscr H^{a+s}(\mathcal C_s^\bullet)\simeq \mathscr H^a(\mathcal K;\mathbb R)$ whenever
 $a+s<n$, equivalently $a<q$. Together with
 \eqref{eq:MWXtruncatedFaceCohomology}, this proves the theorem.
+The endpoint $a=q$ remains covered by \eqref{eq:MWXtruncatedFaceCohomology};
+its cohomology dimension is given in Remark~\ref{rem:MWXterminalCohomology}.
 \end{proof}
 
 
@@ -1219,8 +1283,8 @@ Naturality of the connecting maps gives
 \partial_r:\mathscr H^{\ell-1}(\mathcal C_{r-1}^\bullet)
 \longrightarrow \mathscr H^\ell(\mathcal C_r^\bullet).
 \]
-For $\ell<n$, Lemma~\ref{lem:liftedFaceVanishing} makes $\partial_r$
-surjective. Induction on $r$ proves the result, with negative
+For $0\leq\ell<n$, Lemma~\ref{lem:liftedFaceVanishing} makes $\partial_r$
+an isomorphism. Induction on $r$ proves the result, with negative
 cohomological degrees understood as zero.
 \end{proof}
 
@@ -2494,7 +2558,9 @@ $S^iu\in\operatorname{im}D_h^i$.
 For $m=1$, this early range is empty.
 
 
-For completeness, the reduction also applies to the assembled weak links.
+For completeness, we verify the reduction for the assembled weak links
+using the mapping-cone and exact-sequence framework described in
+\cite[Section~3.1 and Proposition~4.2]{Christiansen2026BGG}.
 On $Y^i=Z_h^i\oplus\widetilde Z_h^i$, let
 $C(z,u)=(D_hz-Su,\widetilde D_hu)$.
 The connecting map of the row short exact sequence is $-[S]=0$,

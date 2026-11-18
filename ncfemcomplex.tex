@@ -608,7 +608,7 @@ Poincar\'e--Lefschetz duality, where
 $b_i(\Omega)=\dim \mathscr H^i(\Omega;\mathbb R)$.
 \end{remark}
 
-\subsection{Weak exterior differential operator}
+\subsection{Weak exterior differential operator}\label{sec:weakExteriorDerivative}
 For an integer $r\geq 0$, we define the weak exterior derivative
 \[
 \dd_w: \mathbb P_r\Lambda^k(\mathcal T_h)
@@ -1391,6 +1391,20 @@ This proves the decomposition and exactness at the matrix space.
 Finally, $\rot_w$ restricted to symmetric matrices is the adjoint of
 $\sym\curl$, so its surjectivity follows from the injectivity just proved.
 \end{proof}
+For a connected polygonal domain with $g$ holes, the kernel and
+surjectivity arguments above remain valid. Euler's formula
+$V-E+T=1-g$ and the same incidence count give
+\[
+\dim
+\frac{\ker(\rot_w|_{\mathbb P_0(\mathcal T_h;\mathbb S)})}
+{\nabla_h^2V_{2,h}^{\rm MWX}}
+=3T-(V+E-3)-2V_i=3g.
+\]
+Thus, omitting the left inclusion
+$\mathbb P_1\hookrightarrow V_{2,h}^{\rm MWX}$ from
+\eqref{eq:hesscomplex2dfem} gives an unaugmented complex with
+cohomology dimensions $(3,3g,0)$.
+
 Related Morley--$\sym\curl$ decompositions appear in
 \cite[Theorem 3.1]{CarstensenGallistlHu2014} and
 \cite[Theorem 4.5]{Gallistl2015}. The latter uses its prescribed spaces
@@ -1403,8 +1417,10 @@ The weak rotation does not, in general, descend to the quotient
 (\mathring V_{1,h}^*\Lambda^1\otimes\mathbb R^2)/\mskw Q_h.
 \]
 Here $\mathring V_{1,h}^*\Lambda^1$ is the linear BDM space with zero
-normal trace, and the weak rotation is tested against
-$(\mathbb P_2(\mathcal T_h)\cap H_0^1(\Omega))\otimes\mathbb R^2$.
+normal trace. The weak rotation is the operator of
+Section~\ref{sec:weakExteriorDerivative} with $r=1$, tested against
+$(\mathbb P_2(\mathcal T_h)\cap H_0^1(\Omega))\otimes\mathbb R^2$;
+the operator in \eqref{eq:hesscomplex2dfem} corresponds to $r=0$.
 On a mesh with an interior vertex, choose $0\ne v_h\in Q_h$.
 The matrix $\tau_h=\mskw v_h$ represents the zero class, but the admissible
 test function $\boldsymbol z_h=\boldsymbol x v_h$ gives

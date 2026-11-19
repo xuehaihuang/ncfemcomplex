@@ -1815,8 +1815,12 @@ $v\in V_h^{\rm CR}\otimes\mathbb R^3$ with
 $\curl_hv=2\vskw A$. Since $2\vskw\grad_hv=\curl_hv$,
 $A-\grad_hv$ is symmetric and has weak curl $\tau$.
 Finally, the adjoint of $\div_w:K_h\to L_{2,h}\otimes\mathbb R^3$
-is $-P_{K_h}\grad$. Its kernel consists of fields $z$ with
-$\grad z\in L_{1,h}I$, hence of global fields $z=a+bx$;
+is $-P_{K_h}\grad$. For $z\in L_{2,h}\otimes\mathbb R^3$,
+we have $\grad z\in E_h$ by tangential continuity of the gradient
+and the zero boundary trace of $z$. Since
+$E_h=K_h\oplus^\perp L_{1,h}I$, the equation $P_{K_h}\grad z=0$
+is equivalent to $\grad z\in L_{1,h}I$.
+Such fields have the form $z=a+bx$;
 the homogeneous boundary condition forces $z=0$. Thus the last arrow is
 surjective. The Hessian kernel is $\mathbb P_1$, because its vanishing
 makes the CR gradient globally constant and the shared edge means fix
@@ -1893,7 +1897,9 @@ For the former, $\sym\curl$ on $\dev E_h$ is understood in the
 distributional sense. Since $\tau-D^{-1}\tau$ is a scalar matrix and
 $\sym\curl(qI)=0$ in distributions for $q\in L^2(\Omega)$, we have
 $\sym\curl\tau=\sym\curl D^{-1}\tau\in L^2(\Omega;\mathbb S)$.
-Thus the relevant trace-free space is $\dev E_h$.
+The space $\dev E_h$ need not be contained in $E_h$ and must be
+distinguished from the pointwise trace-free intersection
+$E_h\cap L^2(\Omega;\mathbb T)$.
 \end{remark}
 
 \begin{remark}\label{rem:weakTraceBipyramid}\rm
@@ -2064,6 +2070,10 @@ gives rise to the finite element elasticity complex
 \begin{align*}%\label{eq:femelasticitycomplex3d+421}
 {\rm RM}\xrightarrow{\subset}V_{3,h}^{\rm MWX}\otimes\mathbb R^3 \xrightarrow{\defm_h} V_{2,h}^{\rm MWX}\otimes\mathbb S \xrightarrow{\inc_h}  \mathbb P_0(\mathcal T_h;\mathbb S) \xrightarrow{\div_w} \mathring{V}_{1,h}^{*}\Lambda^3\otimes\mathbb R^3\rightarrow \boldsymbol{0}.
 \end{align*}
+For $\tau\in V_{2,h}^{\rm MWX}\otimes\mathbb S$, the MWX derivative
+property gives $(\curl_h\tau)^\top\in V_h^{\rm CR}\otimes\mathbb M$.
+Its broken curl $\inc_h\tau$ is piecewise constant and symmetric,
+by $\tau^\top=\tau$ and commutation of mixed derivatives.
 This augmented sequence is exact on a contractible domain by
 Theorem~\ref{thm:fullBGG} and the kernel identity
 $\ker\defm_h={\rm RM}$.
@@ -2085,10 +2095,17 @@ Theorem~\ref{thm:fullBGG}.
 
 \begin{remark}\rm
 Simple connectivity does not remove the harmonic terms in three dimensions.
-For example, the shell between two concentric similar tetrahedra admits a
-conforming mesh with $(V,E,F,T)=(8,22,28,12)$ and no interior vertices:
-triangulate each of the four triangular frusta into three tetrahedra using a
-consistent ordering of its vertices. Then $L_{1,h}=0$,
+For example, the shell between two concentric homothetic tetrahedra admits a
+conforming mesh with $(V,E,F,T)=(8,22,28,12)$ and no interior vertices.
+Label the outer vertices by a global ordering, with primes denoting
+the corresponding inner vertices. For each outer face $[i,j,k]$,
+$i<j<k$, subdivide its frustum into
+\[
+[i,j,k,k'],\qquad [i,j,j',k'],\qquad [i,i',j',k'].
+\]
+Both frusta incident to an outer edge $[i,j]$, $i<j$, use the diagonal
+$[i,j']$ on their shared quadrilateral, so the mesh is conforming.
+Then $L_{1,h}=0$,
 $\dim V_{3,h}^{\rm MWX}=V+2E+F=80$, and
 $\dim V_{2,h}^{\rm MWX}=E+F=50$.
 The kernel of $\nabla_h^2$ on $V_{3,h}^{\rm MWX}$ is $\mathbb P_1$,
@@ -2158,7 +2175,7 @@ The last operator is determined by
 (\div_w\div_h\tau,v)=-(\div_h\tau,\grad v),\qquad
 \tau\in V_h^{\rm CR}\otimes\mathbb S,\quad v\in L_{1,h}.
 \]
-This also verifies the last composition. For
+For
 $\rho\in V_{2,h}^{\rm MWX}\otimes\mathbb T$, set
 $w=\div_h\rho^\top\in V_h^{\rm CR}\otimes\mathbb R^3$. The row-wise identity
 $\div_h\sym\curl_h\rho=\tfrac12\curl_h w$ gives
@@ -2308,7 +2325,9 @@ For the two input rows and linking maps of Theorem~\ref{thm:fullBGG},
 S^i\ker\widetilde D_h^i\subseteq\operatorname{im}D_h^i,
 \qquad 0\leq i<n.
 \]
-Thus every linking map induces zero on cohomology.
+Thus the induced maps
+$[S]^i:\mathscr H^i(\widetilde Z_h^\bullet)\to
+\mathscr H^{i+1}(Z_h^\bullet)$ are zero.
 \end{lemma}
 \begin{proof}
 The two rows are complexes by Theorems~\ref{thm:MWXcohomology}
@@ -2501,8 +2520,11 @@ $A_{m-1}=(S^{m-1})^*$ on the two piecewise constant spaces; testing gives
 \]
 The earlier squares are the usual broken-derivative identities.
 Since $J=j-1<m$, $S^J$ is a pointwise isomorphism and the links before
-it are injective. For $i\geq m$, the fibre map $A_i$ is injective,
-so its finite-dimensional adjoint $S^i$ is surjective.
+it are injective. For $m\leq i<n$, the fibre map $A_i$ is injective.
+Since $A_i$ maps the assembled spaces into each other, it is injective
+as a map $Z_h^{i+1}\to\widetilde Z_h^i$.
+Its finite-dimensional $L^2$ adjoint $S^i=A_i^*$ is therefore
+surjective onto $Z_h^{i+1}$.
 For $J<i<m$, pointwise surjectivity gives the same conclusion.
 
 We next show that all links induce zero on cohomology.
@@ -2557,8 +2579,9 @@ On each oriented $\ell$-face, the definition of $S^i$ gives
 J_s^{i+1}S^iu=(-1)^i\sum_{a=1}^n
 \bigl(\iota_{e^a}\otimes\iota_{e_a}\bigr)J_{s+1}^iu.
 \end{equation}
-The first contraction acts on tangential multivectors and the second
-on coefficient forms. Indeed, for $u=\alpha\otimes\beta$ and
+On a face $f$, the first contraction uses the restricted covector
+$e^a|_{T_f}$ and maps $\Lambda^{s+1}T_f$ to $\Lambda^sT_f$;
+the second acts on coefficient forms. Indeed, for $u=\alpha\otimes\beta$ and
 $\eta\in\Lambda^sT_f^*$, this follows from
 $e^a\wedge\alpha=(-1)^i\alpha\wedge e^a$ and
 $\langle\iota_{e^a}M,\eta\rangle
@@ -2584,9 +2607,10 @@ so $\dim \mathscr H^i(Y^\bullet,C)$ is the sum of the two input dimensions.
 Put $W^i=0\oplus(\ker S^i)^\perp$ and $N^i=W^i+CW^{i-1}$.
 If $C(0,v)\in W^i$ for $(0,v)\in W^{i-1}$, its upper component gives
 $S^{i-1}v=0$. Since $v\perp\ker S^{i-1}$, this implies $v=0$.
-Thus $W^i\cap CW^{i-1}=0$. Moreover, $C$ maps $W^i$ isomorphically
-onto $CW^i$ and kills $CW^{i-1}$, so $N^\bullet$ is acyclic and the
-quotient $Y^\bullet/N^\bullet$ has the same cohomology as $Y^\bullet$.
+Thus $N^i=W^i\oplus CW^{i-1}$. Moreover, $C$ maps $W^i$ isomorphically
+onto $CW^i$ and kills $CW^{i-1}$, so $N^\bullet$ is contractible.
+The quotient $Y^\bullet/N^\bullet$ therefore has the same cohomology as
+$Y^\bullet$.
 
 For $i\leq J$, injectivity of $S^i$ gives
 $W^i=0\oplus\widetilde Z_h^i$, so the quotient is
@@ -2607,11 +2631,16 @@ The input dimensions are $\binom n{j-1}b_i$ and $\binom nj b_i$;
 Pascal's identity proves \eqref{eq:lowerBGGcohomology}.
 The affine fields in \eqref{eq:fullBGGkernel} satisfy
 $D_h^0(a+\iota_xb)=S^0b$.
-For $j>1$, the first projection kills this image; for $j=1$, the bridge
-applies $\widetilde D_h^0$ to the constant $b$.
-This vanishes also when $m=1$, by the zero boundary co-trace of the weak
-tests. These fields therefore lie in the initial kernel and exhaust
-its dimension, as in Theorem~\ref{thm:fullBGG}.
+For $j>1$, the first projection kills this image. For $j=1$, the bridge
+gives $\widetilde D_h^0b$, which vanishes directly if $m>1$.
+When $m=j=1$, integration by parts gives
+\[
+(\widetilde D_h^0b,\eta)=(b,\dd^*\eta)=0,
+\qquad \eta\in\widetilde Z_h^1,
+\]
+since $b$ is constant on each connected component and $\eta$ has
+homogeneous boundary co-trace. These fields therefore lie in the initial
+kernel and exhaust its dimension, as in Theorem~\ref{thm:fullBGG}.
 
 For $j>m$, put $p=n-m$ and choose simplices $\sigma^p$ and
 $\tau^m$ in complementary subspaces $\mathbb R^p\oplus\mathbb R^m$,
